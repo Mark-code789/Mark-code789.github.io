@@ -572,7 +572,7 @@
 
             window.addEventListener("DOMContentLoaded", () => {
                 if("serviceWorker" in navigator) {
-                    navigator.serviceWorker.register("https://dl.dropbox.com/s/rhlayo0evnmzooi/Checkers%20Service%20Worker.js?dl=0").then((res) => {
+                    navigator.serviceWorker.register("/Checkers Service Worker.js").then((res) => {
                         alert("registered successfully. \n" + res);
                         pageComplete();
 
