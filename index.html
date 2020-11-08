@@ -573,12 +573,16 @@
             window.addEventListener("DOMContentLoaded", () => {
                 if("serviceWorker" in navigator) {
                     navigator.serviceWorker.register("https://dl.dropbox.com/s/rhlayo0evnmzooi/Checkers%20Service%20Worker.js?dl=0").then((res) => {
+                        alert("registered successfully. \n" + res);
                         pageComplete();
+
                     }).catch((error) => {
+                        alert("failed to register. \n" + error);
                         pageComplete();
                     });
                 } 
                 else {
+                    alert("No service worker available.");
                     pageComplete();
                 } 
             });
