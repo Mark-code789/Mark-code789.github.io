@@ -573,9 +573,7 @@
             window.addEventListener("DOMContentLoaded", () => {
                 if("serviceWorker" in navigator) {
                     navigator.serviceWorker.register("/Checkers Service Worker.js").then((res) => {
-                        alert("registered successfully with scope: \n" + res.scope);
                         pageComplete();
-
                     }).catch((error) => {
                         alert("failed to register. \n" + error);
                         pageComplete();
