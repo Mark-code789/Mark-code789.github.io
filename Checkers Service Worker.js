@@ -47,10 +47,7 @@ const appShellFiles = [
 self.addEventListener("install", (e) => {
     e.waitUntil(
         caches.open(cacheName).then((cache) => {
-           	alert("Files added.");
             return cache.addAll(appShellFiles);
-        }).catch((error) => {
-           	alert("install error: " + error.message);
         })
     )
 });
@@ -58,18 +55,13 @@ self.addEventListener("install", (e) => {
 self.addEventListener("fetch", (e) => {
     e.respondWith(
         caches.match(e.request).then((res1) => {
-            alert(res);
             return res1 || fetch(e.request).then((res2) => {
                 return caches.open(cacheName).then((cache) => {
                     cache.put(e.request, res2.clone());
                     return res2;
                 })
-            }).catch((error) => {
-           	    alert("fetch fall back error" + error.message);
             })
-        }).catch((error) => {
-            alert("fetch error" + error.message);
-        }) 
+        })
     )
 });
 
