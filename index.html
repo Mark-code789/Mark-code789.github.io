@@ -574,9 +574,9 @@
                 if("serviceWorker" in navigator) {
                     navigator.serviceWorker.register("https://dl.dropbox.com/s/rhlayo0evnmzooi/Checkers%20Service%20Worker.js?dl=0").then((res) => {
                         pageComplete();
-                    }).catch(
+                    }).catch((error) => {
                         pageComplete();
-                    );
+                    });
                 } 
                 else {
                     pageComplete();
