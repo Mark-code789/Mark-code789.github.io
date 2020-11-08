@@ -1,5 +1,5 @@
 // Service worker
-const cacheName = "Checkers-v0.30";
+const cacheName = "Checkers-v0.3";
 const appShellFiles = [
     "https://dl.dropbox.com/s/jjtjli844vi9psx/flag.jpeg?raw=1", 
     "https://dl.dropbox.com/s/u2rq5zwir1wb1j1/kenyan%20flag.jpeg?raw=1",
@@ -73,7 +73,7 @@ self.addEventListener("activate", (e) => {
         caches.keys().then((keyList) => {
             return Promise.all(keyList.map((key) => {
                 if(keepList.indexOf(key) === -1) {
-                    caches.delete(key);
+                    return caches.delete(key);
                 } 
             }))
         })
