@@ -520,16 +520,15 @@
             var intervalID;
             
             function pageComplete () {
-                alert("page complete.");
                 let piece = $(".piece");
                 let tds = $$(".container tr td");
                 let j = 1;
                 
-                /*intervalID = setInterval(() => { 
+                intervalID = setInterval(() => { 
                     piece.parentNode.removeChild(piece);
                     tds[j].appendChild(piece);
                     j = (j<3)? j+1: 0; 
-                }, 500);*/
+                }, 500);
                 
                 let head = document.head;
                 let SheetLink = $$$("link");
@@ -568,13 +567,13 @@
                     navigator.serviceWorker.register("Checkers Service Worker.js").then((res) => {
                         return pageComplete();
                     }).catch((error) => {
-                        alert("failed to register. \n" + error);
-                        //pageComplete();
+                        alert("Encountered an Error while trying to register an offline version of this game due to:\n\n" + error.message);
+                        pageComplete();
                     });
                 }
             } 
             else {
-                alert("No service worker available.");
+                alert("Can't Register an offline version of this game because your browser don't support this capability. However you can still access it only while online. If you however really need the offline version, try: \n\n1. Update your browser. or\n2.try another browser, preferably chrome.");
                 window.onload = () => {pageComplete()};
             } 
         </script>
