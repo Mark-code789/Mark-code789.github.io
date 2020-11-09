@@ -8,7 +8,7 @@
         <title>CHECKERS</title>
         <style>
             html {
-                font-size: 3vmin;
+                font-size: 3.5vmin;
             } 
             html, body {
                 margin: 0;
@@ -525,18 +525,11 @@
                 let tds = $$(".container tr td");
                 let j = 1;
                 
-                intervalID = setInterval(() => { 
+                /*intervalID = setInterval(() => { 
                     piece.parentNode.removeChild(piece);
                     tds[j].appendChild(piece);
                     j = (j<3)? j+1: 0; 
-                }, 500);
-                
-                let vh = document.documentElement.clientHeight || window.innerHeight || window.screen.availHeight;
-                let vw = document.documentElement.clientWidth || window.innerWidth || window.screen.availWidth;
-                let ratio = Math.round(Math.min(vh, vw)/Math.max(vh, vw));
-                let size = (ratio > 0)? 0.03: 0.03;
-                size = Math.min(window.innerHeight, window.innerWidth) * size;
-                //document.documentElement.style.fontSize = `${size}px`;
+                }, 500);*/
                 
                 let head = document.head;
                 let SheetLink = $$$("link");
