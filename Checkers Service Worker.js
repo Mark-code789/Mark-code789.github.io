@@ -55,12 +55,17 @@ self.addEventListener("install", (e) => {
 self.addEventListener("fetch", (e) => {
     e.respondWith(
         caches.match(e.request).then((res1) => {
-            return res1 || fetch(e.request).then((res2) => {
-                return caches.open(cacheName).then((cache) => {
-                    cache.put(e.request, res2.clone());
-                    return res2;
+            it(res1) {
+                return res1;
+            }
+            else {
+                return fetch(e.request).then((res2) => {
+                    return caches.open(cacheName).then((cache) => {
+                        cache.put(e.request, res2.clone());
+                        return res2;
+                    })
                 })
-            })
+             }
         })
     )
 });
