@@ -4,11 +4,11 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, height=auto, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
         <meta name="theme-color" content="#000">
-        <link rel="manifest" href="https://dl.dropbox.com/s/872ddn2o9mgvc2i/manifest.json?dl=0" crossorigin="use-credentials"> 
+        <link rel="manifest" href="https://dl.dropbox.com/s/872ddn2o9mgvc2i/manifest.json?dl=0"> 
         <title>CHECKERS</title>
         <style>
             html {
-                font-size: 4vmin;
+                font-size: 3vmin;
             } 
             html, body {
                 margin: 0;
@@ -534,9 +534,9 @@
                 let vh = document.documentElement.clientHeight || window.innerHeight || window.screen.availHeight;
                 let vw = document.documentElement.clientWidth || window.innerWidth || window.screen.availWidth;
                 let ratio = Math.round(Math.min(vh, vw)/Math.max(vh, vw));
-                let size = (ratio > 0)? 0.035: 0.04;
+                let size = (ratio > 0)? 0.03: 0.03;
                 size = Math.min(window.innerHeight, window.innerWidth) * size;
-                document.documentElement.style.fontSize = `${size}px`;
+                //document.documentElement.style.fontSize = `${size}px`;
                 
                 let head = document.head;
                 let SheetLink = $$$("link");
@@ -573,7 +573,7 @@
 
             window.addEventListener("DOMContentLoaded", () => {
                 if("serviceWorker" in navigator) {
-                    navigator.serviceWorker.register("/Checkers Service Worker.js").then((res) => {
+                    navigator.serviceWorker.register("mark-code789.github.io/Checkers Service Worker.js").then((res) => {
                         pageComplete();
                     }).catch((error) => {
                         alert("failed to register. \n" + error);
