@@ -570,21 +570,20 @@
                 
                 JsLink1.id = "pubnub-file";
             } 
-
-            window.addEventListener("DOMContentLoaded", () => {
-                if("serviceWorker" in navigator) {
+            if ("serviceWorker" in navigator) {
+                window.onload = () => {
                     navigator.serviceWorker.register("Checkers Service Worker.js").then((res) => {
-                        pageComplete();
+                        return pageComplete();
                     }).catch((error) => {
                         alert("failed to register. \n" + error);
-                        pageComplete();
+                        //pageComplete();
                     });
-                } 
-                else {
-                    alert("No service worker available.");
-                    pageComplete();
-                } 
-            });
+                }
+            } 
+            else {
+                alert("No service worker available.");
+                window.onload = () => {pageComplete()};
+            } 
         </script>
     </body>
 </html>
