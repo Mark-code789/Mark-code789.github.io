@@ -55,7 +55,7 @@ self.addEventListener("install", (e) => {
 self.addEventListener("fetch", (e) => {
     e.respondWith(
         caches.match(e.request).then((res1) => {
-            it(res1) {
+            if(res1) {
                 return res1;
             }
             else {
