@@ -572,7 +572,7 @@
                     navigator.serviceWorker.register("Checkers Service Worker.js").then((res) => {
                         return pageComplete();
                     }).catch((error) => {
-                        alert("Encountered an Error while trying to register an offline version of this game due to:\n\n" + error.message);
+                        //alert("Encountered an Error while trying to register an offline version of this game due to:\n\n" + error.message);
                         pageComplete();
                     });
                 }
