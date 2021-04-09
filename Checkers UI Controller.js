@@ -1060,22 +1060,18 @@ const Move = async (prop) => {
         piece.style.boxShadow = piece.className.includes("black")? `0 var(--shadow-width) 0 0 #1A1A1A`: `0 var(--shadow-width) 0 0 #999999`;
         root.style.setProperty('--ept', prop.y2.toFixed(16) + "px");
         root.style.setProperty('--epl', prop.x2.toFixed(16) + "px");
-        let mt = 0.4;
         let id = Game.state[Game.prop.i][Game.prop.j].substring(1,2);
         let angle = parseInt(GetValue(root, "--angleZ" + id));
         root.style.setProperty("--angleZP", angle + "deg");
         
-        if(capture) {
-        	let increase = mt * 0.25;
-        	let no_of_cells = Math.abs(Game.prop.i - prop.i);
-        	for(let i = 1; i < no_of_cells; i++) {
-        		mt += increase;
-        	} 
-        	root.style.setProperty("--mt", mt + "s");
-        } 
-        else {
-        	root.style.setProperty("--mt", mt + "s");
-        } 
+        let mt = 0.4;
+    	let increase = mt * 0.25;
+    	let no_of_cells = Math.abs(Game.prop.i - prop.i);
+    	for(let i = 1; i < no_of_cells; i++) {
+    		mt += increase;
+    	} 
+    	root.style.setProperty("--mt", mt + "s");
+        
        
         if(screen.orientation.type.toLowerCase().includes("landscape")) {
         	mt += mt * 0.25;
