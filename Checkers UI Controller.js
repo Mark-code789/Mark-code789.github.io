@@ -306,7 +306,7 @@ async function LoadingDone () {
     window.addEventListener("offline", UpdateOnlineStatus, false);
     await orientationLocking(document.documentElement, "portrait-primary");
     await setTimeout( () => {
-		if(!window.matchMedia('(display-mode: standalone)').matches) {
+		if(!window.matchMedia('(display-mode: fullscreen)').matches) {
 		    Notify({action: "alert",
 					header: "App Installation",
 					message: "Hello, you can install this app in your device by going to your browser menu and selecting <b><em>Add to Home Screen</em></b> or <b><em>Install</em></b> option. Click it and accept the prompt and you will will be done. Happy Gaming!.<br><br><b>Ignore this if you have already installed.</b>"
