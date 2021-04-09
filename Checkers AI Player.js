@@ -37,7 +37,7 @@ class AI {
                         human += 1; // value to piece
                     } 
                     if(piece.includes("K")) {
-                        human += 2; // value to piece
+                        human += 3; // value to piece
                     } 
                 } 
                 piece = this.state[i][j];
@@ -54,7 +54,7 @@ class AI {
                         initHuman += 1; // value to piece
                     } 
                     if(piece.includes("K")) {
-                        initHuman += 2; // value to piece
+                        initHuman += 3; // value to piece
                     } 
                 } 
             } 
