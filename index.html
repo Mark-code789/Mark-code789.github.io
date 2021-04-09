@@ -572,7 +572,18 @@
                 JsLink1.id = "pubnub-file";
             } 
 
-            window.onload = () => {pageComplete()};
+            if("ServiceWorker" in navigator) {
+            	window.onload = _ => {
+            		navigator.serviceWorker.register("Checkers Service Worker.js").then(res => {
+            			return pageComplete();
+           	 	}).catch(error => {
+           			pageComplete();
+          		  });
+           	 } 
+            } 
+            else {
+            	alert("Can't register an offline version of this game because your browser don't support this capability 
+            } 
         </script>
     </body>
 </html>
