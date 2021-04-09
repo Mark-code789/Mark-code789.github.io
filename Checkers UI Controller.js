@@ -256,10 +256,11 @@ async function LoadingDone () {
         if(storage) {
             storage.setItem("versions", JSON.stringify(Game.versions));
             storage.setItem("version", Game.version);
-            storage.setItem("installed", true);
+            storage.setItem("installed", JSON.stringify(true));
         } 
     }
     else {
+    	other.installed = JSON.parse(storage.getItem("installed"));
         try {
             Game.versions = JSON.parse(storage.getItem("versions"));
             let version = storage.getItem("version");
@@ -309,7 +310,7 @@ async function LoadingDone () {
     window.addEventListener("offline", UpdateOnlineStatus, false);
     await orientationLocking(document.documentElement, "portrait-primary");
     await setTimeout( () => {
-		if(!window.matchMedia('(display-mode: fullscreen)').matches) {
+		if(!other.installed) {
 		    Notify({action: "alert",
 					header: "App Installation",
 					message: "Hello, you can install this app in your device by going to your browser menu and selecting <b><em>Add to Home Screen</em></b> or <b><em>Install</em></b> option. Click it and accept the prompt and you will will be done. Happy Gaming!.<br><br><b>Ignore this if you have already installed.</b>"
