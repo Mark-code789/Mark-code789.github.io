@@ -721,7 +721,6 @@ const BackState = {
 
 // Game object 
 const Game = {
-	worker: new Worker("Checkers Web Worker.js"), 
     mode: "single-player",
     version: "american",
     versions: {american: [{score: 3, validForHint: true}],
