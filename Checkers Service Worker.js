@@ -35,13 +35,13 @@ const appShellFiles = [
     "https://dl.dropbox.com/s/qiyucvychewpiwk/collect.mp3?raw=1", 
     "https://dl.dropbox.com/s/z9wf6nxyyrxx9cq/game%20win.mp3?raw=1", 
     "https://dl.dropbox.com/s/uchjgfosuf17kkk/game%20lose.mp3?raw=1", 
+    "https://cdn.pubnub.com/sdk/javascript/pubnub.4.29.9.js", 
     "Checkers Style Sheet.css", 
     "Checkers AI Player.js", 
     "Checkers UI Controller.js", 
     "Checkers Channel.js", 
     "Checkers Core Engine.js", 
     "Checkers Web Worker.js", 
-    "https://cdn.pubnub.com/sdk/javascript/pubnub.4.29.9.js", 
     "index.html"
 ];
 
