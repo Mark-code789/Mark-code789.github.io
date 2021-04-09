@@ -193,7 +193,7 @@ class AI {
         let count = 0;
         
         if(moves.length > 1 && this.depth > 1) { 
-        	if(window.Worker && (this.depth > 4 || Game.version == "international")) {
+        	if(window.Worker && (this.depth > 4 || Game.version == "international" || Game.version == "nigerian")) {
         		worker = new Worker("Checkers Web Worker.js");
         		worker.onmessage = message;
         		for(let i = 0; i < moves.length; i++) {
