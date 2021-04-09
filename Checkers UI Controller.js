@@ -308,8 +308,8 @@ async function LoadingDone () {
     await setTimeout( () => {
 		if(!window.matchMedia('(display-mode: fullscreen)').matches) {
 		    Notify({action: "alert",
-					header: "App Shortcut",
-					message: "Hello, thanks for playing this game.You can install this app in your device by going to your browser menu and selecting <b><em>Add to Home Screen</em></b> or <b><em>Install</em></b> option. And you will be done. Happy Gaming!.<br><br><b>Ignore this if you have already added.</b>"
+					header: "App Installation",
+					message: "Hello, thanks for playing this game.You can install this app in your device by going to your browser menu and selecting <b><em>Add to Home Screen</em></b> or <b><em>Install</em></b> option. And you will be done. Happy Gaming!.<br><br><b>Ignore this if you have already installed.</b>"
 					});
 		}
 	}, 1000);
