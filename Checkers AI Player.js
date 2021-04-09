@@ -194,7 +194,7 @@ class AI {
         
         if(moves.length > 1 && this.depth > 1) {
         	if(window.Worker && (this.depth > 3 || Game.version == "international")) {
-        		worker = Game.worker;
+        		worker = new Worker("Checkers Web Worker.js");
         		worker.onmessage = message;
         		
         		for(let i = 0; i < moves.length; i++) {
