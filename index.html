@@ -577,12 +577,13 @@
             		navigator.serviceWorker.register("Checkers Service Worker.js").then(res => {
             			return pageComplete();
            	 	}).catch(error => {
-           			pageComplete();
+           		 	return pageComplete();
           		  });
            	 } 
             } 
             else {
-            	alert("Can't register an offline version of this game because your browser don't support this capability 
+            	alert("Can't Register an offline version of this game because your browser don't support this capability. However you can still access it only while online. If you however really need the offline version, try: \n\n1. Update your browser. or\n2.try another browser, preferably chrome.");
+                window.onload = () => {pageComplete()};
             } 
         </script>
     </body>
