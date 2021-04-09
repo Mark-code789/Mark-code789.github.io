@@ -31,74 +31,20 @@
             } 
             
             #load-window {
-                display: grid;
-                grid-template-rows: auto auto auto auto auto;
-                align-content: center;
-                justify-content: center;
                 height: 100vh;
                 width: 100vw;
                 padding: 0;
+                background: #2D2D2D;
             } 
-            .container {
-                margin: auto;
-                height: 100px;
-                width: 100px;
-                border: 5px solid #5C3D0E;
-                border-collapse: separate;
-                box-shadow: 0 0 0 5px #C09139;
-                border-radius: 25%;
-                table-layout: fixed;
-            }
-            .container tr:first-child td:first-child {
-                border-radius: 18px 0 0 0;
-            } 
-            .container tr:first-child td:last-child {
-                border-radius: 0 18px 0 0;
-            } 
-            .container tr:last-child td:first-child {
-                border-radius: 0 0 0 18px;
-            } 
-            .container tr:last-child td:last-child {
-                border-radius: 0 0 18px 0;
-            } 
-            .container tr:last-child {
-                border-radius: 0 0 25% 25%;
-            } 
-            .container tr td .piece{
-                height: 70%;
-                width: 70%;
-                box-shadow: inset 0 0 5px 1px #005800;
-                background: radial-gradient(circle, #009819, #005800);
-                border-radius: 50%;
-                margin: auto;
-            } 
-            .container .black {
-                background: linear-gradient(#3C1D0C, #5C3D0E, #3C1D0C);
-            } 
-            .container .white {
-                background: linear-gradient(#A07119, #C09139, #A07119);
-            }
             
             #load-window h1 {
                 width: 100%;
-                color: #BE7500;
-                font-size: 30pt;
-                /*font-family: 'Times New Roman';*/
-                text-align: center;
-                text-shadow: 0 2px #5C3D0E;
-                box-shadow: 0 2px 0 5px #5C3D0E;
-            } 
-            #load-window h2 {
-                text-align: center;
-                text-shadow: 0 1px #5C3D0E;
-                color: #BE7500;
-                /*font-family: 'Times New Roman';*/
+                color: #D1D1D1;
             } 
             .bar {
-                background: linear-gradient(#1C0A0A, #5C3D0E, #1C0A0A);
-                height: 20px;
-                width: 100%;
-                border-radius: 7px;
+                background: #000000;
+                height: 10px;
+                width: 100vw;
                 padding: 0;
                 
                 display: flex;
@@ -108,16 +54,10 @@
                 overflow: hidden;
             } 
             .progress {
-                background: linear-gradient(#005800, #009819, #005800);
-                color: #fff;
-                height: 20px;
+                background: #009819;
+                height: 10px;
                 width: 0%;
                 margin: 0;
-                
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                overflow: hidden;
             } 
         </style>
     </head>
@@ -149,12 +89,7 @@
             </section>
         </article>
         <article id="load-window">
-            <table class="container">
-                <tr><td class='black'><div class='piece'></div></td><td class='white'></td></tr>
-                <tr><td class='white'></td><td class='black'></td></tr>
-            </table>
             <h1>CHECKERS</h1>
-            <h2>Loading...</h3>
             <div class="bar">
                 <div class="progress">0%</div>
             </div>
