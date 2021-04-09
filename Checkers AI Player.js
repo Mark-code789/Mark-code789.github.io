@@ -315,6 +315,7 @@ class AI {
     } 
     
     makeMove = async (returnable = false) => { //try {
+    	Game.thinking = true;
         let state = JSON.parse(JSON.stringify(this.state));
         let moves = this.moves;
         let bestMove = await this.findBestMove(state, moves);
@@ -380,6 +381,7 @@ class AI {
 			other.aiPath = [];
         }, 250);
         this.moves = [];
+        Game.thinking = false;
         return;
         
         //} catch (error) {}
