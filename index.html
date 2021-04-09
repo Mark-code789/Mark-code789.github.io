@@ -564,7 +564,7 @@
                 JsLink1.id = "pubnub-file";
             } 
 			//window.onload = pageComplete();
-            if("ServiceWorker" in navigator) {
+            if("serviceWorker" in navigator) {
             	window.onload = _ => {
             		navigator.serviceWorker.register("Checkers Service Worker.js").then(res => {
             			alert("Done");
