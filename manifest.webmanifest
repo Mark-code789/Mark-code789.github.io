@@ -34,7 +34,6 @@
             "type": "image/png"
         }
     ],
-    "start_url": "/index.html",
     "display": "standalone",
     "orientation": "natural",
     "theme_color": "#000",
