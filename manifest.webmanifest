@@ -22,16 +22,6 @@
             "src": "https://dl.dropbox.com/s/ensfgrsqyzad207/homescreen%20192icon.png?raw=1",
             "sizes": "192x192",
             "type": "image/png"
-        },
-        {
-            "src": "https://dl.dropbox.com/s/hje949m133p1dme/homescreen%20256icon.png?raw=1",
-            "sizes": "256x256",
-            "type": "image/png"
-        }, 
-        {
-            "src": "https://dl.dropbox.com/s/mcch71nrl5vycyo/homescreen%20512icon.png?raw=1",
-            "sizes": "512x512",
-            "type": "image/png"
         }
     ],
     "start_url": "./index.html", 
