@@ -315,6 +315,8 @@ async function LoadingDone () {
 					header: "App Installation",
 					message: "Hello, you can install this app in your device by going to your browser menu and selecting <b><em>Add to Home Screen</em></b> or <b><em>Install</em></b> option. Click it and accept the prompt and you will will be done. Happy Gaming!.<br><br><b>Ignore this if you have already installed.</b>"
 					});
+					
+			storage.setItem("installed", JSON.stringify(true));
 		}
 	}, 1000);
 }
