@@ -192,7 +192,8 @@ var other = {
     yOffset: 0,
     active: false, 
     
-    orientation: 'natural', 
+    orientation: 'natural',
+    installed: false, 
     initialLoading: true,
     fullscreenSupport: false, 
     default: "linear-gradient(rgba(0, 152, 25, 0.9), rgba(0, 112, 0, 0.9))", 
@@ -255,6 +256,7 @@ async function LoadingDone () {
         if(storage) {
             storage.setItem("versions", JSON.stringify(Game.versions));
             storage.setItem("version", Game.version);
+            storage.setItem("installed", true);
         } 
     }
     else {
