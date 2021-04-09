@@ -196,7 +196,7 @@ class AI {
         	if(window.Worker && (this.depth > 3 || Game.version == "international")) {
         		worker = new Worker("Checkers Web Worker.js");
         		worker.onmessage = message;
-        		Notify("Working fine");
+        		alert("Working fine");
         		for(let i = 0; i < moves.length; i++) {
 		            let cloneState = JSON.parse(JSON.stringify(state));
 		            let move = moves[i];
