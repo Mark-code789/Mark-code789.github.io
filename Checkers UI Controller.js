@@ -129,9 +129,10 @@ let imageProps = ["--english-flag",
                     Object.keys(Icons)[5]
                     ];
 // use recursive function to load the images in srcs and updating the progress bar
-let i, bar, width;
+let i, bar, label, width;
 try {
 	i = 0;
+	label = document.querySelector("#load-window p");
 	bar = document.querySelector(".bar"); // Loading bar
 	width = parseInt(window.getComputedStyle(bar, null).getPropertyValue("width"));
 } catch {}
@@ -160,7 +161,7 @@ async function load (src) { try {
                 Sound[soundProps[i - srcs.length]] = audio;
             } 
             bar.children[0].style.width = ((i+1) * width / (srcs.length + sounds.length)) + "px";
-            bar.children[0].innerHTML = (parseInt(window.getComputedStyle(bar.children[0], null).getPropertyValue("width")) / width * 100).toFixed(0) + "%";
+            label.innerHTML = (parseInt(window.getComputedStyle(bar.children[0], null).getPropertyValue("width")) / width * 100).toFixed(0) + "%";
             i++;
             if(i < srcs.length) {
                 load(srcs[i]);
