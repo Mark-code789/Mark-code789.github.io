@@ -304,7 +304,7 @@ async function LoadingDone () {
     UpdateOnlineStatus();
     window.addEventListener("online", UpdateOnlineStatus, false);
     window.addEventListener("offline", UpdateOnlineStatus, false);
-    await orientationLocking(document.documentElement, other.orientation);
+    await orientationLocking(document.documentElement, "portrait-primary");
     await setTimeout( () => {
 		if(!window.matchMedia('(display-mode: fullscreen)').matches) {
 		    Notify({action: "alert",
