@@ -38,8 +38,16 @@
             } 
             
             #load-window h1 {
+            	position: relative;
+            	top: 50%;
+            	left: 50%;
+            	transform: translate(-50%, -50%);
                 width: 100%;
                 color: #D1D1D1;
+                text-align: center;
+            } 
+            #load-window p {
+            	position: relative;
             } 
             .bar {
                 background: #000000;
@@ -90,8 +98,9 @@
         </article>
         <article id="load-window">
             <h1>CHECKERS</h1>
+            <p>0%</p>
             <div class="bar">
-                <div class="progress">0%</div>
+                <div class="progress"></div>
             </div>
         </article>
         <section onanimationend="End(event)" id="pop-up-note" hidden></section>
