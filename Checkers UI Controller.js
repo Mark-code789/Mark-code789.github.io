@@ -304,9 +304,9 @@ async function LoadingDone () {
     UpdateOnlineStatus();
     window.addEventListener("online", UpdateOnlineStatus, false);
     window.addEventListener("offline", UpdateOnlineStatus, false);
-   
+    await orientationLocking(document.documentElement, other.orientation);
     await setTimeout( () => {
-		if(!window.matchMedia('(display-mode: standalone)').matches) {
+		if(!window.matchMedia('(display-mode: fullscreen)').matches) {
 		    Notify({action: "alert",
 					header: "App Shortcut",
 					message: "Hello, thanks for playing this game. However, you can make accessibility of this game much simpler by adding it to homescreen and make it act like a native app.<br><br>To do this, just go to your browser menu and select <b><em>Add to Home screen</em></b> or <b><em>Add shortcut</em></b> option and you will be done. Happy Gaming.<br><br><b>Ignore this if you have already added.</b>"
