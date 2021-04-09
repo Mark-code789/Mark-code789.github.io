@@ -588,12 +588,10 @@ class Sleep {
 	static i = 0;
 	static j = 1_000;
 	static start = () => {
-		Game.thinking = true;
 		return new Promise((resolve, reject) => {
 			const it = setInterval(() => {
 				Sleep.i++;
 				if(Sleep.i >= Sleep.j) {
-					Game.thinking = false;
 					resolve("Done");
 					Sleep.i = 0;
 					clearInterval(it);
