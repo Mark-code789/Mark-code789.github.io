@@ -1,6 +1,6 @@
 {
     "short_name": "Checkers",
-    "name": "Mark Checkers",
+    "name": "Checkers",
     "description": "Standalone Frontend Checkers Game",
     "icons": [
         {
