@@ -34,7 +34,7 @@
             "type": "image/png"
         }
     ],
-    "start_url": "mark-code789.github.io/Checkers/index.html",
+    "start_url": "mark-code789.github.io/Checkers/",
     "display": "standalone",
     "orientation": "natural",
     "theme_color": "#000",
