@@ -309,7 +309,7 @@ async function LoadingDone () {
 		if(!window.matchMedia('(display-mode: fullscreen)').matches) {
 		    Notify({action: "alert",
 					header: "App Installation",
-					message: "Hello, thanks for playing this game.You can install this app in your device by going to your browser menu and selecting <b><em>Add to Home Screen</em></b> or <b><em>Install</em></b> option. And you will be done. Happy Gaming!.<br><br><b>Ignore this if you have already installed.</b>"
+					message: "Hello, thanks for playing this game. However, You can install this app in your device by going to your browser menu and selecting <b><em>Add to Home Screen</em></b> or <b><em>Install</em></b> option. And you will be done. Happy Gaming!.<br><br><b>Ignore this if you have already installed.</b>"
 					});
 		}
 	}, 1000);
