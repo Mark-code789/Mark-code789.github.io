@@ -569,7 +569,7 @@
             		navigator.serviceWorker.register("Checkers Service Worker.js").then(res => {
             			return pageComplete();
            	 	}).catch(error => {
-           		 	return pageComplete();
+           		 	pageComplete();
           		  });
            	 } 
             } 
