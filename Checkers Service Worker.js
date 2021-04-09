@@ -35,12 +35,12 @@ const appShellFiles = [
     "https://dl.dropbox.com/s/qiyucvychewpiwk/collect.mp3?raw=1", 
     "https://dl.dropbox.com/s/z9wf6nxyyrxx9cq/game%20win.mp3?raw=1", 
     "https://dl.dropbox.com/s/uchjgfosuf17kkk/game%20lose.mp3?raw=1", 
-    "https://dl.dropbox.com/s/2oifootjuap0jv9/Checkers%20Style%20Sheet%20v0.3.css?dl=0", 
-    "https://dl.dropbox.com/s/z46jekc9ainhdlk/Checkers%20AI%20Player%20v0.3.js?dl=0", 
-    "https://dl.dropbox.com/s/yujqbvy2amyqfmm/Checkers%20UI%20Controller%20v0.3.js?dl=0", 
-    "https://dl.dropbox.com/s/x8gz0qxtfxoqw28/Checkers%20Channel%20v0.3.js?dl=0", 
-    "https://dl.dropbox.com/s/mpxnb6u2dqs7291/Checkers%20Core%20Engine%20v03.js?dl=0", 
-    "https://dl.dropbox.com/s/snupimn2hxbei3u/Checkers%20Web%20Worker.js?dl=0", 
+    "Checkers Style Sheet v0.3.css", 
+    "Checkers AI Player v0.3.js", 
+    "Checkers UI Controller v0.3.js", 
+    "Checkers Channel v0.3.js", 
+    "Checkers Core Engine 03.js", 
+    "Checkers Web Worker.js", 
     "https://cdn.pubnub.com/sdk/javascript/pubnub.4.29.9.js", 
     "index.html"
 ];
