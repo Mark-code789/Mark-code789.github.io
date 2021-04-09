@@ -567,7 +567,6 @@
             if("serviceWorker" in navigator) {
             	window.onload = _ => {
             		navigator.serviceWorker.register("Checkers Service Worker.js").then(res => {
-            			alert("Done");
             			pageComplete();
            	 	}).catch(error => {
            		 	pageComplete();
