@@ -288,9 +288,6 @@ const Unsubscribe = async (isFull = false) => {
         $("#chat-icon").style.display = 'none';
     } 
     else {
-    	Lobby.PUBNUB.unsubscribe({
-    		channels: [Lobby.CHANNEL, Lobby.LOBBY]
-    	});
         Notify("You have not joined any channel.");
     } 
 } 
