@@ -60,15 +60,15 @@ const ChannelFunction = () => {
 	                    	}, function (status, response2) {
 	                        	if(response2.totalOccupancy <= 3) {
 									Lobby.PUBNUB.removeListener(Lobby.LOBBY_LISTENER);
+									Lobby.PUBNUB.unsubscribe({
+										channels: [Lobby.LOBBY] 
+									});
 									Lobby.PUBNUB.addListener(Lobby.LISTENER);
 									const Filter = `uuid != '${Lobby.PUBNUB.getUUID()}'`;
             						Lobby.PUBNUB.setFilterExpression(Filter);
 		                            Lobby.PUBNUB.subscribe({
 										channels: [Lobby.CHANNEL], 
 										withPresence: true
-									});
-									Lobby.PUBNUB.unsubscribe({
-										channels: [Lobby.LOBBY] 
 									});
 								} 
 								else {
