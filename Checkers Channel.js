@@ -295,13 +295,13 @@ const Publish = (prop) => { try {
 	                    Lobby.timeoutID = setTimeout(() => {
 	                        LeftChannel({totalOccupancy: 1});
 	                    }, 3000);
-						Lobby.publishMessgages = [];
+						Lobby.publishMessages = [];
 	                } 
 	                Lobby.publishMessages.shift();
 					return Prms("Sent");
 	            } 
 	            if(status.error) {
-					//Lobby.publishMessgages = [];
+					//Lobby.publishMessages = [];
 	                Notify({action: "alert", 
 	                        header: "Publish Error", 
 	                        message: "Couldn't communicate with the opponent. Either you have network issues or you are offline."});
