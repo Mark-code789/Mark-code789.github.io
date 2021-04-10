@@ -57,9 +57,13 @@ const ChannelFunction = () => {
 						try {
 							if(response.action === "join") {
 		                		Lobby.PUBNUB.hereNow({
-		                    		channels: [Lobby.CHANNEL]
+		                    		channel: Lobby.CHANNEL
 		                    	}, function (status, response2) {
 		                        	if(response2.totalOccupancy < 2) {
+										Lobby.PUBNUB.removeListener(listener);
+										Lobby.PUBNUB.addListener(Lobby.LISTENER);
+										const Filter = `uuid != '${Lobby.PUBNUB.getUUID()}'`;
+                						Lobby.PUBNUB.setFilterExpression(Filter);
 			                            Lobby.PUBNUB.subscribe({
 											channel: Lobby.CHANNEL, 
 											withPresence: true
@@ -227,11 +231,9 @@ const ChannelFunction = () => {
                         } 
                     } 
                 } 
-                const Filter = `uuid != '${Lobby.PUBNUB.getUUID()}'`;
-                Lobby.PUBNUB.setFilterExpression(Filter);
-                Lobby.PUBNUB.addListener(Lobby.LISTENER);
+                Lobby.PUBNUB.addListener(listener);
                 Lobby.PUBNUB.subscribe({
-                    channels: [Lobby.CHANNEL ], 
+                    channel: Lobby.LOBBY, 
                     withPresence: true
                 }); 
             } 
