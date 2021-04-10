@@ -393,7 +393,7 @@ article {
     background-clip: content-box;
     background-size: 50%;
     background-repeat: no-repeat;
-    background-position: calc(50% + 3px) 50%;
+    background-position: calc(50% + 4px) 50%;
     filter: invert(70%);
     pointer-events: none;
 } 
