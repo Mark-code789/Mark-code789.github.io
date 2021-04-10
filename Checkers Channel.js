@@ -310,7 +310,21 @@ const Publish = (prop) => { try {
             } 
         });
         await Sleep.start();
-        Notify(res);
+        if(res == "Sent") {
+        	await Lobby.publishMessages.shift();
+        	Lobby.retryCount = 0;
+        } 
+        else if(res == "Left") 
+        	Lobby.publishMessages = [];
+        else if(res == "Failed" && Lobby.retryCount <= 2) // retry twice
+        	++Lobby.retryCount;
+        else if(res == "Failed" && Lobby.retryCount > 2) {
+        	Lobby.retryCount = 0;
+        	Lobby.publishMessages = [];
+        } 
+        	
+        if(Lobby.publishMessages.length > 0) 
+        	asyncPusblish();
     } 
     } catch (error) {alert(error);}
 } 
