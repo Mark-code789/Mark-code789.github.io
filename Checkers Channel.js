@@ -83,7 +83,7 @@ const ChannelFunction = () => {
 							else if(response.action === 'timeout') {
 	                            Notify(`Connection timeout to ${Lobby.CHANNEL} channel. Reconnecting...`);
 	                        } 
-                		} catch (error) {alert(error)}
+                		} catch (error) {Notify(error)}
                 	} 
                 } 
                 
