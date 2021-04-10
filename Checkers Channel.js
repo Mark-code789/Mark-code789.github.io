@@ -63,7 +63,7 @@ const ChannelFunction = () => {
                             } 
                             else if(response.occupancy === 2 && !Lobby.isConnected) {
                                 if(!Lobby.isHost) {
-                                    Lobby.isFull = false;
+                                    Lobby.isFull = true;
                                     Notify("You are a guest in this channel.");
                                 } 
                             } 
