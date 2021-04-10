@@ -54,7 +54,7 @@ const ChannelFunction = () => {
                 setTimeout( () => {Notify("Connecting..."); }, 100);
                 
                 Lobby.LISTENER = {
-                    presence: function(response) {
+                    presence: function(response) { try {
                         if(response.action === 'join') {
                             if(response.occupancy === 1 && !Lobby.isConnected) {
                                 Lobby.isHost = true;
@@ -97,7 +97,7 @@ const ChannelFunction = () => {
 								else 
 									Notify("Someone tried to join your channel");
 							});
-                        } 
+                        }} catch(error) {alert(error)}
                     }, 
                     status: function(event) {
                         if(event.affectedChannels[0] === Lobby.CHANNEL) {
