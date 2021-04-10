@@ -97,7 +97,7 @@ const ChannelFunction = () => {
 								} 
 								else 
 									Notify("Someone tried to join your channel");
-							} 
+							});
                         } 
                     }, 
                     status: function(event) {
