@@ -83,13 +83,17 @@ const ChannelFunction = () => {
                             Notify(`Connection timeout to ${Lobby.CHANNEL} channel. Reconnecting...`);
                         } 
                         else if(response.action === 'leave') {
-                        	if(response.occupancy < 2) {
-	                            Publish({
-	                                    channel: Lobby.CHANNEL, 
-	                                    message: {
-	                                             title: "ConfirmLeave", 
-	                                             content: ""}
-	                                    });
+                        	Lobby.PUBNUB.hereNow({
+                        		channel: Lobby.CHANNEL
+                        	}, function (status, response2) {
+	                        	if(response2.totalOccupancy < 2) {
+		                            Publish({
+		                                    channel: Lobby.CHANNEL, 
+		                                    message: {
+		                                             title: "ConfirmLeave", 
+		                                             content: ""}
+		                                    });
+								} 
 							} 
                         } 
                     }, 
