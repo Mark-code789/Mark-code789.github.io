@@ -286,28 +286,26 @@ const Publish = (prop) => { try {
         asyncPublish();
     
     async function asyncPublish () {
-        while(Lobby.publishMessages.length > 0) {
-	        let config = Lobby.publishMessages[0];
-	        await Lobby.PUBNUB.publish(config, async (status, response) => {
-	            if(!status.error) {
-	                if(config.message.title === 'ConfirmLeave') {
-	                    Lobby.timeoutID = setTimeout(() => {
-	                        LeftChannel({totalOccupancy: 1});
-	                    }, 3000);
-						Lobby.publishMessages = [];
-	                } 
-					return Prms("Sent");
-	            } 
-	            if(status.error) {
-					//Lobby.publishMessages = [];
-	                Notify({action: "alert", 
-	                        header: "Publish Error", 
-	                        message: "Couldn't communicate with the opponent. Either you have network issues or you are offline."});
-					return Prms("Failed")
-	            } 
-	        });
-			Lobby.publishMessages.shift();
-		} 
+        let config = Lobby.publishMessages[0];
+        let status await Lobby.PUBNUB.publish(config, async (status, response) => {
+            if(!status.error) {
+                if(config.message.title === 'ConfirmLeave') {
+                    Lobby.timeoutID = setTimeout(() => {
+                        LeftChannel({totalOccupancy: 1});
+                    }, 1000);
+					return Prms("Left");
+                } 
+				return Prms("Sent");
+            } 
+            if(status.error) {
+				//Lobby.publishMessages = [];
+                Notify({action: "alert", 
+                        header: "Publish Error", 
+                        message: "Couldn't communicate with the opponent. Either you have network issues or you are offline."});
+				return Prms("Failed")
+            } 
+        });
+        
     } 
     } catch (error) {alert(error);}
 } 
