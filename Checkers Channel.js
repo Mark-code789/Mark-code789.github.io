@@ -297,7 +297,6 @@ const Publish = (prop) => { try {
 	                    }, 3000);
 						Lobby.publishMessages = [];
 	                } 
-	                Lobby.publishMessages.shift();
 					return Prms("Sent");
 	            } 
 	            if(status.error) {
@@ -308,6 +307,7 @@ const Publish = (prop) => { try {
 					return Prms("Failed")
 	            } 
 	        });
+			Lobby.publishMessages.shift();
 		} 
     } 
     } catch (error) {alert(error);}
