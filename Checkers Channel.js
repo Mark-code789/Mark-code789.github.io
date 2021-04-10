@@ -310,9 +310,7 @@ const Publish = (prop) => { try {
             } 
         });
         await Sleep.start();
-        Notify({action: "alert", 
-        		header: "Return Value", 
-				message: res});
+        Notify(res);
     } 
     } catch (error) {alert(error);}
 } 
