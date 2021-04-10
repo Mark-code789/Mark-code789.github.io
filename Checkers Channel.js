@@ -58,7 +58,6 @@ const ChannelFunction = () => {
 	                		Lobby.PUBNUB.hereNow({
 	                    		channels: [Lobby.CHANNEL] 
 	                    	}, function (status, response2) {
-								Notify("Occupancy: " + response2.totalOccupancy);
 	                        	if(response2.totalOccupancy < 2) {
 									Lobby.PUBNUB.removeListener(Lobby.LOBBY_LISTENER);
 									Lobby.PUBNUB.unsubscribe({
