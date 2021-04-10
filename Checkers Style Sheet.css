@@ -384,8 +384,8 @@ article {
 
 #chat-window #chat-section .chat_field_container .send_button {
     margin: 0 0 0 10px;
-    height: 40px;
-    width: 40px;
+    height: 45px;
+    width: 45px;
     border-radius: 50%;
     outline: none;
     background-image: var(--send-btn);
