@@ -71,13 +71,13 @@ const ChannelFunction = () => {
                                 clearTimeout(Lobby.timeoutID);
                                 Lobby.PUBNUB.unsubscribe({
                                     channels: [Lobby.CHANNEL]
-                                }, function (status, response2) {
-	                                Notify(`${Lobby.CHANNEL} channel is full, please try another channel.`);
-	                                Lobby.isConnected = false;
-							        Lobby.PUBNUB = null;
-							        Lobby.isHost = false;
-									Lobby.PUBNUB.removeListener(Lobby.LISTENER);
-								});
+                                });
+								
+                                Notify(`${Lobby.CHANNEL} channel is full, please try another channel.`);
+                                Lobby.isConnected = false;
+						        Lobby.PUBNUB = null;
+						        Lobby.isHost = false;
+								Lobby.PUBNUB.removeListener(Lobby.LISTENER);
                             } 
                         } 
                         else if(response.action === 'timeout') {
