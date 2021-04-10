@@ -65,11 +65,11 @@ const ChannelFunction = () => {
 									const Filter = `uuid != '${Lobby.PUBNUB.getUUID()}'`;
             						Lobby.PUBNUB.setFilterExpression(Filter);
 		                            Lobby.PUBNUB.subscribe({
-										channel: Lobby.CHANNEL, 
+										channels: [Lobby.CHANNEL], 
 										withPresence: true
 									});
 									Lobby.PUBNUB.unsubscribe({
-										channel: Lobby.LOBBY
+										channels: [Lobby.LOBBY] 
 									});
 								} 
 								else {
@@ -282,8 +282,12 @@ const Unsubscribe = async (isFull = false) => {
         Lobby.isHost = false;
         $("#chat-icon").style.display = 'none';
     } 
-    else 
+    else {
+    	Lobby.PUBNUB.unsubscribe({
+    		channels: [Lobby.CHANNEL, Lobby.LOBBY]
+    	});
         Notify("You have not joined any channel.");
+    } 
 } 
 
 const Publish = (prop) => { try {
