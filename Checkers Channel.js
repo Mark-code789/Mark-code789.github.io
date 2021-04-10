@@ -83,12 +83,14 @@ const ChannelFunction = () => {
                             Notify(`Connection timeout to ${Lobby.CHANNEL} channel. Reconnecting...`);
                         } 
                         else if(response.action === 'leave') {
-                            Publish({
-                                    channel: Lobby.CHANNEL, 
-                                    message: {
-                                             title: "ConfirmLeave", 
-                                             content: ""}
-                                    });
+                        	if(response.occupancy < 2) {
+	                            Publish({
+	                                    channel: Lobby.CHANNEL, 
+	                                    message: {
+	                                             title: "ConfirmLeave", 
+	                                             content: ""}
+	                                    });
+							} 
                         } 
                     }, 
                     status: function(event) {
