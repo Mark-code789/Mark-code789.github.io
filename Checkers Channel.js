@@ -85,6 +85,7 @@ const ChannelFunction = () => {
 	                        } 
                 		} catch (error) {alert(error)}
                 	} 
+                } 
                 
                 Lobby.LISTENER = {
                     presence: function(response) { 
