@@ -270,7 +270,7 @@ const Unsubscribe = async (isFull = false) => {
         Notify("You have not joined any channel.");
 } 
 
-const Publish = (prop) => {
+const Publish = (prop) => { try {
     const MetaConfig = {
         "uuid": Lobby.PUBNUB.getUUID()
     } 
@@ -286,7 +286,8 @@ const Publish = (prop) => {
         asyncPublish();
     
     async function asyncPublish () {
-        while(Lobby.publishMessgages.length > 0) {
+    	alert(Lobby.publishMessages.length);
+        while(Lobby.publishMessages.length > 0) {
 	        let config = Lobby.publishMessages[0];
 	        await Lobby.PUBNUB.publish(config, async (status, response) => {
 	            if(!status.error) {
@@ -309,6 +310,7 @@ const Publish = (prop) => {
 	        });
 		} 
     } 
+    } catch (error) {alert(error);}
 } 
 
 const LeftChannel = (response) => {
