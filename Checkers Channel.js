@@ -53,27 +53,30 @@ const ChannelFunction = () => {
                 Lobby.PUBNUB.setUUID(Lobby.UUID);
                 setTimeout( () => {Notify("Connecting..."); }, 100);
                 let listener = {
-                	presence: function(response) { try {
-                		Lobby.PUBNUB.hereNow({
-                    		channels: [Lobby.CHANNEL]
-                    	}, function (status, response2) {
-                        	if(response2.totalOccupancy < 2) {
-	                            Lobby.PUBNUB.subscribe({
-									channels: Lobby.CHANNEL, 
-									withPresence: true
-								});
-								Lobby.PUBNUB.unsubscribe({
-									channels: Lobby.LOBBY
+                	presence: function(response) { 
+						try {
+							if(response.action === "join") {
+		                		Lobby.PUBNUB.hereNow({
+		                    		channels: [Lobby.CHANNEL]
+		                    	}, function (status, response2) {
+		                        	if(response2.totalOccupancy < 2) {
+			                            Lobby.PUBNUB.subscribe({
+											channels: Lobby.CHANNEL, 
+											withPresence: true
+										});
+										Lobby.PUBNUB.unsubscribe({
+											channels: Lobby.LOBBY
+										});
+									} 
+									else {
+										Notify(`${Lobby.CHANNEL} channel is full, please try another channel.`);
+										Lobby.PUBNUB.unsubscribe({
+											channels: Lobby.LOBBY
+										});
+									} 
 								});
 							} 
-							else {
-								Notify(`${Lobby.CHANNEL} channel is full, please try another channel.`);
-								Lobby.PUBNUB.unsubscribe({
-									channels: Lobby.LOBBY
-								});
-							} 
-						});
-                	} catch (error) {alert(error)}
+                		} catch (error) {alert(error)}
                 } 
                 
                 Lobby.LISTENER = {
