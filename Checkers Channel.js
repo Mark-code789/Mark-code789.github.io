@@ -287,17 +287,18 @@ const Publish = (prop) => { try {
     
     async function asyncPublish () {
         let config = Lobby.publishMessages[0];
-        let res = Lobby.PUBNUB.publish(config, (status, response) => {
+        let res;
+		Lobby.PUBNUB.publish(config, (status, response) => {
             if(!status.error) {
                 if(config.message.title === 'ConfirmLeave') {
                     Lobby.timeoutID = setTimeout(() => {
                         LeftChannel({totalOccupancy: 1});
                     }, 1000);
                     Sleep.end();
-					return Prms("Left");
+					res = "Left";
                 } 
                 Sleep.end();
-				return Prms("Sent");
+				res = "Sent";
             } 
             if(status.error) {
 				//Lobby.publishMessages = [];
@@ -305,7 +306,7 @@ const Publish = (prop) => { try {
                         header: "Publish Error", 
                         message: "Couldn't communicate with the opponent. Either you have network issues or you are offline."});
                 Sleep.end();
-				return Prms("Failed");
+				res = "Failed";
             } 
         });
         await Sleep.start();
