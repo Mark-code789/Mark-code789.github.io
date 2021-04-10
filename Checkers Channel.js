@@ -54,12 +54,12 @@ const ChannelFunction = () => {
                 setTimeout( () => {Notify("Connecting..."); }, 100);
                 Lobby.LOBBY_LISTENER = {
                 	presence: function(response) { 
-						alert(response.action);
 						if(response.action === "join") {
 	                		Lobby.PUBNUB.hereNow({
 	                    		channel: Lobby.CHANNEL
 	                    	}, function (status, response2) {
 	                        	if(response2.totalOccupancy < 2) {
+									alert(response2.totalOccupancy);
 									Lobby.PUBNUB.removeListener(Lobby.LOBBY_LISTENER);
 									Lobby.PUBNUB.addListener(Lobby.LISTENER);
 									const Filter = `uuid != '${Lobby.PUBNUB.getUUID()}'`;
