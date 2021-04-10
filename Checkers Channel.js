@@ -356,7 +356,6 @@ const Publish = (prop) => { try {
 
 const LeftChannel = (response) => {
     if(response.totalOccupancy < 2) {
-        name = $$("#online .player_name")[1].innerHTML;
         $$("#online .player_name")[1].innerHTML = "N/A";
         let opponentStatus = $("#player-2-status");
         opponentStatus.innerHTML = "N/A";
