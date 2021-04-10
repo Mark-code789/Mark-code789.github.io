@@ -94,6 +94,8 @@ const ChannelFunction = () => {
 		                                             content: ""}
 		                                    });
 								} 
+								else 
+									Notify("Someone tried to join your channel");
 							} 
                         } 
                     }, 
