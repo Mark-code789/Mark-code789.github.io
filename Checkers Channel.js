@@ -325,7 +325,9 @@ const Publish = (prop) => { try {
         } 
         	
         if(Lobby.publishMessages.length > 0) 
-        	asyncPusblish();
+        	await asyncPusblish();
+        
+        return Prms("Done");
     } 
     } catch (error) {alert(error);}
 } 
