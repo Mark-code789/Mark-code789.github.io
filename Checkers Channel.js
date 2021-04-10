@@ -66,19 +66,17 @@ const ChannelFunction = () => {
                                     Notify("You are a guest in this channel.");
                                 } 
                             } 
-                            else if(response.occupancy === 3) {
-                                if(!Lobby.isFull) {
-                                	Lobby.isFull = true;
-                                    clearTimeout(Lobby.timeoutID);
-                                    Lobby.PUBNUB.removeListener(Lobby.LISTENER);
-                                    Lobby.PUBNUB.unsubscribe({
-                                        channels: [Lobby.CHANNEL]
-                                    });
-                                    Notify(`${Lobby.CHANNEL} channel is full, please try another channel.`);
-                                    Lobby.isConnected = false;
-							        Lobby.PUBNUB = null;
-							        Lobby.isHost = false;
-                                } 
+                            else if(response.occupancy >= 3) {
+                            	Lobby.isFull = true;
+                                clearTimeout(Lobby.timeoutID);
+                                Lobby.PUBNUB.removeListener(Lobby.LISTENER);
+                                Lobby.PUBNUB.unsubscribe({
+                                    channels: [Lobby.CHANNEL]
+                                });
+                                Notify(`${Lobby.CHANNEL} channel is full, please try another channel.`);
+                                Lobby.isConnected = false;
+						        Lobby.PUBNUB = null;
+						        Lobby.isHost = false;
                             } 
                         } 
                         else if(response.action === 'timeout') {
