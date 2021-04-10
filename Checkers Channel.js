@@ -1,6 +1,6 @@
 'use strict' 
 
-const Lobby = {isConnected: false, isHost: false, isFull: true, retryCount: 0, publishMessages: []};
+const Lobby = {isConnected: false, isHost: false, retryCount: 0, publishMessages: []};
 
 const ChannelFunction = () => {
 	if(!navigator.onLine) {
@@ -52,31 +52,41 @@ const ChannelFunction = () => {
                 });
                 Lobby.PUBNUB.setUUID(Lobby.UUID);
                 setTimeout( () => {Notify("Connecting..."); }, 100);
+                let listener = {
+                	presence: function(response) { try {
+                		Lobby.PUBNUB.hereNow({
+                    		channels: [Lobby.CHANNEL]
+                    	}, function (status, response2) {
+                        	if(response2.totalOccupancy < 2) {
+	                            Lobby.PUBNUB.subscribe({
+									channels: Lobby.CHANNEL, 
+									withPresence: true
+								});
+								Lobby.PUBNUB.unsubscribe({
+									channels: Lobby.LOBBY
+								});
+							} 
+							else {
+								Notify(`${Lobby.CHANNEL} channel is full, please try another channel.`);
+								Lobby.PUBNUB.unsubscribe({
+									channels: Lobby.LOBBY
+								});
+							} 
+						});
+                	} catch (error) {alert(error)}
+                } 
                 
                 Lobby.LISTENER = {
                     presence: function(response) { try {
                         if(response.action === 'join') {
                             if(response.occupancy === 1 && !Lobby.isConnected) {
                                 Lobby.isHost = true;
-                                Lobby.isFull = false;
                                 Notify("You are the host in this channel.");
                             } 
                             else if(response.occupancy === 2 && !Lobby.isConnected) {
                                 if(!Lobby.isHost) {
                                     Notify("You are a guest in this channel.");
                                 } 
-                            } 
-                            else if(response.occupancy >= 3) {
-                            	Lobby.isFull = true;
-                                clearTimeout(Lobby.timeoutID);
-                                Lobby.PUBNUB.unsubscribe({
-                                    channels: [Lobby.CHANNEL]
-                                });
-								Lobby.PUBNUB.removeListener(Lobby.LISTENER);
-                                Notify(`${Lobby.CHANNEL} channel is full, please try another channel.`);
-                                Lobby.isConnected = false;
-						        Lobby.PUBNUB = null;
-						        Lobby.isHost = false;
                             } 
                         } 
                         else if(response.action === 'timeout') {
