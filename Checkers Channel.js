@@ -54,7 +54,7 @@ const ChannelFunction = () => {
                 setTimeout( () => {Notify("Connecting..."); }, 100);
                 Lobby.LOBBY_LISTENER = {
                 	presence: function(response) { 
-						if(response.action === "join") {
+						if(response.channel == Lobby.LOBBY && response.action === "join") {
 	                		Lobby.PUBNUB.hereNow({
 	                    		channel: Lobby.CHANNEL
 	                    	}, function (status, response2) {
@@ -75,12 +75,12 @@ const ChannelFunction = () => {
 								else {
 									Notify(`${Lobby.CHANNEL} channel is full, please try another channel.`);
 									Lobby.PUBNUB.unsubscribe({
-										channel: Lobby.LOBBY
+										channels: [Lobby.LOBBY]
 									});
 								} 
 							});
 						} 
-						else if(response.action === 'timeout') {
+						else if(response.channel == Lobby.LOBBY && response.action === 'timeout') {
                             Notify(`Connection timeout to ${Lobby.CHANNEL} channel. Reconnecting...`);
                         } 
                 	} 
@@ -89,7 +89,7 @@ const ChannelFunction = () => {
                 Lobby.LISTENER = {
                     presence: function(response) { 
 						try {
-	                        if(response.action === 'join') {
+	                        if(response.channel == Lobby.CHANNEL && response.action === 'join') {
 	                            if(response.occupancy === 1 && !Lobby.isConnected) {
 	                                Lobby.isHost = true;
 	                                Notify("You are the host in this channel.");
@@ -100,10 +100,10 @@ const ChannelFunction = () => {
 	                                } 
 	                            } 
 	                        } 
-	                        else if(response.action === 'timeout') {
+	                        else if(response.channel == Lobby.CHANNEL && response.action === 'timeout') {
 	                            Notify(`Connection timeout to ${Lobby.CHANNEL} channel. Reconnecting...`);
 	                        } 
-							else if(response.action === "leave") {
+							else if(response.channel == Lobby.CHANNEL && response.action === "leave") {
 								Publish({
 										 channel: Lobby.CHANNEL, 
                                          message: {
