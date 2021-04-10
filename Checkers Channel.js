@@ -289,7 +289,7 @@ const Publish = (prop) => { try {
                 if(config.message.title === 'ConfirmLeave') {
                     Lobby.timeoutID = setTimeout(() => {
                         LeftChannel({totalOccupancy: 1});
-                    }, 5_000_000);
+                    }, 5000);
                     Sleep.end();
 					res = "Left";
                 } 
