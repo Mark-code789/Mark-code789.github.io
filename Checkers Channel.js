@@ -287,8 +287,7 @@ const Publish = (prop) => { try {
     
     async function asyncPublish () {
         let config = Lobby.publishMessages[0];
-        Sleep.start();
-        let res = await Lobby.PUBNUB.publish(config, async (status, response) => {
+        let res = Lobby.PUBNUB.publish(config, (status, response) => {
             if(!status.error) {
                 if(config.message.title === 'ConfirmLeave') {
                     Lobby.timeoutID = setTimeout(() => {
@@ -309,6 +308,7 @@ const Publish = (prop) => { try {
 				return Prms("Failed");
             } 
         });
+        await Sleep.start();
         alert(res);
     } 
     } catch (error) {alert(error);}
