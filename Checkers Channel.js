@@ -235,7 +235,7 @@ const ChannelFunction = () => {
                 } 
                 Lobby.PUBNUB.addListener(Lobby.LOBBY_LISTENER);
                 Lobby.PUBNUB.subscribe({
-                    channel: Lobby.LOBBY, 
+                    channels: [Lobby.LOBBY], 
                     withPresence: true
                 }); 
             } 
