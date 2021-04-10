@@ -90,6 +90,7 @@ const ChannelFunction = () => {
                     presence: function(response) { 
 						if(response.channel == Lobby.CHANNEL) {
 	                        if(response.action === 'join') {
+								alert(response.occupancy);
 	                            if(response.occupancy === 1 && !Lobby.isConnected) {
 	                                Lobby.isHost = true;
 	                                Notify("You are the host in this channel.");
