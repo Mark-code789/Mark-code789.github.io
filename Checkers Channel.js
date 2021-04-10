@@ -58,7 +58,6 @@ const ChannelFunction = () => {
 	                		Lobby.PUBNUB.hereNow({
 	                    		channel: Lobby.CHANNEL
 	                    	}, function (status, response2) {
-								alert(response2.totalOccupancy);
 	                        	if(response2.totalOccupancy <= 2) {
 									Lobby.PUBNUB.removeListener(Lobby.LOBBY_LISTENER);
 									Lobby.PUBNUB.addListener(Lobby.LISTENER);
