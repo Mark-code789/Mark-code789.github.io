@@ -80,11 +80,7 @@ const ChannelFunction = () => {
                             } 
                         } 
                         else if(response.action === 'timeout') {
-                            $$(".chat_header p")[1].innerHTML = "offline";
-                            let opponentStatus = $("#player-2-status");
-                                opponentStatus.innerHTML = "OFFLINE";
-                                opponentStatus.style.backgroundImage = "linear-gradient(rgba(193, 115, 0, 0.9), rgba(153, 75, 0, 0.9))";
-                            Notify(`${name} went offline.`);
+                            Notify(`Connection timeout to ${Lobby.CHANNEL} channel. Retrying...`);
                         } 
                         else if(response.action === 'leave') {
                             Publish({
