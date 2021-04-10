@@ -54,37 +54,35 @@ const ChannelFunction = () => {
                 setTimeout( () => {Notify("Connecting..."); }, 100);
                 Lobby.LOBBY_LISTENER = {
                 	presence: function(response) { 
-						try {
-							alert(response.action);
-							if(response.action === "join") {
-		                		Lobby.PUBNUB.hereNow({
-		                    		channel: Lobby.CHANNEL
-		                    	}, function (status, response2) {
-		                        	if(response2.totalOccupancy < 2) {
-										Lobby.PUBNUB.removeListener(Lobby.LOBBY_LISTENER);
-										Lobby.PUBNUB.addListener(Lobby.LISTENER);
-										const Filter = `uuid != '${Lobby.PUBNUB.getUUID()}'`;
-                						Lobby.PUBNUB.setFilterExpression(Filter);
-			                            Lobby.PUBNUB.subscribe({
-											channel: Lobby.CHANNEL, 
-											withPresence: true
-										});
-										Lobby.PUBNUB.unsubscribe({
-											channel: Lobby.LOBBY
-										});
-									} 
-									else {
-										Notify(`${Lobby.CHANNEL} channel is full, please try another channel.`);
-										Lobby.PUBNUB.unsubscribe({
-											channel: Lobby.LOBBY
-										});
-									} 
-								});
-							} 
-							else if(response.action === 'timeout') {
-	                            Notify(`Connection timeout to ${Lobby.CHANNEL} channel. Reconnecting...`);
-	                        } 
-                		} catch (error) {alert(error)}
+						alert(response.action);
+						if(response.action === "join") {
+	                		Lobby.PUBNUB.hereNow({
+	                    		channel: Lobby.CHANNEL
+	                    	}, function (status, response2) {
+	                        	if(response2.totalOccupancy < 2) {
+									Lobby.PUBNUB.removeListener(Lobby.LOBBY_LISTENER);
+									Lobby.PUBNUB.addListener(Lobby.LISTENER);
+									const Filter = `uuid != '${Lobby.PUBNUB.getUUID()}'`;
+            						Lobby.PUBNUB.setFilterExpression(Filter);
+		                            Lobby.PUBNUB.subscribe({
+										channel: Lobby.CHANNEL, 
+										withPresence: true
+									});
+									Lobby.PUBNUB.unsubscribe({
+										channel: Lobby.LOBBY
+									});
+								} 
+								else {
+									Notify(`${Lobby.CHANNEL} channel is full, please try another channel.`);
+									Lobby.PUBNUB.unsubscribe({
+										channel: Lobby.LOBBY
+									});
+								} 
+							});
+						} 
+						else if(response.action === 'timeout') {
+                            Notify(`Connection timeout to ${Lobby.CHANNEL} channel. Reconnecting...`);
+                        } 
                 	} 
                 } 
                 
