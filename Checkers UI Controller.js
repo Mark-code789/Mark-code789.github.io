@@ -308,7 +308,7 @@ async function LoadingDone () {
     UpdateOnlineStatus();
     window.addEventListener("online", UpdateOnlineStatus, false);
     window.addEventListener("offline", UpdateOnlineStatus, false);
-    await orientationLocking(document.documentElement, "portrait-primary");
+    
     await setTimeout( () => {
 		if(!other.installed) {
 		    Notify({action: "alert",
