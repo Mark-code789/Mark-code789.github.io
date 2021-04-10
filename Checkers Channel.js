@@ -99,7 +99,7 @@ const ChannelFunction = () => {
 	                                Lobby.isHost = true;
 	                                Notify("You are the host in this channel.");
 	                            } 
-	                            else if(response.occupancy >= 2 && !Lobby.isConnected) {
+	                            else if(response.occupancy == 2 && !Lobby.isConnected) {
 	                                if(!Lobby.isHost) {
 	                                    Notify("You are a guest in this channel.");
 	                                } 
