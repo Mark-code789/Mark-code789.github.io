@@ -75,7 +75,9 @@ const ChannelFunction = () => {
                                         channels: [Lobby.CHANNEL]
                                     });
                                     Notify(`${Lobby.CHANNEL} channel is full, please try another channel.`);
-                                    Lobby.PUBNUB = null;
+                                    Lobby.isConnected = false;
+							        Lobby.PUBNUB = null;
+							        Lobby.isHost = false;
                                 } 
                             } 
                         } 
