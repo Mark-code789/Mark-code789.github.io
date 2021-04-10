@@ -301,10 +301,6 @@ const Publish = (prop) => { try {
 				res = "Sent";
             } 
             if(status.error) {
-				//Lobby.publishMessages = [];
-                Notify({action: "alert", 
-                        header: "Publish Error", 
-                        message: "Couldn't communicate with the opponent. Either you have network issues or you are offline."});
                 Sleep.end();
 				res = "Failed";
             } 
@@ -314,13 +310,18 @@ const Publish = (prop) => { try {
         	await Lobby.publishMessages.shift();
         	Lobby.retryCount = 0;
         } 
-        else if(res == "Left") 
+        else if(res == "Left") {
+        	Lobby.retryCount = 0;
         	Lobby.publishMessages = [];
+        } 
         else if(res == "Failed" && Lobby.retryCount <= 2) // retry twice
         	++Lobby.retryCount;
         else if(res == "Failed" && Lobby.retryCount > 2) {
         	Lobby.retryCount = 0;
         	Lobby.publishMessages = [];
+        	Notify({action: "alert", 
+                    header: "Communication Error", 
+                    message: "Couldn't communicate with the opponent. Either you have network issues or you are offline."});
         } 
         	
         if(Lobby.publishMessages.length > 0) 
