@@ -56,7 +56,7 @@ const ChannelFunction = () => {
                 	presence: function(response) { 
 						if(response.channel == Lobby.LOBBY && response.action === "join") {
 	                		Lobby.PUBNUB.hereNow({
-	                    		channel: Lobby.CHANNEL
+	                    		channels: [Lobby.CHANNEL] 
 	                    	}, function (status, response2) {
 								Notify(response.totalOccupancy);
 	                        	if(response2.totalOccupancy <= 2) {
