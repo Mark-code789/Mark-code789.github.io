@@ -310,7 +310,9 @@ const Publish = (prop) => { try {
             } 
         });
         await Sleep.start();
-        alert(res);
+        Nitify({action: "alert", 
+        		header: "Return Value", 
+				message: res});
     } 
     } catch (error) {alert(error);}
 } 
