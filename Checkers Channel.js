@@ -61,56 +61,53 @@ const ChannelFunction = () => {
 		                    	}, function (status, response2) {
 		                        	if(response2.totalOccupancy < 2) {
 			                            Lobby.PUBNUB.subscribe({
-											channels: Lobby.CHANNEL, 
+											channel: Lobby.CHANNEL, 
 											withPresence: true
 										});
 										Lobby.PUBNUB.unsubscribe({
-											channels: Lobby.LOBBY
+											channel: Lobby.LOBBY
 										});
 									} 
 									else {
 										Notify(`${Lobby.CHANNEL} channel is full, please try another channel.`);
 										Lobby.PUBNUB.unsubscribe({
-											channels: Lobby.LOBBY
+											channel: Lobby.LOBBY
 										});
 									} 
 								});
 							} 
+							else if(response.action === 'timeout') {
+	                            Notify(`Connection timeout to ${Lobby.CHANNEL} channel. Reconnecting...`);
+	                        } 
                 		} catch (error) {alert(error)}
-                } 
+                	} 
                 
                 Lobby.LISTENER = {
-                    presence: function(response) { try {
-                        if(response.action === 'join') {
-                            if(response.occupancy === 1 && !Lobby.isConnected) {
-                                Lobby.isHost = true;
-                                Notify("You are the host in this channel.");
-                            } 
-                            else if(response.occupancy === 2 && !Lobby.isConnected) {
-                                if(!Lobby.isHost) {
-                                    Notify("You are a guest in this channel.");
-                                } 
-                            } 
-                        } 
-                        else if(response.action === 'timeout') {
-                            Notify(`Connection timeout to ${Lobby.CHANNEL} channel. Reconnecting...`);
-                        } 
-                        else if(response.action === 'leave') {
-                        	Lobby.PUBNUB.hereNow({
-                        		channel: Lobby.CHANNEL
-                        	}, function (status, response2) {
-	                        	if(response2.totalOccupancy < 2) {
-		                            Publish({
-		                                    channel: Lobby.CHANNEL, 
-		                                    message: {
-		                                             title: "ConfirmLeave", 
-		                                             content: ""}
-		                                    });
-								} 
-								else 
-									Notify("Someone tried to join your channel");
-							});
-                        }} catch(error) {alert(error)}
+                    presence: function(response) { 
+						try {
+	                        if(response.action === 'join') {
+	                            if(response.occupancy === 1 && !Lobby.isConnected) {
+	                                Lobby.isHost = true;
+	                                Notify("You are the host in this channel.");
+	                            } 
+	                            else if(response.occupancy === 2 && !Lobby.isConnected) {
+	                                if(!Lobby.isHost) {
+	                                    Notify("You are a guest in this channel.");
+	                                } 
+	                            } 
+	                        } 
+	                        else if(response.action === 'timeout') {
+	                            Notify(`Connection timeout to ${Lobby.CHANNEL} channel. Reconnecting...`);
+	                        } 
+							else if(response.action === "leave") {
+								Publish({
+										 channel: Lobby.CHANNEL, 
+                                         message: {
+                                                   title: "ConfirmLeave", 
+                                                   content: ""}
+                                        });
+							} 
+                        } catch(error) {alert(error)}
                     }, 
                     status: function(event) {
                         if(event.affectedChannels[0] === Lobby.CHANNEL) {
