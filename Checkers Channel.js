@@ -72,7 +72,7 @@ const ChannelFunction = () => {
 									});
 								} 
 								else {
-									Notify(`${Lobby.CHANNEL} channel is full, please try another channel.`);
+									Notify(`${Lobby.CHANNEL} channel is full (${response.totalOccupancy}), please try another channel.`);
 									Lobby.PUBNUB.removeListener(Lobby.LOBBY_LISTENER);
 									Lobby.PUBNUB.unsubscribe({
 										channels: [Lobby.LOBBY]
