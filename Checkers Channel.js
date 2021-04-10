@@ -58,7 +58,7 @@ const ChannelFunction = () => {
 	                		Lobby.PUBNUB.hereNow({
 	                    		channel: Lobby.CHANNEL
 	                    	}, function (status, response2) {
-	                        	if(response2.totalOccupancy <= 2) {
+	                        	if(response2.totalOccupancy <= 3) {
 									Lobby.PUBNUB.removeListener(Lobby.LOBBY_LISTENER);
 									Lobby.PUBNUB.addListener(Lobby.LISTENER);
 									const Filter = `uuid != '${Lobby.PUBNUB.getUUID()}'`;
