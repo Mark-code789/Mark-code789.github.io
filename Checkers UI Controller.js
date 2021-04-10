@@ -2093,7 +2093,10 @@ const Submit = (event) => {
             Notify("Names submitted successfully!");
         } 
         else {
-            Notify("You have not provided any name for either <b><em>Player 1</em></b> or <b><em>Player 2</em></b> or both.");
+        	if(playerA_name == "") 
+            	Notify("You have not provided any name for <b><em>Player 1</em></b> please do so and submit again.");
+            else if(playerB_name == "")
+            	Notify("You have not provided any name for <b><em>Player 2</em></b> please do so and submit again.");
         } 
     } 
 } 
