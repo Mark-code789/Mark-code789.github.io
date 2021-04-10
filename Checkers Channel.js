@@ -387,7 +387,7 @@ const Message = async (prop) => { try {
     pText.classList.add("text");
     pTime.classList.add("time");
     
-    text = prop.text || $('.chat_field').innerHTML;
+    let text = prop.text || $('.chat_field').innerHTML;
     let time = new Date();
     let h = ("0" + time.getHours()).slice(-2);
     let m = ("0" + time.getMinutes()).slice(-2);
