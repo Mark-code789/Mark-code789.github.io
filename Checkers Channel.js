@@ -88,8 +88,8 @@ const ChannelFunction = () => {
                 
                 Lobby.LISTENER = {
                     presence: function(response) { 
-						try {
-	                        if(response.channel == Lobby.CHANNEL && response.action === 'join') {
+						if(response.channel == Lobby.CHANNEL) {
+	                        if(response.action === 'join') {
 	                            if(response.occupancy === 1 && !Lobby.isConnected) {
 	                                Lobby.isHost = true;
 	                                Notify("You are the host in this channel.");
@@ -100,10 +100,10 @@ const ChannelFunction = () => {
 	                                } 
 	                            } 
 	                        } 
-	                        else if(response.channel == Lobby.CHANNEL && response.action === 'timeout') {
+	                        else if(response.action === 'timeout') {
 	                            Notify(`Connection timeout to ${Lobby.CHANNEL} channel. Reconnecting...`);
 	                        } 
-							else if(response.channel == Lobby.CHANNEL && response.action === "leave") {
+							else if(response.action === "leave") {
 								Publish({
 										 channel: Lobby.CHANNEL, 
                                          message: {
@@ -111,7 +111,7 @@ const ChannelFunction = () => {
                                                    content: ""}
                                         });
 							} 
-                        } catch(error) {alert(error)}
+                        } 
                     }, 
                     status: function(event) {
                         if(event.affectedChannels[0] === Lobby.CHANNEL) {
