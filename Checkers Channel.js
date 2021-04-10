@@ -287,7 +287,7 @@ const Publish = (prop) => { try {
     
     async function asyncPublish () {
         let config = Lobby.publishMessages[0];
-        let res;
+        let res = "Not yet assigned";
 		Lobby.PUBNUB.publish(config, (status, response) => {
             if(!status.error) {
                 if(config.message.title === 'ConfirmLeave') {
