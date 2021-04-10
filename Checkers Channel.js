@@ -286,7 +286,6 @@ const Publish = (prop) => { try {
         asyncPublish();
     
     async function asyncPublish () {
-    	alert(Lobby.publishMessages.length);
         while(Lobby.publishMessages.length > 0) {
 	        let config = Lobby.publishMessages[0];
 	        await Lobby.PUBNUB.publish(config, async (status, response) => {
