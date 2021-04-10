@@ -55,8 +55,8 @@ const ChannelFunction = () => {
                 Lobby.LOBBY_LISTENER = {
                 	presence: function(response) { 
 						try {
+							alert(response.action);
 							if(response.action === "join") {
-								alert("response");
 		                		Lobby.PUBNUB.hereNow({
 		                    		channel: Lobby.CHANNEL
 		                    	}, function (status, response2) {
