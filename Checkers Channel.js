@@ -315,7 +315,7 @@ const Publish = (prop) => {
 		    	Lobby.isPublishing = true;
 		        let config = Lobby.publishMessages[0];
 				if(config.message.title == "Moved") 
-					alert(config.message.content.i + ", " + config.message.content.j);
+					alert(config.message.content.i + " and " + config.message.content.j);
 		        let res = "Not yet assigned";
 				Lobby.PUBNUB.publish(config, (status, response) => {
 		            if(!status.error) {
