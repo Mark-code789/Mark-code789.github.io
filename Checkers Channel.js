@@ -221,6 +221,7 @@ const ChannelFunction = () => {
                                 Cancel();
                             } 
                             else if(msg.message.title === "Moved") { 
+                            	alert(msg.message.content.i + "" + msg.message.content.j);
 								try {
 	                                let i = 7 - msg.message.content.i, 
 	                                    j = 7 - msg.message.content.j,
