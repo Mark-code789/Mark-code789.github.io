@@ -305,7 +305,7 @@ const Publish = (prop) => {
 	        meta: MetaConfig 
 	    } 
 	    
-	    Lobby.publishMessages.push(PublishConfig);
+	    await Lobby.publishMessages.push(PublishConfig);
 	    
 	    if(!Lobby.isPublishing)
 	        asyncPublish();
