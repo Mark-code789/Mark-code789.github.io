@@ -901,6 +901,10 @@ const Move = async (prop) => {
     		for(let move of sort) {
     			let empty = `${prop.i}${prop.j}`;
     			if((!Game.path.sort || JSON.stringify(Game.path.sort.slice(0, Game.path.sort.indexOf(move))) == JSON.stringify(sort.slice(0, sort.indexOf(move)))) && move.empty == empty) {
+    				//Publish for capturing moves
+    				if(Game.mode === "two-player-online" && (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") ) {
+			            Publish({channel: Lobby.CHANNEL, message: {title: "Moved", content: {i: prop.i, j: prop.j} } });
+			        }
     				Game.path = {sort, index: sort.indexOf(move)};
     				validMove = true;
 					for(let move2 of sort.slice(0, sort.indexOf(move) + 1)) {
@@ -921,10 +925,6 @@ const Move = async (prop) => {
 	    				clone.style.opacity = "0.5";
 				        prop.cell.appendChild(clone);
 						Game.prop.cell.style.pointerEvents = "none";
-						
-    					if(Game.mode === "two-player-online" && (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") ) {
-				            Publish({channel: Lobby.CHANNEL, message: {title: "Moved", content: {i: prop.i, j: prop.j} } });
-				        }
     				} 
     				else {
 						final = true;
@@ -991,6 +991,7 @@ const Move = async (prop) => {
         
         
     async function select (prop, capture = false) { //try {
+    	//publish for selecting both ordinary and capture moves
         if(Game.mode === "two-player-online" && (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") ) {
             Publish({channel: Lobby.CHANNEL, message: {title: "Moved", content: {i: prop.i, j: prop.j} } });
         }
@@ -1026,6 +1027,7 @@ const Move = async (prop) => {
     } 
     
     function makePath (prop, capture = false) { //try {
+    	// publish for ordinary moves
     	if(!capture && Game.mode === "two-player-online" && (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") ) {
             Publish({channel: Lobby.CHANNEL, message: {title: "Moved", content: {i: prop.i, j: prop.j} } });
         } 
