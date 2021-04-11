@@ -310,7 +310,7 @@ const Publish = (prop) => { try {
         asyncPublish();
     
     async function asyncPublish () { 
-    	alert(Lobby.publishMessages.length);
+    	//alert(Lobby.publishMessages.length);
         let config = Lobby.publishMessages[0];
         let res = "Not yet assigned";
 		Lobby.PUBNUB.publish(config, (status, response) => {
