@@ -306,7 +306,7 @@ const Publish = (prop) => { try {
     
     Lobby.publishMessages.push(PublishConfig);
     
-    if(Lobby.publishMessages.length === 1)
+    if(Lobby.publishMessages.length >= 1)
         asyncPublish();
     
     async function asyncPublish () { 
