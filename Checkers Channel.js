@@ -304,8 +304,7 @@ const Publish = async (prop) => {
 	        message: prop.message, 
 	        meta: MetaConfig 
 	    } 
-	    if(prop.message.title == "Moved") 
-			alert(prop.message.content.i + ", " + prop.message.content.j);
+	    
 	    await Lobby.publishMessages.push(PublishConfig);
 	    
 	    if(!Lobby.isPublishing)
@@ -315,6 +314,8 @@ const Publish = async (prop) => {
 			if(Lobby.publishMessages.length > 0) {
 		    	Lobby.isPublishing = true;
 		        let config = Lobby.publishMessages[0];
+				if(config.message.title == "Moved") 
+					alert(config.message.content.i + ", " + config.message.content.j);
 		        let res = "Not yet assigned";
 				Lobby.PUBNUB.publish(config, (status, response) => {
 		            if(!status.error) {
