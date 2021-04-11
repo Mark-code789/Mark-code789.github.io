@@ -294,7 +294,7 @@ const Unsubscribe = async (isFull = false) => {
     } 
 } 
 
-const Publish = async (prop) => { 
+const Publish = (prop) => { 
 	try {
 	    const MetaConfig = {
 	        "uuid": Lobby.PUBNUB.getUUID()
@@ -305,7 +305,7 @@ const Publish = async (prop) => {
 	        meta: MetaConfig 
 	    } 
 	    
-	    await Lobby.publishMessages.push(PublishConfig);
+	    Lobby.publishMessages.push(PublishConfig);
 	    
 	    if(!Lobby.isPublishing)
 	        asyncPublish();
