@@ -226,7 +226,7 @@ const ChannelFunction = () => {
 	                                    j = 7 - msg.message.content.j,
 	                                    cell = $("#table").rows[i].cells[j];
 	                                ValidateMove({cell, i, j, isComputer: true});
-                                } catch (error) {Notify(error + "")}
+                                } catch (error) {alert(error + "")}
                             } 
                             else if(msg.message.title === "Undone") {
                                 back(true, true);
