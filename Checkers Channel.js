@@ -295,7 +295,7 @@ const Unsubscribe = async (isFull = false) => {
     } 
 } 
 
-const Publish = (prop) => { 
+const Publish = async (prop) => { 
 	try {
 	    const MetaConfig = {
 	        "uuid": Lobby.PUBNUB.getUUID()
