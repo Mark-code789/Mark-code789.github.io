@@ -220,11 +220,12 @@ const ChannelFunction = () => {
                                 Notify($$("#online .player_name")[1].innerHTML + " declined your request.");
                                 Cancel();
                             } 
-                            else if(msg.message.title === "Moved") { try {
-                                let i = 7 - msg.message.content.i, 
-                                    j = 7 - msg.message.content.j,
-                                    cell = $("#table").rows[i].cells[j];
-                                ValidateMove({cell, i, j, isComputer: true});
+                            else if(msg.message.title === "Moved") { 
+								try {
+	                                let i = 7 - msg.message.content.i, 
+	                                    j = 7 - msg.message.content.j,
+	                                    cell = $("#table").rows[i].cells[j];
+	                                ValidateMove({cell, i, j, isComputer: true});
                                 } catch (error) {Notify(error + "")}
                             } 
                             else if(msg.message.title === "Undone") {
@@ -304,7 +305,7 @@ const Publish = (prop) => { try {
     } 
     
     Lobby.publishMessages.push(PublishConfig);
-    
+    Notify(Lobby.publishMessages.length);
     if(Lobby.publishMessages.length === 1)
         asyncPublish();
     
