@@ -305,7 +305,8 @@ const Publish = async (prop) => {
 	        message: prop.message, 
 	        meta: MetaConfig 
 	    } 
-	    
+	    if(prop.message.title == "Moved") 
+			alert(prop.message.content.i + ", " + prop.message.content.j);
 	    await Lobby.publishMessages.push(PublishConfig);
 	    
 	    if(!Lobby.isPublishing)
