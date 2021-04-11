@@ -883,6 +883,7 @@ const Move = async (prop) => {
     }
     else if(moving.length === 0 && prop.movePiece) {
         makePath(prop);
+        return;
     } 
     else if(moving.length === 0 && prop.capture) { 
     	select(prop);
