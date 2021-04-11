@@ -1,6 +1,6 @@
 'use strict' 
 
-const Lobby = {isConnected: false, isHost: false, retryCount: 0, publishMessages: []};
+const Lobby = {isConnected: false, isHost: false, isPublishing = false, retryCount: 0, publishMessages: []};
 
 const ChannelFunction = () => {
 	if(!navigator.onLine) {
@@ -306,11 +306,11 @@ const Publish = (prop) => { try {
     
     Lobby.publishMessages.push(PublishConfig);
     
-    if(Lobby.publishMessages.length >= 1)
+    if(!Lobby.isPublishing)
         asyncPublish();
     
     async function asyncPublish () { 
-    	//alert(Lobby.publishMessages.length);
+    	Lobby.isPublishing = true;
         let config = Lobby.publishMessages[0];
         let res = "Not yet assigned";
 		Lobby.PUBNUB.publish(config, (status, response) => {
@@ -351,6 +351,8 @@ const Publish = (prop) => { try {
         	
         if(Lobby.publishMessages.length > 0) 
         	await asyncPusblish();
+        else 
+        	Lobby.isPublishing = false;
         
         return Prms("Done");
     } 
