@@ -1026,6 +1026,9 @@ const Move = async (prop) => {
     } 
     
     function makePath (prop, capture = false) { //try {
+    	if(!capture && Game.mode === "two-player-online" && (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") ) {
+            Publish({channel: Lobby.CHANNEL, message: {title: "Moved", content: {i: prop.i, j: prop.j} } });
+        } 
         scene.style.display = "table";
         if(!capture) 
         	Game.prop.cell.classList.remove("valid");
@@ -1155,10 +1158,6 @@ const Move = async (prop) => {
                 else
                 playerB.kings++;
             }  
-            
-            if((other.capture && prop.final || !other.capture) && Game.mode === "two-player-online" && (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") ) {
-                Publish({channel: Lobby.CHANNEL, message: {title: "Moved", content: {i: prop.i, j: prop.j} } });
-            } 
             
             // Updating Game state
             piece = Game.state[Game.prop.i][Game.prop.j];
