@@ -294,68 +294,71 @@ const Unsubscribe = async (isFull = false) => {
     } 
 } 
 
-const Publish = (prop) => { try {
-    const MetaConfig = {
-        "uuid": Lobby.PUBNUB.getUUID()
-    } 
-    const PublishConfig = {
-        channel: prop.channel, 
-        message: prop.message, 
-        meta: MetaConfig 
-    } 
-    
-    Lobby.publishMessages.push(PublishConfig);
-    
-    if(!Lobby.isPublishing)
-        asyncPublish();
-    
-    async function asyncPublish () { 
-    	Lobby.isPublishing = true;
-        let config = Lobby.publishMessages[0];
-        let res = "Not yet assigned";
-		Lobby.PUBNUB.publish(config, (status, response) => {
-            if(!status.error) {
-                if(config.message.title === 'ConfirmLeave') {
-                    Lobby.timeoutID = setTimeout(() => {
-                        LeftChannel({totalOccupancy: 1});
-                    }, 5000);
-                    Sleep.end();
-					res = "Left";
-                } 
-                Sleep.end();
-				res = "Sent";
-            } 
-            if(status.error) {
-                Sleep.end();
-				res = "Failed";
-            } 
-        });
-        await Sleep.start();
-        if(res == "Sent") {
-        	await Lobby.publishMessages.shift();
-        	Lobby.retryCount = 0;
-        } 
-        else if(res == "Left") {
-        	Lobby.retryCount = 0;
-        	Lobby.publishMessages = [];
-        } 
-        else if(res == "Failed" && Lobby.retryCount <= 2) // retry twice
-        	++Lobby.retryCount;
-        else if(res == "Failed" && Lobby.retryCount > 2) {
-        	Lobby.retryCount = 0;
-        	Lobby.publishMessages = [];
-        	Notify({action: "alert", 
-                    header: "Communication Error", 
-                    message: "Couldn't communicate with the opponent. Either you have network issues or you are offline."});
-        } 
-        	
-        if(Lobby.publishMessages.length > 0) 
-        	await asyncPusblish();
-        else 
-        	Lobby.isPublishing = false;
-        
-        return Prms("Done");
-    } 
+const Publish = (prop) => { 
+	try {
+	    const MetaConfig = {
+	        "uuid": Lobby.PUBNUB.getUUID()
+	    } 
+	    const PublishConfig = {
+	        channel: prop.channel, 
+	        message: prop.message, 
+	        meta: MetaConfig 
+	    } 
+	    
+	    Lobby.publishMessages.push(PublishConfig);
+	    
+	    if(!Lobby.isPublishing)
+	        asyncPublish();
+	    
+	    async function asyncPublish () { 
+			if(Lobby.publishMessages.length > 0) {
+		    	Lobby.isPublishing = true;
+		        let config = Lobby.publishMessages[0];
+		        let res = "Not yet assigned";
+				Lobby.PUBNUB.publish(config, (status, response) => {
+		            if(!status.error) {
+		                if(config.message.title === 'ConfirmLeave') {
+		                    Lobby.timeoutID = setTimeout(() => {
+		                        LeftChannel({totalOccupancy: 1});
+		                    }, 5000);
+		                    Sleep.end();
+							res = "Left";
+		                } 
+		                Sleep.end();
+						res = "Sent";
+		            } 
+		            if(status.error) {
+		                Sleep.end();
+						res = "Failed";
+		            } 
+		        });
+		        await Sleep.start();
+		        if(res == "Sent") {
+		        	await Lobby.publishMessages.shift();
+		        	Lobby.retryCount = 0;
+		        } 
+		        else if(res == "Left") {
+		        	Lobby.retryCount = 0;
+		        	Lobby.publishMessages = [];
+		        } 
+		        else if(res == "Failed" && Lobby.retryCount <= 2) // retry twice
+		        	++Lobby.retryCount;
+		        else if(res == "Failed" && Lobby.retryCount > 2) {
+		        	Lobby.retryCount = 0;
+		        	Lobby.publishMessages = [];
+		        	Notify({action: "alert", 
+		                    header: "Communication Error", 
+		                    message: "Couldn't communicate with the opponent. Either you have network issues or you are offline."});
+		        } 
+		        	
+		        if(Lobby.publishMessages.length > 0) 
+		        	await asyncPusblish();
+		        else 
+		        	Lobby.isPublishing = false;
+		        
+		        return Prms("Done");
+			} 
+    	} 
     } catch (error) {alert(error);}
 } 
 
