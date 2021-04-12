@@ -414,6 +414,7 @@ const Share = () => {
 } 
 
 const Message = async (prop) => { try {
+	Notify(prop.action);
     let container = $(".bubbles_container");
     let anchor = $(".anchor");
     let bubble = $$$("div");
