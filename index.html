@@ -332,43 +332,53 @@
         <article id="settings-window" hidden>
             <h2>SETTINGS</h2>
             <section id="main-section">
-                <section class="inner_item"  >
+            	<section class="inner_item" id="item0">
+            		<p>Fullscreen:</p>
+                    <button id="fs-on" onclick="Clicked(this, this.parentNode)">ON</button>
+                    <button id="fs-off" onclick="Clicked(this, this.parentNode)" class="default">OFF</button>
+                </section>
+                <section class="inner_item" id="item1">
+                    <p>VIEW:</p>
+                    <button id="horiz" onclick="Clicked(this, this.parentNode)">HORIZ.</button>
+                    <button id="vert" onclick="Clicked(this, this.parentNode)" class="default">VERT.</button>
+                </section>
+                <section class="inner_item" id="item2">
                     <p>SOUND:</p>
                     <button id="unmute" onclick="Mute(false), Clicked(this, this.parentNode)" class="default">ON</button>
                     <button id="mute" onclick="Mute(true), Clicked(this, this.parentNode)">OFF</button>
                 </section>
-                <section class="inner_item three_items">
+                <section class="inner_item three_items" id="item3">
                     <p>FIRST MOVE:</p>
                     <button onclick="Clicked(this, this.parentNode)">WHITE</button>
                     <button onclick="Clicked(this, this.parentNode)" class="default">BLACK</button>
                     <button onclick="Clicked(this, this.parentNode)" class="third_item bottom">ROLL DICE</button>
                 </section>
-                <section class="inner_item three_items">
+                <section class="inner_item three_items" id="item4">
                     <p>PLAY AS:</p>
                     <button onclick="Clicked(this, this.parentNode), PlayAs(this)" class="default">WHITE</button>
                     <button onclick="Clicked(this, this.parentNode), PlayAs(this)">BLACK</button>
                     <button onclick="Clicked(this, this.parentNode), PlayAs(this)" class="third_item bottom">ALTERNATE</button>
                 </section>
-                <section class="inner_item">
+                <section class="inner_item" id="item5">
                     <p>MANDATORY CAPTURE:</p>
                     <button id="must-jump" onclick="Clicked(this, this.parentNode)" class="default">ON</button>
                     <button id="not-must-jump" onclick="Clicked(this, this.parentNode)">OFF</button>
                 </section>
-                <section class="inner_item three_items">
+                <section class="inner_item three_items" id="item6">
                     <p>HELPER:</p>
                     <button id="active" onclick="Clicked(this, this.parentNode)" class="default">ON</button>
                     <button id="inactive" onclick="Clicked(this, this.parentNode)">OFF</button>
                     <button id="only-captures" onclick="Clicked(this, this.parentNode)" class="third_item bottom">ONLY CAPTURES</button>
                 </section>
-                <section class="inner_item">
+                <section class="inner_item" id="item7">
                     <p>RESTART LEVELS:</p>
                     <button onclick="Clicked(), RestartLevels()" class="only_item middle">RESTART</button>
                 </section>
-                <section class="inner_item">
+                <section class="inner_item" id="item8">
                     <p>SUPPORT:</p>
                     <button onclick="Clicked(), Contact()" class="only_item">CONTACT ME</button>
                 </section>
-                <section class="inner_item">
+                <section class="inner_item" id="item9">
                     <p>ATTRIBUTES:</p>
                     <button onclick="Clicked(), Attribute()" class="only_item">ATTRIBUTES</button>
                 </section>
