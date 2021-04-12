@@ -3151,17 +3151,23 @@ const Fullscreen = (value) => {
 		$("#item1").style.display = "grid";
 	else {
 		$("#item1").style.display = "none";
-		screen.orientation.unlock();
+		orientationLocking(null, null, true);
 	} 
 } 
 
-async function orientationLocking (elem, orientation) {
+async function orientationLocking (elem, orientation, unlock = false) {
 	try {
         let isFullScreen = () => {
             if(document.fullscreenElement !== undefined) return document.fullscreenElement;
             if(document.webkitFullscreenElement !== undefined) return document.webkitFullscreenElement;
             if(document.mozFullscreenElement !== undefined) return document.mozFullscreenElement;
             if(document.msFullscreenElement !== undefined) return document.msFullscreenElement;
+        }
+        if(unlock) {
+        	if(isFullScreen()) {
+        		screen.orientation.unlock();
+        	}
+        	return;
         } 
         let method = elem.requestFullscreen || elem.webkitRequestFullscreen || elem.mozRequestFullscreen || elem.msRequestFullscreen;
        
