@@ -1952,7 +1952,7 @@ const Clicked = async (elem, parent, click = true) => { try {
         await orientationLocking(document.documentElement, other.orientation);
     }
     if(other.initialLoading) {
-    	await Play.initializeAudios();
+    	await AudioPlayer.initializeAudios();
     	other.initialLoading = false;
     } 
     } catch (error) {alert("Click error: " + error.message);}
