@@ -1841,30 +1841,44 @@ const GameOver = async (isDraw = false) => { try {
     } catch (error) {alert(error)}
 } 
 
-const Play = (tone, vol) => {
-    if(!Sound.muted) { 
-        try {
-            Sound[tone].muted = false;
-            Sound[tone].volume = vol;
-            if(Sound[tone].paused) {
-                let promise = Sound[tone].play();
-                if(promise != undefined) {
-                    promise.then(() => {
-                        //Notify("SUCCESS");
-                    }).catch((error) => {
-                        /*Notify({action: "alert", 
-                                header: "Audio Error", 
-                                message: error});*/
-                    });
-                } 
-            } 
-            else {
-                Sound[tone].pause();
-                Sound[tone].currentTime = 0;
-                Sound[tone].play();
-            } 
-        } catch (error) {Notify(error + "");}
-    } 
+class AudioPlayer {
+	static play = (tone, vol) => {
+	    if(!Sound.muted) { 
+	        try {
+	            Sound[tone].muted = false;
+	            Sound[tone].volume = vol;
+	            if(Sound[tone].paused) {
+	                let promise = Sound[tone].play();
+	                if(promise != undefined) {
+	                    promise.then(() => {
+	                        //Notify("SUCCESS");
+	                    }).catch((error) => {
+	                        /*Notify({action: "alert", 
+	                                header: "Audio Error", 
+	                                message: error});*/
+	                    });
+	                } 
+	            } 
+	            else {
+	                Sound[tone].pause();
+	                Sound[tone].currentTime = 0;
+	                Sound[tone].play();
+	            } 
+	        } catch (error) {Notify(error + "");}
+	    }
+	}
+	static initializeAudios = () => {
+		Sound.capture.muted = true;
+	    Sound.king.muted = true;
+	    Sound.collect.muted = true;
+	    Sound.game_win.muted = true;
+	    Sound.game_lose.muted = true;
+	    Sound.capture.play();
+	    Sound.king.play();
+	    Sound.collect.play();
+	    Sound.game_win.play();
+	    Sound.game_lose.play();
+	} 
 } 
 
 const Clicked = async (elem, parent, click = true) => { try {
@@ -3132,17 +3146,7 @@ async function play (isAutoRotate = false, accepted = false) {
 } 
 
 async function orientationLocking (elem, orientation) {
-    Sound.capture.muted = true;
-    Sound.king.muted = true;
-    Sound.collect.muted = true;
-    Sound.game_win.muted = true;
-    Sound.game_lose.muted = true;
-    Sound.capture.play();
-    Sound.king.play();
-    Sound.collect.play();
-    Sound.game_win.play();
-    Sound.game_lose.play();
-    try {
+	try {
         let isFullScreen = () => {
             if(document.fullscreenElement !== undefined) return document.fullscreenElement;
             if(document.webkitFullscreenElement !== undefined) return document.webkitFullscreenElement;
@@ -3208,21 +3212,26 @@ async function back (undo = false, isComp = false) {
 		return;
 	} 
     if(!undo) {
-        let btns = $("#item1").children;
-        for(let btn of btns) {
-            if(GetValue(btn, "background-image") == other.default) { 
-                if(btn.innerHTML == "HORIZ." && screen.orientation.type.toLowerCase().includes("portrait")) {
-                    await orientationLocking(document.documentElement, "landscape-primary"); 
-                    other.orientation = "landscape-primary";
-                    break;
-                } 
-                else if(btn.innerHTML == "VERT." && screen.orientation.type.toLowerCase().includes("landscape")) {
-                    await orientationLocking(document.documentElement, "portrait-primary");
-                    other.orientation = "portrait-primary";
-                    break;
-                } 
-            } 
-        } 
+        let btns = $("#item0").children;
+        other.fullscreen = GetValue(btn[0], "background-image") == other.default;
+       
+        if(other.fullscreen) {
+        	btns = $("#item1").children;
+	        for(let btn of btns) {
+	            if(GetValue(btn, "background-image") == other.default) { 
+	                if(btn.innerHTML == "HORIZ." && screen.orientation.type.toLowerCase().includes("portrait")) {
+	                    await orientationLocking(document.documentElement, "landscape-primary"); 
+	                    other.orientation = "landscape-primary";
+	                    break;
+	                } 
+	                else if(btn.innerHTML == "VERT." && screen.orientation.type.toLowerCase().includes("landscape")) {
+	                    await orientationLocking(document.documentElement, "portrait-primary");
+	                    other.orientation = "portrait-primary";
+	                    break;
+	                } 
+	            } 
+	        }
+		} 
         
         btns = $$("#item3 button");
         for(let btn of btns) {
