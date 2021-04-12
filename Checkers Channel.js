@@ -414,7 +414,6 @@ const Share = () => {
 } 
 
 const Message = async (prop) => { try {
-	Notify(prop.action);
     let container = $(".bubbles_container");
     let anchor = $(".anchor");
     let bubble = $$$("div");
@@ -456,7 +455,7 @@ const Message = async (prop) => { try {
         
         setTimeout(() => {anchor.scrollIntoView({block: "start", behavior: "smooth"});}, 200);
         Publish.send({channel: Lobby.CHANNEL, message: {title: "ChatMessage", content: text} });
-        //Message({action: "receive", count: 1, text});
+        Notify("Sent");
         return;
     } 
     else if(prop.action === 'receive') {
