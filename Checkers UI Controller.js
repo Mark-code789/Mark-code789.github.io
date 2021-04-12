@@ -1187,10 +1187,10 @@ const Move = async (prop) => {
                         prop.cell2.classList.add("valid");
 					} 
                     if(prop.king) {
-                        Play("king", 1);
+                        AudioPlayer.play("king", 1);
                     } 
                     else {
-                        Play("click", 0.1);
+                        AudioPlayer.play("click", 0.1);
                     } 
                     
                     if(Game.mode === "single-player" && (Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black") ) {
@@ -1232,7 +1232,7 @@ const Move = async (prop) => {
                     Game.state[i][j] = "EC";
                     
                     if(!prop.king) {
-                        Play("capture", 1);
+                        AudioPlayer.play("capture", 1);
                     }
                     
                     setTimeout (_=> startMoving(prop.n+1), 1);
@@ -1294,13 +1294,13 @@ const Move = async (prop) => {
                         
                         //Playing audios
                         if(!prop.king && Game.track.length > 1) {
-                            Play("collect", 0.5);
+                            AudioPlayer.play("collect", 0.5);
                         } 
                         else if(!prop.king) {
-                            Play("capture", 1);
+                            AudioPlayer.play("capture", 1);
                         } 
                         else {
-                            Play("king", 1);
+                            AudioPlayer.play("king", 1);
                         } 
                             
                         Game.track = [];
@@ -1577,10 +1577,10 @@ const GameOver = async (isDraw = false) => { try {
     if(Game.mode === "single-player") {
         if(!Game.over && !isDraw) {
             if(name === playerA.name) {
-                Play("game_lose", 1);
+                AudioPlayer.play("game_lose", 1);
             } 
             else {
-                Play("game_win", 1);
+                AudioPlayer.play("game_win", 1);
             } 
         } 
         if(name === playerA.name && !isDraw)
@@ -1655,7 +1655,7 @@ const GameOver = async (isDraw = false) => { try {
     } 
     else if(Game.mode === "two-player-offline") {
         if(!Game.over && !isDraw)
-            Play("game_win", 1);
+            AudioPlayer.play("game_win", 1);
         
         if(!isDraw) {
             Notify({action: "confirm", 
@@ -1690,10 +1690,10 @@ const GameOver = async (isDraw = false) => { try {
     else if(Game.mode === "two-player-online") {
         if(!Game.over && !isDraw) {
             if(name === playerA.name) {
-                Play("game_lose", 1);
+                AudioPlayer.play("game_lose", 1);
             } 
             else {
-                Play("game_win", 1);
+                AudioPlayer.play("game_win", 1);
             } 
         } 
         if(name === playerA.name && !isDraw)
@@ -1883,7 +1883,7 @@ class AudioPlayer {
 
 const Clicked = async (elem, parent, click = true) => { try {
     if(click) 
-        Play("click", 0.1);
+        AudioPlayer.play("click", 0.1);
     if(elem != undefined && !elem.innerHTML.includes("LOCKED") || elem != undefined && !click) {
         let btns = parent.children;
         for(let btn of btns) {
