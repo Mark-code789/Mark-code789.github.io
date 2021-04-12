@@ -316,49 +316,36 @@ const Publish = (prop) => {
 		        let config = Lobby.publishMessages[0];
 				if(config.message.title == "Moved") 
 					alert(config.message.content.i + " and " + config.message.content.j);
-		        let res = "Not yet assigned";
+		        
 				Lobby.PUBNUB.publish(config, (status, response) => {
 		            if(!status.error) {
 		                if(config.message.title === 'ConfirmLeave') {
+							Lobby.retryCount = 0;
+		        			Lobby.publishMessages = [];
 		                    Lobby.timeoutID = setTimeout(() => {
 		                        LeftChannel({totalOccupancy: 1});
 		                    }, 5000);
-		                    Sleep.end();
-							res = "Left";
 		                } 
-		                Sleep.end();
-						res = "Sent";
+						await Lobby.publishMessages.shift();
+		        		Lobby.retryCount = 0;
 		            } 
 		            if(status.error) {
-		                Sleep.end();
-						res = "Failed";
+						if(Lobby.retryCount <= 2) // retry twice
+		                	++Lobby.retryCount;
+						else 
+							Lobby.retryCount = 0;
+				        	Lobby.publishMessages = [];
+				        	Notify({action: "alert", 
+				                    header: "Communication Error", 
+				                    message: "Couldn't communicate with the opponent. Either you have network issues or you are offline."});
 		            } 
-		        });
-		        await Sleep.start();
-		        if(res == "Sent") {
-		        	await Lobby.publishMessages.shift();
-		        	Lobby.retryCount = 0;
-		        } 
-		        else if(res == "Left") {
-		        	Lobby.retryCount = 0;
-		        	Lobby.publishMessages = [];
-		        } 
-		        else if(res == "Failed" && Lobby.retryCount <= 2) // retry twice
-		        	++Lobby.retryCount;
-		        else if(res == "Failed" && Lobby.retryCount > 2) {
-		        	Lobby.retryCount = 0;
-		        	Lobby.publishMessages = [];
-		        	Notify({action: "alert", 
-		                    header: "Communication Error", 
-		                    message: "Couldn't communicate with the opponent. Either you have network issues or you are offline."});
-		        } 
-		        	
-		        if(Lobby.publishMessages.length > 0) 
-		        	await asyncPusblish();
-		        else 
-		        	Lobby.isPublishing = false;
-		        
-		        return Prms("Done");
+					if(Lobby.publishMessages.length > 0) 
+			        	await asyncPusblish();
+			        else 
+			        	Lobby.isPublishing = false;
+			
+					return Prms("Done");
+			    });
 			} 
     	} 
     } catch (error) {alert(error);}
