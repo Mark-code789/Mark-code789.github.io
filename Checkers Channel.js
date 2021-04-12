@@ -229,6 +229,7 @@ const ChannelFunction = () => {
                                 } catch (error) {alert(error + "")}
                             } 
                             else if(msg.message.title === "Undone") {
+                            	Notify(playerB.name + " undid the move");
                                 back(true, true);
                             } 
                             else if(msg.message.title === "ExitedGame") {
