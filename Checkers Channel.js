@@ -318,7 +318,7 @@ class Publish {
 	    
     static publish = async function () { 
         let config = this.messages[0];
-		Lobby.PUBNUB.publish(config, async (status, response) => {
+		Lobby.PUBNUB.publish(config, (status, response) => {
             if(!status.error) {
                 if(config.message.title === 'ConfirmLeave') {
 					this.retryCount = 0;
