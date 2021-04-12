@@ -200,7 +200,7 @@ const ChannelFunction = () => {
 								try {
                             		let tick = $("#" + msg.message.content);
                             		tick.style.background = "#009819";
-                            	} 
+                            	} catch (error) {alert(error)} 
                             } 
                             else if(msg.message.title === 'ChatMessage') {
                             	Publish.send({channel: Lobby.CHANNEL, message: {title: "Delivered", content: msg.message.content.id}});
