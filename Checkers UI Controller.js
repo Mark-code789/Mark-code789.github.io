@@ -3304,11 +3304,16 @@ async function back (undo = false, isComp = false) {
 	            }
 				
                 Game.whiteTurn = !Game.whiteTurn;
-                if(Game.mode == "two-player-online") 
-                	Publish.send({channel: Lobby.CHANNEL, message: {title: "Undone", content: {} } });
+                
                 if((Game.mode === "single-player" || Game.mode == "two-player-online") && (Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black")) {
-                	Game.validForHint = false;
-                    $("#play-window .footer_section p label:last-of-type").style.backgroundImage = "var(--undo)";
+                	if(Game.mode == "two-player-online") {
+                		Publish.send({channel: Lobby.CHANNEL, message: {title: "Undone", content: {} } });
+                		Publish.send({channel: Lobby.CHANNEL, message: {title: "Undone", content: {} } });
+                	}
+                	else {
+	                	Game.validForHint = false;
+	                    $("#play-window .footer_section p label:last-of-type").style.backgroundImage = "var(--undo)";
+					} 
                      
                     await back(true, true);
                     return;
