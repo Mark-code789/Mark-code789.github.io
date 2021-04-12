@@ -3281,7 +3281,7 @@ async function back (undo = false, isComp = false) {
             let length = BackState.moves.length;
             if(length > 0 && Game.mode === "two-player-offline" || (isComp || (Game.mode == "two-player-online" || Game.mode === "single-player") && length > 1 && (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") )) {
             	if(isComp)
-            		Notify(playerB.name + " undone the move");
+            		Notify(playerB.name + " undid the move");
                 let move = BackState.moves[length-1];
                 await BackState.moves.pop();
                 Undo.move(move);
