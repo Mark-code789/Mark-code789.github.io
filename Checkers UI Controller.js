@@ -3213,7 +3213,7 @@ async function back (undo = false, isComp = false) {
 	} 
     if(!undo) {
         let btns = $$("#item0 button");
-        other.fullscreen = GetValue(btn[0], "background-image") == other.default;
+        other.fullscreen = GetValue(btns[0], "background-image") == other.default;
        
         if(other.fullscreen) {
         	btns = $$("#item1 button");
