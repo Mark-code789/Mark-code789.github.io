@@ -590,9 +590,10 @@ const AdjustWidth = (elem) => { try {
 } 
 
 const ChangeTextBox = async (isFocused, elem) => { 
-    elem.scrollIntoView(false);
-    if(elem.id === "channel-name") 
+    if(elem.id === "channel-name") {
         elem.maxLength = "100";
+        elem.scrollIntoView(false);
+    } 
     setTimeout(() => {
         let vh = window.innerHeight;
         if(vh < 150 && isFocused) {
