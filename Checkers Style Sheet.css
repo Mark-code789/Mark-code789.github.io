@@ -90,12 +90,13 @@ article {
     text-align: center;
     touch-action: none;
     pointer-events: none;
-    
-    display: flex;
-    justify-content: center;
 } 
 
 .typing_container {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 	height: 10px;
 	width: 100%;
 	display: flex;
