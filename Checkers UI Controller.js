@@ -3122,7 +3122,7 @@ async function play (isAutoRotate = false, accepted = false) {
     } 
 } 
 
-async function orientationLocking (elem, orientation) {
+async function orientationLocking () {
     Sound.capture.muted = true;
     Sound.king.muted = true;
     Sound.collect.muted = true;
