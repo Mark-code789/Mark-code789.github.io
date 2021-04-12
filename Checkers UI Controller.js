@@ -3336,7 +3336,7 @@ async function back (undo = false, isComp = false) {
                     await UpdatePiecesStatus();
 				}, 100);
             } 
-            else if((Game.mode == "single-player" || Game.mode == "two-player-online") && length <= 1 || length == 0) {
+            else if((Game.mode == "single-player" || Game.mode == "two-player-online") && length <= 1 && (Game.whiteTurn && playerA.pieceColor == "White" || !Game.whiteTurn && playerA.pieceColor == "Black") || length == 0) {
                 Notify("No moves made yet");
             }
             else {
