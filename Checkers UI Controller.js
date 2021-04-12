@@ -2546,7 +2546,7 @@ const Mode = async (type, click = true) => {
         playerA.name = $$("#online .player_name")[0].innerHTML;
         playerB.name = $$("#online .player_name")[1].innerHTML;
         $("#two-players-window h2").innerHTML = "TWO PLAYERS ONLINE";
-        $$("#settings-window #main-section .inner_item")[3].style.display = "grid";
+        $("#item3").style.display = "grid";
         $("#online").style.display = "grid";
         $("#offline").style.display = "none";
        
