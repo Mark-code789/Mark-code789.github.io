@@ -3120,20 +3120,7 @@ async function play (isAutoRotate = false, accepted = false) {
         else if(Game.mode === 'two-player-offline')
             Notify("Can't play, you haven't filled out players details. Fill them out and try again.");
     } 
-} 
-
-async function orientationLocking () {
-    Sound.capture.muted = true;
-    Sound.king.muted = true;
-    Sound.collect.muted = true;
-    Sound.game_win.muted = true;
-    Sound.game_lose.muted = true;
-    Sound.capture.play();
-    Sound.king.play();
-    Sound.collect.play();
-    Sound.game_win.play();
-    Sound.game_lose.play();
-} 
+}
 
 async function back (undo = false, isComp = false) {
 	if(Game.thinking && undo) {
@@ -3141,22 +3128,6 @@ async function back (undo = false, isComp = false) {
 		return;
 	} 
     if(!undo) {
-        let btns = $("#settings-window #main-section #item1").children;
-        for(let btn of btns) {
-            if(GetValue(btn, "background-image") == other.default) { 
-                if(btn.innerHTML == "HORIZ." && screen.orientation.type.toLowerCase().includes("portrait")) {
-                    await orientationLocking(document.documentElement, "landscape-primary"); 
-                    other.orientation = "landscape-primary";
-                    break;
-                } 
-                else if(btn.innerHTML == "VERT." && screen.orientation.type.toLowerCase().includes("landscape")) {
-                    await orientationLocking(document.documentElement, "portrait-primary");
-                    other.orientation = "portrait-primary";
-                    break;
-                } 
-            } 
-        } 
-        
         btns = $$("#settings-window #main-section .inner_item:nth-of-type(3) button");
         for(let btn of btns) {
             if(GetValue(btn, "background-image") == other.default) { 
