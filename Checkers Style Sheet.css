@@ -275,12 +275,28 @@ article {
     overflow-wrap: break-word;
 } 
 
+.report {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	width: 100%;
+} 
+
 .time {
-    display: block;
+    display: inline-block;
     padding: 5px;
     text-align: right;
     
     font-size: 0.6em;
+} 
+
+.tick {
+	display: inline-block;
+	height: 8px;
+	width: 8px;
+	background: #A0A0A0;
+	border: none;
+	border-radius: 50%;
 } 
 
 .right_bubble {
