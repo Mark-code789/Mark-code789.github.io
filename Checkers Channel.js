@@ -115,7 +115,6 @@ const ChannelFunction = () => {
 								} 
 	                        } 
 							else if(response.action === "leave") {
-								alert(response.uuid + "\n\n" + Lobby.UUID);
 								Publish.send({
 										 channel: Lobby.CHANNEL, 
                                          message: {
@@ -123,7 +122,8 @@ const ChannelFunction = () => {
                                                    content: ""}
                                         });
 							} 
-							else if(response.action === "state-change" && response.uuid != Lobby.PUBNUB.getUUID()) { try {
+							else if(response.action === "state-change") { try {
+								alert(response.uuid + "\n\n" + Lobby.UUID);
 								if(response.state.isTyping) {
 									$("#dragItem").innerHTML = "";
 									if(GetValue($("#chat-icon"), "display") === "block") {
