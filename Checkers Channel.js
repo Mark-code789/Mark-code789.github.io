@@ -118,7 +118,7 @@ const ChannelFunction = () => {
                                         });
 							} 
 							else if(response.action === "state-change") {
-								alert(response.state.isTyping);
+								alert("State: " + response.state.isTyping);
 							} 
                         } 
                     }, 
