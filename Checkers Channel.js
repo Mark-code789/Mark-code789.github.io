@@ -120,11 +120,29 @@ const ChannelFunction = () => {
 							else if(response.action === "state-change") {
 								if(response.state.isTyping) {
 									if(GetValue($("#chat-icon"), "display") === "block") {
+										
 										for(let dot of $$("typing") {
 											void dot.offsetWidth;
 											dot.style.display = "inline-block";
 											dot.classList.add("boucing");
 										} 
+									} 
+									else {
+										let status = $$(".chat_header p")[1];
+										status.innerHTML = "typing...";
+									} 
+								} 
+								else {
+									if(GetValue($("#chat-icon"), "display") === "block") {
+										
+										for(let dot of $$("typing") {
+											dot.classList.remove("boucing");
+											dot.style.display = "none";
+										} 
+									} 
+									else {
+										let status = $$(".chat_header p")[1];
+										status.innerHTML = "online";
 									} 
 								} 
 							} 
