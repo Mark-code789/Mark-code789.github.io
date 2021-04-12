@@ -85,9 +85,14 @@ article {
 } 
 
 #chat-icon .chat_icon_container p {
+	width: 100%;
+	height: 100%;
     text-align: center;
     touch-action: none;
     pointer-events: none;
+    
+    display: flex;
+    justify-content: center;
 } 
 
 .typing_container {
