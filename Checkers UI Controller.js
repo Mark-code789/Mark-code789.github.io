@@ -3145,7 +3145,7 @@ async function play (isAutoRotate = false, accepted = false) {
     } 
 }
 
-const Fullscreen = (value) => {
+const Fullscreen = (value) => { try {
 	let isFullScreen = () => {
         if(document.fullscreenElement !== undefined) return document.fullscreenElement;
         if(document.webkitFullscreenElement !== undefined) return document.webkitFullscreenElement;
@@ -3172,7 +3172,7 @@ const Fullscreen = (value) => {
 			other.fullscreen = value;
 			$("#item1").style.display = "none";
     	}
-	} 
+	} } catch (error) {alert(error)}
 } 
 
 async function orientationLocking (elem, orientation, unlock = false) {
