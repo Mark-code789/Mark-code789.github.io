@@ -203,14 +203,14 @@ const ChannelFunction = () => {
                             	} 
                             } 
                             else if(msg.message.title === 'ChatMessage') {
-                            	Publish.send({channel: Lobby.CHANNEL, message: {title: "Delivered", content: msg.message.id}});
+                            	Publish.send({channel: Lobby.CHANNEL, message: {title: "Delivered", content: msg.message.content.id}});
                                 let badge = $(".badge");
                                 if(GetValue($("#chat-icon"), "display") === "block") {
                                     badge.innerHTML = parseInt(badge.innerHTML)+1;
                                     badge.style.display = "block";
                                     Notify(`You have ${parseInt(badge.innerHTML) <= 1? 'a new message': badge.innerHTML + ' new messages'} from ${$$("#online .player_name")[1].innerHTML}`);
                                 } 
-                                Message({action: 'receive', count: parseInt(badge.innerHTML), text: msg.message.content});
+                                Message({action: 'receive', count: parseInt(badge.innerHTML), text: msg.message.content.text});
                             } 
                             else if(msg.message.title === "RequestPlay") {
                             	Request(msg.message);
@@ -471,8 +471,7 @@ const Message = async (prop) => { try {
             unreadBubble.parentNode.removeChild(unreadBubble);
         
         setTimeout(() => {anchor.scrollIntoView({block: "start", behavior: "smooth"});}, 200);
-        Publish.send({channel: Lobby.CHANNEL, message: {title: "ChatMessage", content: text} });
-        Notify("Sent");
+        Publish.send({channel: Lobby.CHANNEL, message: {title: "ChatMessage", content: {text: } });
         return;
     } 
     else if(prop.action === 'receive') {
