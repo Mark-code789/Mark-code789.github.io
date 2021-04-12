@@ -590,12 +590,13 @@ class Sleep {
 	i = 0;
 	j = 1_000;
 	start = () => {
+		let self = this;
 		return new Promise((resolve, reject) => {
 			const it = setInterval(() => {
-				this.i++;
-				if(this.i >= this.j) {
+				self.i++;
+				if(self.i >= self.j) {
 					resolve("Done");
-					this.i = 0;
+					self.i = 0;
 					clearInterval(it);
 				} 
 			}, 1000);
