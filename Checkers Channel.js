@@ -436,7 +436,7 @@ const Message = async (prop) => { try {
     let children = $$(".bubble");
     
     if(prop.action === "send") {
-    	$(".chat_field_container .send_button").focus();
+    	$(".send_button").focus();
         $('.chat_field').innerHTML = "";
         await ChangeTextBox(false, $(".chat_field"));
         await AdjustWidth($(".chat_field"));
