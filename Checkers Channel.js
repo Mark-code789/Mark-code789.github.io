@@ -117,6 +117,9 @@ const ChannelFunction = () => {
                                                    content: ""}
                                         });
 							} 
+							else if(response.action === "state-change") {
+								alert(response.state);
+							} 
                         } 
                     }, 
                     status: function(event) {
@@ -591,6 +594,12 @@ const AdjustWidth = (elem) => { try {
 const ChangeTextBox = async (isFocused, elem) => { 
 	if($(".send_button") === document.activeElement) {
 		Message({action: "send"});
+	} 
+	else if($(".chat_field") === document.activeElememt) {
+		Lobby.PUBNUB.setState({
+			state: {"isTyping": true}, 
+			channels: [Lobby.CHANNEL]
+		}, function (status, response) {});
 	} 
 	if(!elem.className.includes("chat_field")) {
 		elem.scrollIntoView(false);
