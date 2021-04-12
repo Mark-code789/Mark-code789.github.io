@@ -95,7 +95,7 @@ const ChannelFunction = () => {
                 Lobby.LISTENER = {
                     presence: function(response) { 
 						if(response.channel == Lobby.CHANNEL) {
-	                        if(response.action === 'join') {
+	                        if(response.action === 'join' && response.uuid === Lobby.PUBNUB.getUUID()) {
 	                            if(response.occupancy === 1 && !Lobby.isConnected) {
 	                                Lobby.isHost = true;
 	                                Notify("You are the host in this channel.");
@@ -107,7 +107,12 @@ const ChannelFunction = () => {
 	                            } 
 	                        } 
 	                        else if(response.action === 'timeout') {
-	                            Notify(`Connection timeout to ${Lobby.CHANNEL} channel. Reconnecting...`);
+								if(response.uuid === Lobby.PUBNUB.getUUID()) 
+	                            	Notify(`Connection timeout to ${Lobby.CHANNEL} channel. Reconnecting...`);
+								else {
+									let status = $$(".chat_header p")[1];
+									status.innerHTML = "offline";
+								} 
 	                        } 
 							else if(response.action === "leave") {
 								Publish.send({
