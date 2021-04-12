@@ -191,6 +191,7 @@ class AI {
         let bestPossibleMoves = [];
         let worker;
         let count = 0;
+        let sleep = new Sleep();
         
         if(moves.length > 1 && this.depth > 1) { 
         	if(window.Worker && (this.depth > 4 || Game.version == "international" || Game.version == "nigerian")) {
@@ -218,7 +219,7 @@ class AI {
 						worker.postMessage([this.state, move, cloneState, moves2, this.depth, isMax, this.MIN, this.MAX, true]);
 					}
 		        } 
-        		await Sleep.start();
+        		await sleep.start();
         		worker.terminate();
         		let random = Math.round(Math.random() * (bestPossibleMoves.length - 1));
 		        bestMove = bestPossibleMoves[random];
@@ -308,7 +309,7 @@ class AI {
             } 
             
             if(count == this.MAX || count == moves.length) {
-				Sleep.end();
+				sleep.end();
             } 
         } 
     } 
