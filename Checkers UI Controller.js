@@ -3166,6 +3166,7 @@ async function orientationLocking (elem, orientation, unlock = false) {
         if(unlock) {
         	if(isFullScreen()) {
         		screen.orientation.unlock();
+        		document.exitFullscreen();
         	}
         	return;
         } 
