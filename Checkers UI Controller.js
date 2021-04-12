@@ -1932,11 +1932,6 @@ const Clicked = async (elem, parent, click = true) => { try {
 		}, 300);
         return;
     } 
-    
-    if(click && screen.orientation.type.toLowerCase() != other.orientation || click && other.initialLoading) {
-        await orientationLocking(document.documentElement, other.orientation);
-        other.initialLoading = false;
-    } 
     } catch (error) {alert("Click error: " + error.message);}
 }
 
