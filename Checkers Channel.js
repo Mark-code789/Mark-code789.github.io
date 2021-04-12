@@ -117,7 +117,7 @@ const ChannelFunction = () => {
                                                    content: ""}
                                         });
 							} 
-							else if(response.action === "state-change") {
+							else if(response.action === "state-change") { try {
 								if(response.state.isTyping) {
 									$("#drag-item").innerHTML = "";
 									if(GetValue($("#chat-icon"), "display") === "block") {
@@ -144,7 +144,7 @@ const ChannelFunction = () => {
 										let status = $$(".chat_header p")[1];
 										status.innerHTML = "online";
 									} 
-								} 
+								} } catch(error) {alert(error)} 
 							} 
                         } 
                     }, 
@@ -228,7 +228,7 @@ const ChannelFunction = () => {
                             		tick.style.background = "#009819";
                             	} catch (error) {alert(error)} 
                             } 
-                            else if(msg.message.title === 'ChatMessage') {
+                            else if(msg.message.title === 'ChatMessage') { 
                             	Publish.send({channel: Lobby.CHANNEL, message: {title: "Delivered", content: msg.message.content.id}});
                                 let badge = $(".badge");
                                 if(GetValue($("#chat-icon"), "display") === "block") {
