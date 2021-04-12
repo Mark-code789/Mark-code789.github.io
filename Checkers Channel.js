@@ -201,6 +201,7 @@ const ChannelFunction = () => {
                             	tick.style.background = "#009819";
                             } 
                             else if(msg.message.title === 'ChatMessage') {
+                            	Publish.send({channel: Lobby.CHANNEL, message: {title: "Delivered", content: msg.message.id}});
                                 let badge = $(".badge");
                                 if(GetValue($("#chat-icon"), "display") === "block") {
                                     badge.innerHTML = parseInt(badge.innerHTML)+1;
