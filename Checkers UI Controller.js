@@ -3152,10 +3152,6 @@ const Fullscreen = (value) => {
         if(document.mozFullscreenElement !== undefined) return document.mozFullscreenElement;
         if(document.msFullscreenElement !== undefined) return document.msFullscreenElement;
     }
-    if(unlock) {
-
-    	return;
-    }
     elem = document.documentElement;
     let enterFullscreen = elem.requestFullscreen || elem.webkitRequestFullscreen || elem.mozRequestFullscreen || elem.msRequestFullscreen;
     let exitFullscreen = document.exitFullscreen || document.webkitExitFullscreen || document.mozExitFullscreen || document.msExitFullscreen;
