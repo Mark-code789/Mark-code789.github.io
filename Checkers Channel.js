@@ -421,8 +421,10 @@ const Message = async (prop) => { try {
     let anchor = $(".anchor");
     let bubble = $$$("div");
     let pText = $$$("p");
+    let pReport = $$$("span");
     let pTime = $$$("span");
     pText.classList.add("text");
+    pReport.classList.add("report");
     pTime.classList.add("time");
     
     let text = prop.text || $('.chat_field').innerHTML;
@@ -435,11 +437,15 @@ const Message = async (prop) => { try {
     
     pText.innerHTML = text;
     pTime.innerHTML = time;
-    pText.appendChild(pTime);
+    pReport.appendChild(pTime);
+    pText.appendChild(pReport);
     
     let children = $$(".bubble");
     
     if(prop.action === "send") {
+    	let pTick = $$$("span");
+    	pTick.classList.add("tick");
+    	pReport.appendChild(pTick);
         $('.chat_field').innerHTML = "";
         $('.chat_field').focus();
         await ChangeTextBox(false, $(".chat_field"));
