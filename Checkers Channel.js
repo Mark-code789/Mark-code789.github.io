@@ -317,7 +317,7 @@ const Publish = (prop) => {
 				if(config.message.title == "Moved") 
 					alert(config.message.content.i + " and " + config.message.content.j);
 		        
-				Lobby.PUBNUB.publish(config, (status, response) => {
+				Lobby.PUBNUB.publish(config, async (status, response) => {
 		            if(!status.error) {
 		                if(config.message.title === 'ConfirmLeave') {
 							Lobby.retryCount = 0;
