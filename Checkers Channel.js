@@ -1,6 +1,6 @@
 'use strict' 
 
-const Lobby = {isConnected: false, isHost: false, isPublishing: false, retryCount: 0, publishMessages: []};
+const Lobby = {isConnected: false, isHost: false};
 
 const ChannelFunction = () => {
 	if(!navigator.onLine) {
@@ -297,7 +297,7 @@ const Unsubscribe = async (isFull = false) => {
 class Publish { 
 	static messages = [];
 	static retryCount = 0;
-	static send = (prop) {
+	static send = (prop) => {
 	    const MetaConfig = {
 	        "uuid": Lobby.PUBNUB.getUUID()
 	    } 
@@ -316,36 +316,37 @@ class Publish {
 	        this.publish();
 	} 
 	    
-    static publish = async function () { 
+    static publish = async () => { 
         let config = this.messages[0];
+        let self = this;
 		Lobby.PUBNUB.publish(config, (status, response) => {
             if(!status.error) {
                 if(config.message.title === 'ConfirmLeave') {
-					this.retryCount = 0;
-        			this.messages = [];
+					self.retryCount = 0;
+        			self.messages = [];
                     Lobby.timeoutID = setTimeout(() => {
                         LeftChannel({totalOccupancy: 1});
                     }, 5000);
                 } 
 				else {
-					this.messages.shift();
-        			this..retryCount = 0;
+					self.messages.shift();
+        			self.retryCount = 0;
 				} 
             } 
             if(status.error) {
 				alert("Error: " + error);
-				if(this.retryCount <= 2) // retry twice
-                	++this.retryCount;
+				if(self.retryCount <= 2) // retry twice
+                	++self.retryCount;
 				else {
-					this.retryCount = 0;
-		        	this.messages = [];
+					self.retryCount = 0;
+		        	self.messages = [];
 		        	Notify({action: "alert", 
 		                    header: "Communication Error", 
 		                    message: "Couldn't communicate with the opponent. Either you have network issues or you are offline."});
 				} 
             } 
-			if(this.messages.length > 0) 
-	        	this.publish();
+			if(self.messages.length > 0) 
+	        	self.publish();
 	    });
 	} 
 } 
