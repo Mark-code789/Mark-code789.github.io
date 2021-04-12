@@ -3305,7 +3305,7 @@ async function back (undo = false, isComp = false) {
 				
                 Game.whiteTurn = !Game.whiteTurn;
                 
-                if((Game.mode === "single-player" || Game.mode == "two-player-online") && (Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black")) {
+                if(!isComp && (Game.mode === "single-player" || Game.mode == "two-player-online") && (Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black")) {
                 	if(Game.mode == "two-player-online") {
                 		Publish.send({channel: Lobby.CHANNEL, message: {title: "Undone", content: {} } });
                 		Publish.send({channel: Lobby.CHANNEL, message: {title: "Undone", content: {} } });
