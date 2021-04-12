@@ -586,21 +586,21 @@ class KillerMove {
 } 
 
 class Sleep {
-	static i = 0;
-	static j = 1_000;
-	static start = () => {
+	i = 0;
+	j = 1_000;
+	start = () => {
 		return new Promise((resolve, reject) => {
 			const it = setInterval(() => {
-				Sleep.i++;
-				if(Sleep.i >= Sleep.j) {
+				this.i++;
+				if(this.i >= this.j) {
 					resolve("Done");
-					Sleep.i = 0;
+					this.i = 0;
 					clearInterval(it);
 				} 
 			}, 1000);
 		});
 	} 
-	static end = () => {
+	end = () => {
 		this.i = this.j;
 	} 
 } 
