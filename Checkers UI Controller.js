@@ -2121,7 +2121,7 @@ const Restart = async (option) => {
                 type: "CANCEL/RESTART", 
                 onResponse: RestartOption});
         
-        async function RestartOption (choice) {
+        async function RestartOption (choice) { try {
             if(choice === "RESTART") {
                 if(Game.mode === "two-player-online") {
                     if(Game.alternatePlayAs) {
@@ -2159,7 +2159,8 @@ const Restart = async (option) => {
             } 
             else if(choice === "CANCEL") {
                 Cancel();
-            } 
+            }
+            } catch (error) {alert(error)}
         } 
     } 
     else {
