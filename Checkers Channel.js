@@ -471,7 +471,7 @@ const Message = async (prop) => { try {
             unreadBubble.parentNode.removeChild(unreadBubble);
         
         setTimeout(() => {anchor.scrollIntoView({block: "start", behavior: "smooth"});}, 200);
-        Publish.send({channel: Lobby.CHANNEL, message: {title: "ChatMessage", content: {text, id: pTick.id} });
+        Publish.send({channel: Lobby.CHANNEL, message: {title: "ChatMessage", content: {text, id: pTick.id}} });
         return;
     } 
     else if(prop.action === 'receive') {
