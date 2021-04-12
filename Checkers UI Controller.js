@@ -3146,6 +3146,7 @@ async function play (isAutoRotate = false, accepted = false) {
 }
 
 const Fullscreen = (value) => {
+	other.fullscreen = value;
 	if(value)
 		$("#item1").style.display = "grid";
 	else
@@ -3222,10 +3223,8 @@ async function back (undo = false, isComp = false) {
 		return;
 	} 
     if(!undo) {
-        let btns = $$("#item0 button");
-        other.fullscreen = GetValue(btns[0], "background-image") == other.default;
-       
-        if(other.fullscreen) {
+        let btns;
+		if(other.fullscreen) {
         	btns = $$("#item1 button");
 	        for(let btn of btns) {
 	            if(GetValue(btn, "background-image") == other.default) { 
