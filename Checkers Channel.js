@@ -590,9 +590,14 @@ const AdjustWidth = (elem) => { try {
 } 
 
 const ChangeTextBox = async (isFocused, elem) => { 
+	if($(".send_button") == document.activeElement) {
+		
+	} 
+	if(!elem.className.includes("chat_field")) {
+		elem.scrollIntoView(false);
+	} 
     if(elem.id === "channel-name") {
         elem.maxLength = "100";
-        elem.scrollIntoView(false);
     } 
     setTimeout(() => {
         let vh = window.innerHeight;
