@@ -3147,82 +3147,60 @@ async function play (isAutoRotate = false, accepted = false) {
 
 const Fullscreen = (value) => {
 	other.fullscreen = value;
-	if(value)
-		$("#item1").style.display = "grid";
+	let isFullScreen = () => {
+        if(document.fullscreenElement !== undefined) return document.fullscreenElement;
+        if(document.webkitFullscreenElement !== undefined) return document.webkitFullscreenElement;
+        if(document.mozFullscreenElement !== undefined) return document.mozFullscreenElement;
+        if(document.msFullscreenElement !== undefined) return document.msFullscreenElement;
+    }
+    if(unlock) {
+
+    	return;
+    }
+    elem = document.documentElement;
+    let enterFullscreen = elem.requestFullscreen || elem.webkitRequestFullscreen || elem.mozRequestFullscreen || elem.msRequestFullscreen;
+    let exitFullscreen = document.exitFullscreen || document.webkitExitFullscreen || document.mozExitFullscreen || document.msExitFullscreen;
+   
+    other.fullscreenSupport = method? true: false;
+	if(value) {
+		if(enterFullscreen && !isFullScreen()) {
+    		enterFullscreen();
+			$("#item1").style.display = "grid";
+    	}
+    	else
+    		Notify("You must browser doesn't support Fullscreen functionality");
+	} 
 	else {
-		$("#item1").style.display = "none";
-		orientationLocking(null, null, true);
+		if(exitFullscreen && isFullScreen()) {
+    		exitFullscreen();
+			$("#item1").style.display = "none";
+    	}
 	} 
 } 
 
 async function orientationLocking (elem, orientation, unlock = false) {
 	try {
-        let isFullScreen = () => {
-            if(document.fullscreenElement !== undefined) return document.fullscreenElement;
-            if(document.webkitFullscreenElement !== undefined) return document.webkitFullscreenElement;
-            if(document.mozFullscreenElement !== undefined) return document.mozFullscreenElement;
-            if(document.msFullscreenElement !== undefined) return document.msFullscreenElement;
-        }
-        if(unlock) {
-        	if(isFullScreen()) {
-        		screen.orientation.unlock();
-        		document.exitFullscreen();
-        	}
-        	return;
-        } 
-        let method = elem.requestFullscreen || elem.webkitRequestFullscreen || elem.mozRequestFullscreen || elem.msRequestFullscreen;
-       
-        other.fullscreenSupport = method? true: false;
-        
-        if(method && !isFullScreen()) {
-            await method.call(elem);
-            screen.orientation.lock(orientation).then(() => {
-                let viewBtns = $("#item1").children;
-                if(screen.orientation.type.toLowerCase().includes("portrait")) {
-                    viewBtns[2].style.background = other.default;
-                    viewBtns[1].style.background = other.background;
-                    other.orientation = "portrait";
-                    
-                    setTimeout(() => {AdjustScreen("portrait");}, 1500);
-                } 
-                else if(screen.orientation.type.toLowerCase().includes("landscape")) {
-                    viewBtns[1].style.background = "rgba(0, 152, 25, 0.9)";
-                    viewBtns[2].style.background = other.background;
-                    other.orientation = "landscape";
-                    
-                    setTimeout(() => {AdjustScreen("landscape");}, 1500);
-                }
-            }).catch((error) => {
-                if(other.orientation === "natural") {
-                    $$("#item1").style.display = "none";
-                    $$("#item0").style.display = "none";
-                    if(screen.orientation.type.toLowerCase().includes("portrait")) {
-	                    setTimeout(() => {AdjustScreen("portrait");}, 1500);
-	                }
-	                else if(screen.orientation.type.toLowerCase().includes("landscape")) {
-	                    setTimeout(() => {AdjustScreen("landscape");}, 1500);
-	                } 
-                } 
-            });
-        } 
-        else if(method && isFullScreen() && orientation != "natural") {
-            screen.orientation.lock(orientation).then(() => {
-                if(screen.orientation.type.toLowerCase().includes("portrait")) {
-                    other.orientation = "portrait";
-                }
-                else if(screen.orientation.type.toLowerCase().includes("landscape")) {
-                    other.orientation = "landscape";
-                } 
-                setTimeout(() => {AdjustScreen(orientation);}, 1500);
-            }).catch((error) => {
-                //$$("#settings-window #main-section .inner_item")[0].style.display = "none";
-            });
-        } 
+		screen.orientation.lock(orientation).then(() => {
+            let viewBtns = $$("#item1 button");
+            if(screen.orientation.type.toLowerCase().includes("portrait")) {
+                viewBtns[2].style.background = other.default;
+                viewBtns[1].style.background = other.background;
+                other.orientation = "portrait";
+                
+                setTimeout(() => {AdjustScreen("portrait");}, 1500);
+            } 
+            else if(screen.orientation.type.toLowerCase().includes("landscape")) {
+                viewBtns[1].style.background = other.default;
+                viewBtns[2].style.background = other.background;
+                other.orientation = "landscape";
+                
+                setTimeout(() => {AdjustScreen("landscape");}, 1500);
+            }
+        }).catch((error) => {
+            Notify("An error occurred while locking view");
+        }); 
     } catch (error) {
-        if(other.orientation === "natural") {
-            $$("#item1").style.display = "none";
-            $$("#item0").style.display = "none";
-        } 
+        Notify("Locking error: " + error);
     }
 }
 
