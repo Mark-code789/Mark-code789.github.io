@@ -426,10 +426,10 @@ const UpdateOnlineStatus = () => {
 
 const Share = (elem) => {
     if(Lobby.isConnected) {
-    	Notify({action: "alert_special", 
-				header: "Please wait", 
-				message: "Preparing to share"});
         if(navigator.canShare) {
+        	Notify({action: "alert_special", 
+					header: "Please wait", 
+					message: "Preparing to share"});
             let link = "";
             let text = Lobby.CHANNEL;
             for(let i = 0; i < text.length; i++) {
