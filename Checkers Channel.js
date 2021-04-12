@@ -464,7 +464,7 @@ const Message = async (prop) => { try {
             bubble.classList.add("same_side_bubble");
         } 
         container.insertBefore(bubble, anchor);
-        pTick.id = $$(".right_bubble").length + "";
+        pTick.id = "tick" + $$(".right_bubble").length;
         
         let unreadBubble = $(".center_bubble");
         if(unreadBubble != null) 
