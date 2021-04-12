@@ -114,7 +114,7 @@ const ChannelFunction = () => {
 									status.innerHTML = "offline";
 								} 
 	                        } 
-							else if(response.action === "leave" && !response.uuid != Lobby.PUBNUB.getUUID()) {
+							else if(response.action === "leave" && response.uuid != Lobby.PUBNUB.getUUID()) {
 								Publish.send({
 										 channel: Lobby.CHANNEL, 
                                          message: {
@@ -122,7 +122,7 @@ const ChannelFunction = () => {
                                                    content: ""}
                                         });
 							} 
-							else if(response.action === "state-change" && !response.uuid != Lobby.PUBNUB.getUUID()) { try {
+							else if(response.action === "state-change" && response.uuid != Lobby.PUBNUB.getUUID()) { try {
 								if(response.state.isTyping) {
 									$("#dragItem").innerHTML = "";
 									if(GetValue($("#chat-icon"), "display") === "block") {
