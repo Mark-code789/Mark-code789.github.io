@@ -306,9 +306,6 @@ class Publish {
 	        message: prop.message, 
 	        meta: MetaConfig 
 	    } 
-	
-		if(prop.message.title == "Moved") 
-			Notify("Before: " + prop.message.content.i + " and " + prop.message.content.j + " and " + this.messages.length);
 	    
 	    this.messages.push(PublishConfig);
 	    
@@ -334,7 +331,6 @@ class Publish {
 				} 
             } 
             if(status.error) {
-				alert("Error: " + error);
 				if(self.retryCount <= 2) // retry twice
                 	++self.retryCount;
 				else {
