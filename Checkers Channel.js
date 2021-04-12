@@ -118,7 +118,15 @@ const ChannelFunction = () => {
                                         });
 							} 
 							else if(response.action === "state-change") {
-								alert("State: " + response.state.isTyping);
+								if(response.state.isTyping) {
+									if(GetValue($("#chat-icon"), "display") === "block") {
+										for(let dot of $$("typing") {
+											void dot.offsetWidth;
+											dot.style.display = "inline-block";
+											dot.classList.add("boucing");
+										} 
+									} 
+								} 
 							} 
                         } 
                     }, 
