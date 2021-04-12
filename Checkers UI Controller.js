@@ -3128,7 +3128,7 @@ async function back (undo = false, isComp = false) {
 		return;
 	} 
     if(!undo) {
-        btns = $$("#settings-window #main-section .inner_item:nth-of-type(3) button");
+        btns = $$("#settings-window #main-section .inner_item:nth-of-type(2) button");
         for(let btn of btns) {
             if(GetValue(btn, "background-image") == other.default) { 
                 if(btn.innerHTML != "ROLL DICE") {
@@ -3142,7 +3142,7 @@ async function back (undo = false, isComp = false) {
             } 
         } 
         
-        btns = $$("#settings-window #main-section .inner_item:nth-of-type(5) button");
+        btns = $$("#settings-window #main-section .inner_item:nth-of-type(4) button");
         for(let btn of btns) {
             if(GetValue(btn, "background-image") == other.default) { 
                 Game.mandatoryCapture = btn.innerHTML === "ON";
@@ -3150,7 +3150,7 @@ async function back (undo = false, isComp = false) {
             } 
         } 
         
-        btns = $$("#settings-window #main-section .inner_item:nth-of-type(6) button");
+        btns = $$("#settings-window #main-section .inner_item:nth-of-type(5) button");
         for(let btn of btns) {
             if(GetValue(btn, "background-image") === other.default) {
                 if(btn.id === "active") {
