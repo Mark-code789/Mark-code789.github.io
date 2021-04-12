@@ -3212,11 +3212,11 @@ async function back (undo = false, isComp = false) {
 		return;
 	} 
     if(!undo) {
-        let btns = $("#item0 button");
+        let btns = $$("#item0 button");
         other.fullscreen = GetValue(btn[0], "background-image") == other.default;
        
         if(other.fullscreen) {
-        	btns = $("#item1 button");
+        	btns = $$("#item1 button");
 	        for(let btn of btns) {
 	            if(GetValue(btn, "background-image") == other.default) { 
 	                if(btn.innerHTML == "HORIZ." && screen.orientation.type.toLowerCase().includes("portrait")) {
