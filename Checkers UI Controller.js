@@ -1798,7 +1798,7 @@ const GameOver = async (isDraw = false) => { try {
                         Game.whiteTurn = (Game.firstMove && playerA.pieceColor === "White" || !Game.firstMove && playerA.pieceColor === "Black")? true: false;
                     }
                     else {
-                        btns = $$("#settings-window #main-section .inner_item:nth-of-type(3) button");
+                        let btns = $$("#item3 button");
                         Game.whiteTurn = (GetValue(btns[0], "background-image") == other.default);
                         Game.firstMove = Game.whiteTurn;
                     }
