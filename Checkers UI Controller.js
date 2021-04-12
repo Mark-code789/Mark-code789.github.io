@@ -2557,7 +2557,7 @@ const Mode = async (type, click = true) => {
         Game.mode = "single-player";
         playerA.name = "You";
         playerB.name = "AI";
-        $$("#settings-window #main-section .inner_item")[3].style.display = "grid";
+        $("#item3").style.display = "grid";
        
         let elem = $$("#main div")[0];
         await Clicked(elem, elem.parentNode, click);
@@ -2983,7 +2983,7 @@ async function play (isAutoRotate = false, accepted = false) {
                         Game.whiteTurn = (Game.firstMove)? playerA.pieceColor === "White": playerB.pieceColor === "White";
                     }
                     else {
-                        let btns = $$("#settings-window #main-section .inner_item:nth-of-type(3) button");
+                        let btns = $$("#item3 button");
                         Game.whiteTurn = (GetValue(btns[0], "background-image") == other.default);
                         Game.firstMove = (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black")? true: false;
                     }
@@ -3152,7 +3152,7 @@ async function orientationLocking (elem, orientation) {
         if(method && !isFullScreen()) {
             await method.call(elem);
             screen.orientation.lock(orientation).then(() => {
-                let viewBtns = $("#settings-window #main-section #item1").children;
+                let viewBtns = $("#item1").children;
                 if(screen.orientation.type.toLowerCase().includes("portrait")) {
                     viewBtns[2].style.background = other.default;
                     viewBtns[1].style.background = other.background;
@@ -3169,7 +3169,7 @@ async function orientationLocking (elem, orientation) {
                 }
             }).catch((error) => {
                 if(other.orientation === "natural") {
-                    $$("#settings-window #main-section .inner_item")[0].style.display = "none";
+                    $$("#item1").style.display = "none";
                     if(screen.orientation.type.toLowerCase().includes("portrait")) {
 	                    setTimeout(() => {AdjustScreen("portrait");}, 1500);
 	                }
@@ -3194,7 +3194,7 @@ async function orientationLocking (elem, orientation) {
         } 
     } catch (error) {
         if(other.orientation === "natural") 
-            $$("#settings-window #main-section .inner_item")[0].style.display = "none";
+            $$("#item1").style.display = "none";
     }
 } 
 
@@ -3204,7 +3204,7 @@ async function back (undo = false, isComp = false) {
 		return;
 	} 
     if(!undo) {
-        let btns = $("#settings-window #main-section #item1").children;
+        let btns = $("#item1").children;
         for(let btn of btns) {
             if(GetValue(btn, "background-image") == other.default) { 
                 if(btn.innerHTML == "HORIZ." && screen.orientation.type.toLowerCase().includes("portrait")) {
@@ -3220,7 +3220,7 @@ async function back (undo = false, isComp = false) {
             } 
         } 
         
-        btns = $$("#settings-window #main-section .inner_item:nth-of-type(3) button");
+        btns = $$("#item3 button");
         for(let btn of btns) {
             if(GetValue(btn, "background-image") == other.default) { 
                 if(btn.innerHTML != "ROLL DICE") {
@@ -3234,7 +3234,7 @@ async function back (undo = false, isComp = false) {
             } 
         } 
         
-        btns = $$("#settings-window #main-section .inner_item:nth-of-type(5) button");
+        btns = $$("#item5 button");
         for(let btn of btns) {
             if(GetValue(btn, "background-image") == other.default) { 
                 Game.mandatoryCapture = btn.innerHTML === "ON";
@@ -3242,7 +3242,7 @@ async function back (undo = false, isComp = false) {
             } 
         } 
         
-        btns = $$("#settings-window #main-section .inner_item:nth-of-type(6) button");
+        btns = $$("item6 button");
         for(let btn of btns) {
             if(GetValue(btn, "background-image") === other.default) {
                 if(btn.id === "active") {
