@@ -194,6 +194,7 @@ var other = {
     
     orientation: 'natural',
     installed: false, 
+    initialLoading: true,
     fullscreenSupport: false, 
     default: "linear-gradient(rgba(0, 152, 25, 0.9), rgba(0, 112, 0, 0.9))", 
     disabled: "linear-gradient(rgba(110, 110, 110, 0.9), rgba(70, 70, 70, 0.9))", 
@@ -1931,6 +1932,11 @@ const Clicked = async (elem, parent, click = true) => { try {
 		}, 300);
         return;
     } 
+    
+    if(click && screen.orientation.type.toLowerCase() != other.orientation || click && other.initialLoading) {
+        await orientationLocking(document.documentElement, other.orientation);
+        other.initialLoading = false;
+    } 
     } catch (error) {alert("Click error: " + error.message);}
 }
 
@@ -2115,7 +2121,7 @@ const Restart = async (option) => {
                 type: "CANCEL/RESTART", 
                 onResponse: RestartOption});
         
-        async function RestartOption (choice) { try {
+        async function RestartOption (choice) {
             if(choice === "RESTART") {
                 if(Game.mode === "two-player-online") {
                     if(Game.alternatePlayAs) {
@@ -2127,7 +2133,7 @@ const Restart = async (option) => {
                         Game.whiteTurn = (Game.firstMove && playerA.pieceColor === "White" || !Game.firstMove && playerA.pieceColor === "Black")? true: false;
                     }
                     else {
-                        btns = $$("#settings-window #main-section .inner_item:nth-of-type(3) button");
+                        let btns = $("#item3 button");
                         Game.whiteTurn = (GetValue(btns[0], "background-image") == other.default);
                         Game.firstMove = Game.whiteTurn;
                     }
@@ -2153,8 +2159,7 @@ const Restart = async (option) => {
             } 
             else if(choice === "CANCEL") {
                 Cancel();
-            }
-            } catch (error) {alert(error)}
+            } 
         } 
     } 
     else {
@@ -3120,7 +3125,78 @@ async function play (isAutoRotate = false, accepted = false) {
         else if(Game.mode === 'two-player-offline')
             Notify("Can't play, you haven't filled out players details. Fill them out and try again.");
     } 
-}
+} 
+
+async function orientationLocking (elem, orientation) {
+    Sound.capture.muted = true;
+    Sound.king.muted = true;
+    Sound.collect.muted = true;
+    Sound.game_win.muted = true;
+    Sound.game_lose.muted = true;
+    Sound.capture.play();
+    Sound.king.play();
+    Sound.collect.play();
+    Sound.game_win.play();
+    Sound.game_lose.play();
+    try {
+        let isFullScreen = () => {
+            if(document.fullscreenElement !== undefined) return document.fullscreenElement;
+            if(document.webkitFullscreenElement !== undefined) return document.webkitFullscreenElement;
+            if(document.mozFullscreenElement !== undefined) return document.mozFullscreenElement;
+            if(document.msFullscreenElement !== undefined) return document.msFullscreenElement;
+        } 
+        let method = elem.requestFullscreen || elem.webkitRequestFullscreen || elem.mozRequestFullscreen || elem.msRequestFullscreen;
+       
+        other.fullscreenSupport = method? true: false;
+        
+        if(method && !isFullScreen()) {
+            await method.call(elem);
+            screen.orientation.lock(orientation).then(() => {
+                let viewBtns = $("#settings-window #main-section #item1").children;
+                if(screen.orientation.type.toLowerCase().includes("portrait")) {
+                    viewBtns[2].style.background = other.default;
+                    viewBtns[1].style.background = other.background;
+                    other.orientation = "portrait";
+                    
+                    setTimeout(() => {AdjustScreen("portrait");}, 1500);
+                } 
+                else if(screen.orientation.type.toLowerCase().includes("landscape")) {
+                    viewBtns[1].style.background = "rgba(0, 152, 25, 0.9)";
+                    viewBtns[2].style.background = other.background;
+                    other.orientation = "landscape";
+                    
+                    setTimeout(() => {AdjustScreen("landscape");}, 1500);
+                }
+            }).catch((error) => {
+                if(other.orientation === "natural") {
+                    $$("#settings-window #main-section .inner_item")[0].style.display = "none";
+                    if(screen.orientation.type.toLowerCase().includes("portrait")) {
+	                    setTimeout(() => {AdjustScreen("portrait");}, 1500);
+	                }
+	                else if(screen.orientation.type.toLowerCase().includes("landscape")) {
+	                    setTimeout(() => {AdjustScreen("landscape");}, 1500);
+	                } 
+                } 
+            });
+        } 
+        else if(method && isFullScreen() && orientation != "natural") {
+            screen.orientation.lock(orientation).then(() => {
+                if(screen.orientation.type.toLowerCase().includes("portrait")) {
+                    other.orientation = "portrait";
+                }
+                else if(screen.orientation.type.toLowerCase().includes("landscape")) {
+                    other.orientation = "landscape";
+                } 
+                setTimeout(() => {AdjustScreen(orientation);}, 1500);
+            }).catch((error) => {
+                //$$("#settings-window #main-section .inner_item")[0].style.display = "none";
+            });
+        } 
+    } catch (error) {
+        if(other.orientation === "natural") 
+            $$("#settings-window #main-section .inner_item")[0].style.display = "none";
+    }
+} 
 
 async function back (undo = false, isComp = false) {
 	if(Game.thinking && undo) {
@@ -3128,7 +3204,23 @@ async function back (undo = false, isComp = false) {
 		return;
 	} 
     if(!undo) {
-        btns = $$("#settings-window #main-section .inner_item:nth-of-type(2) button");
+        let btns = $("#settings-window #main-section #item1").children;
+        for(let btn of btns) {
+            if(GetValue(btn, "background-image") == other.default) { 
+                if(btn.innerHTML == "HORIZ." && screen.orientation.type.toLowerCase().includes("portrait")) {
+                    await orientationLocking(document.documentElement, "landscape-primary"); 
+                    other.orientation = "landscape-primary";
+                    break;
+                } 
+                else if(btn.innerHTML == "VERT." && screen.orientation.type.toLowerCase().includes("landscape")) {
+                    await orientationLocking(document.documentElement, "portrait-primary");
+                    other.orientation = "portrait-primary";
+                    break;
+                } 
+            } 
+        } 
+        
+        btns = $$("#settings-window #main-section .inner_item:nth-of-type(3) button");
         for(let btn of btns) {
             if(GetValue(btn, "background-image") == other.default) { 
                 if(btn.innerHTML != "ROLL DICE") {
@@ -3142,7 +3234,7 @@ async function back (undo = false, isComp = false) {
             } 
         } 
         
-        btns = $$("#settings-window #main-section .inner_item:nth-of-type(4) button");
+        btns = $$("#settings-window #main-section .inner_item:nth-of-type(5) button");
         for(let btn of btns) {
             if(GetValue(btn, "background-image") == other.default) { 
                 Game.mandatoryCapture = btn.innerHTML === "ON";
@@ -3150,7 +3242,7 @@ async function back (undo = false, isComp = false) {
             } 
         } 
         
-        btns = $$("#settings-window #main-section .inner_item:nth-of-type(5) button");
+        btns = $$("#settings-window #main-section .inner_item:nth-of-type(6) button");
         for(let btn of btns) {
             if(GetValue(btn, "background-image") === other.default) {
                 if(btn.id === "active") {
