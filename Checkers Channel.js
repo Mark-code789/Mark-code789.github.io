@@ -616,49 +616,65 @@ const Request = async (prop) => {
     return;
 } 
 
-const AdjustWidth = (elem) => { try {
-    let sendBtn = $(".send_button");
-    if(elem.innerHTML.toLowerCase().replace(/<div><br><\/div>/gm, '') == "") {
-        elem.innerHTML = "";
-        sendBtn.style.filter = "invert(60%)";
-        sendBtn.style.pointerEvents = "none";
-    } 
-    else {
-        sendBtn.style.filter = "invert(90%)";
-        sendBtn.style.pointerEvents = "auto";
-        
-        if(CalculateSize(elem.innerHTML) >= 32768) {
-            elem.innerHTML = elem.innerHTML.substring(0, elem.innerHTML.length-2);
-            Notify("message size exceeded limit");
-        } 
-    } 
-    let height = elem.clientHeight || parseInt(GetValue(elem, "height"));
-    document.documentElement.style.setProperty("--txtSize", (height + "px"));
-    
-    } catch (error) {Notify(error + "")}
+const AdjustWidth = (elem, isKeyDown) => { try {
+	if(isKeyDown) {
+		let state;
+		Lobby.PUBNUB.getState({
+			uuid: Lobby.UUID, 
+			channels: Lobby.CHANNEL
+		}, (state, response) => {
+			if(!state.error) 
+				state = response.state.isTyping;
+		});
+		if(state == false) {
+			clearTimeout(Lobby.timeoutID);
+			Lobby.PUBNUB.setState({
+				state: {"isTyping": true}, 
+				channels: [Lobby.CHANNEL]
+			}, function (status, response) {});
+		} 
+	} 
+	else {
+		let state;
+		Lobby.PUBNUB.getState({
+			uuid: Lobby.UUID, 
+			channels: Lobby.CHANNEL
+		}, (state, response) => {
+			if(!state.error) 
+				state = response.state.isTyping;
+		});
+		if(state == true) {
+			Lobby.timeoutID = setTimeout(_ => {
+				Lobby.PUBNUB.setState({
+					state: {"isTyping": false}, 
+					channels: [Lobby.CHANNEL]
+				}, function (status, response) {});
+			}, 1000);
+		} 
+		
+	    let sendBtn = $(".send_button");
+	    if(elem.innerHTML.toLowerCase().replace(/<div><br><\/div>/gm, '') == "") {
+	        elem.innerHTML = "";
+	        sendBtn.style.filter = "invert(60%)";
+	        sendBtn.style.pointerEvents = "none";
+	    } 
+	    else {
+	        sendBtn.style.filter = "invert(90%)";
+	        sendBtn.style.pointerEvents = "auto";
+	        
+	        if(CalculateSize(elem.innerHTML) >= 32768) {
+	            elem.innerHTML = elem.innerHTML.substring(0, elem.innerHTML.length-2);
+	            Notify("message size exceeded limit");
+	        } 
+	    } 
+	    let height = elem.clientHeight || parseInt(GetValue(elem, "height"));
+	    document.documentElement.style.setProperty("--txtSize", (height + "px"));
+    } } catch (error) {Notify(error + "")}
 } 
 
 const ChangeTextBox = async (isFocused, elem) => { 
 	if($(".send_button") === document.activeElement) {
 		Message({action: "send"});
-	} 
-	else if(elem == $(".chat_field") && isFocused) {
-		Lobby.PUBNUB.setState({
-			state: {"isTyping": true}, 
-			channels: [Lobby.CHANNEL]
-		}, function (status, response) {
-			if(status.error)
-				alert(error);
-		});
-	} 
-	else if(elem == $(".chat_field") && !isFocused) {
-		Lobby.PUBNUB.setState({
-			state: {"isTyping": false}, 
-			channels: [Lobby.CHANNEL]
-		}, function (status, response) {
-			if(status.error)
-				alert(error);
-		});
 	} 
 	if(!elem.className.includes("chat_field")) {
 		elem.scrollIntoView(false);
