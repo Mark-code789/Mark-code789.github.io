@@ -194,7 +194,6 @@ var other = {
     
     orientation: 'natural',
     installed: false, 
-    initialLoading: true,
     fullscreenSupport: false, 
     default: "linear-gradient(rgba(0, 152, 25, 0.9), rgba(0, 112, 0, 0.9))", 
     disabled: "linear-gradient(rgba(110, 110, 110, 0.9), rgba(70, 70, 70, 0.9))", 
@@ -3134,64 +3133,6 @@ async function orientationLocking (elem, orientation) {
     Sound.collect.play();
     Sound.game_win.play();
     Sound.game_lose.play();
-    try {
-        let isFullScreen = () => {
-            if(document.fullscreenElement !== undefined) return document.fullscreenElement;
-            if(document.webkitFullscreenElement !== undefined) return document.webkitFullscreenElement;
-            if(document.mozFullscreenElement !== undefined) return document.mozFullscreenElement;
-            if(document.msFullscreenElement !== undefined) return document.msFullscreenElement;
-        } 
-        let method = elem.requestFullscreen || elem.webkitRequestFullscreen || elem.mozRequestFullscreen || elem.msRequestFullscreen;
-       
-        other.fullscreenSupport = method? true: false;
-        
-        if(method && !isFullScreen()) {
-            await method.call(elem);
-            screen.orientation.lock(orientation).then(() => {
-                let viewBtns = $("#settings-window #main-section #item1").children;
-                if(screen.orientation.type.toLowerCase().includes("portrait")) {
-                    viewBtns[2].style.background = other.default;
-                    viewBtns[1].style.background = other.background;
-                    other.orientation = "portrait";
-                    
-                    setTimeout(() => {AdjustScreen("portrait");}, 1500);
-                } 
-                else if(screen.orientation.type.toLowerCase().includes("landscape")) {
-                    viewBtns[1].style.background = "rgba(0, 152, 25, 0.9)";
-                    viewBtns[2].style.background = other.background;
-                    other.orientation = "landscape";
-                    
-                    setTimeout(() => {AdjustScreen("landscape");}, 1500);
-                }
-            }).catch((error) => {
-                if(other.orientation === "natural") {
-                    $$("#settings-window #main-section .inner_item")[0].style.display = "none";
-                    if(screen.orientation.type.toLowerCase().includes("portrait")) {
-	                    setTimeout(() => {AdjustScreen("portrait");}, 1500);
-	                }
-	                else if(screen.orientation.type.toLowerCase().includes("landscape")) {
-	                    setTimeout(() => {AdjustScreen("landscape");}, 1500);
-	                } 
-                } 
-            });
-        } 
-        else if(method && isFullScreen() && orientation != "natural") {
-            screen.orientation.lock(orientation).then(() => {
-                if(screen.orientation.type.toLowerCase().includes("portrait")) {
-                    other.orientation = "portrait";
-                }
-                else if(screen.orientation.type.toLowerCase().includes("landscape")) {
-                    other.orientation = "landscape";
-                } 
-                setTimeout(() => {AdjustScreen(orientation);}, 1500);
-            }).catch((error) => {
-                //$$("#settings-window #main-section .inner_item")[0].style.display = "none";
-            });
-        } 
-    } catch (error) {
-        if(other.orientation === "natural") 
-            $$("#settings-window #main-section .inner_item")[0].style.display = "none";
-    }
 } 
 
 async function back (undo = false, isComp = false) {
