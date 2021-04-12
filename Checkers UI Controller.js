@@ -3279,7 +3279,7 @@ async function back (undo = false, isComp = false) {
         let moving = $$("#transmitter .outer");
         if(moving.length == 0) {
             let length = BackState.moves.length;
-            if(length > 0 && Game.mode === "two-player-offline" || ((Game.mode == "two-player-online" || Game.mode === "single-player") && (length > 1 && (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") || length > 0 && (Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black"))) {
+            if(length > 0 && Game.mode === "two-player-offline" || ((Game.mode == "two-player-online" || Game.mode === "single-player") && length > 1 && (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") )) {
                 let move = BackState.moves[length-1];
                 await BackState.moves.pop();
                 Undo.move(move);
