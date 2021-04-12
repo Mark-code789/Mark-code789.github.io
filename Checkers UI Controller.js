@@ -3149,8 +3149,10 @@ const Fullscreen = (value) => {
 	other.fullscreen = value;
 	if(value)
 		$("#item1").style.display = "grid";
-	else
+	else {
 		$("#item1").style.display = "none";
+		screen.orientation.unlock();
+	} 
 } 
 
 async function orientationLocking (elem, orientation) {
