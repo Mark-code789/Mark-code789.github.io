@@ -90,6 +90,40 @@ article {
     pointer-events: none;
 } 
 
+.typing_container {
+	height: 10px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+} 
+
+.typing {
+	display: inline-block;
+	height: 5px;
+	width: 5px;
+	background: #fff;
+	border: none;
+	border-radius: 50%;
+	margin: 0 2px;
+} 
+
+.typing:nth-of-type(1) {
+	animation: bounce 1.5s linear 0s infinite normal forwards;
+} 
+.typing:nth-of-type(2) {
+	animation: bounce 1.5s linear 0.5s infinite normal forwards;
+} 
+.typing:nth-of-type(3) {
+	animation: bounce 1.5s linear 1s infinite normal forwards;
+} 
+
+@keyframes bounce {
+	0% {margin-bottom: 0px;}
+	50% {margin-bottom: 8px;}
+	100%{margin-bottom: 0px;}
+} 
+
 .badge {
     position: absolute;
     top: -5px;
