@@ -596,7 +596,7 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
     
     async function start () {
         let res = null;
-        let btns = $$("#settings-window .three_items button");
+        let btns = $$("#item3 button");
         if(Game.rollDice) {
             res = await RollDice();
             Game.whiteTurn = (playerA.pieceColor.includes("White"))? res: !res;
@@ -2133,7 +2133,7 @@ const Restart = async (option) => {
                         Game.whiteTurn = (Game.firstMove && playerA.pieceColor === "White" || !Game.firstMove && playerA.pieceColor === "Black")? true: false;
                     }
                     else {
-                        let btns = $("#item3 button");
+                        let btns = $$("#item3 button");
                         Game.whiteTurn = (GetValue(btns[0], "background-image") == other.default);
                         Game.firstMove = Game.whiteTurn;
                     }
