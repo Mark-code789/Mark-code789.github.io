@@ -903,7 +903,7 @@ const Move = async (prop) => {
     			if((!Game.path.sort || JSON.stringify(Game.path.sort.slice(0, Game.path.sort.indexOf(move))) == JSON.stringify(sort.slice(0, sort.indexOf(move)))) && move.empty == empty) {
     				//Publish for capturing moves
     				if(Game.mode === "two-player-online" && (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") ) {
-			            Publish({channel: Lobby.CHANNEL, message: {title: "Moved", content: {i: prop.i, j: prop.j} } });
+			            Publish.send({channel: Lobby.CHANNEL, message: {title: "Moved", content: {i: prop.i, j: prop.j} } });
 			        }
     				Game.path = {sort, index: sort.indexOf(move)};
     				validMove = true;
@@ -993,7 +993,7 @@ const Move = async (prop) => {
     async function select (prop, capture = false) { //try {
     	//publish for selecting both ordinary and capture moves
         if(Game.mode === "two-player-online" && (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") ) {
-            Publish({channel: Lobby.CHANNEL, message: {title: "Moved", content: {i: prop.i, j: prop.j} } });
+            Publish.send({channel: Lobby.CHANNEL, message: {title: "Moved", content: {i: prop.i, j: prop.j} } });
         }
         
         if(moving.length > 0) {
@@ -1029,7 +1029,7 @@ const Move = async (prop) => {
     function makePath (prop, capture = false) { //try {
     	// publish for ordinary moves
     	if(!capture && Game.mode === "two-player-online" && (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") ) {
-            Publish({channel: Lobby.CHANNEL, message: {title: "Moved", content: {i: prop.i, j: prop.j} } });
+            Publish.send({channel: Lobby.CHANNEL, message: {title: "Moved", content: {i: prop.i, j: prop.j} } });
         } 
         scene.style.display = "table";
         if(!capture) 
@@ -1808,7 +1808,7 @@ const GameOver = async (isDraw = false) => { try {
                             header: "Please Wait!",
                             message: "Wait for opponent's feedback."});
                     let gameSettings = {firstMove: !Game.firstMove, mandatoryCapture: Game.mandatoryCapture, version: Game.version};
-                    Publish({channel: Lobby.CHANNEL, message: {title: 'RequestReplay', content: gameSettings}});
+                    Publish.send({channel: Lobby.CHANNEL, message: {title: 'RequestReplay', content: gameSettings}});
                     return;
                 } 
                 await Refresh(true);
@@ -2143,7 +2143,7 @@ const Restart = async (option) => {
                             header: "Please Wait!",
                             message: "Wait for opponent's feedback."});
                     let gameSettings = {firstMove: !Game.firstMove, mandatoryCapture: Game.mandatoryCapture, version: Game.version};
-                    Publish({channel: Lobby.CHANNEL, message: {title: 'RequestRestart', content: gameSettings}});
+                    Publish.send({channel: Lobby.CHANNEL, message: {title: 'RequestRestart', content: gameSettings}});
                     return;
                 } 
                 
@@ -2248,7 +2248,7 @@ const Exit = () => { try {
         function Option (choice)  {
             if(choice == "EXIT") {
                 if(Game.mode === "two-player-online") {
-                    Publish({channel: Lobby.CHANNEL, message: {title: "ExitedGame", content: playerA.name} });
+                    Publish.send({channel: Lobby.CHANNEL, message: {title: "ExitedGame", content: playerA.name} });
                 } 
                 Cancel();
                 back();
@@ -2261,7 +2261,7 @@ const Exit = () => { try {
     } 
     else if(!Game.over) {
         if(Game.mode === "two-player-online") {
-            Publish({channel: Lobby.CHANNEL, message: {title: "ExitedGame", content: playerA.name} });
+            Publish.send({channel: Lobby.CHANNEL, message: {title: "ExitedGame", content: playerA.name} });
         } 
         back();
     } 
@@ -2990,7 +2990,7 @@ async function play (isAutoRotate = false, accepted = false) {
                 	
                     Notify("Play request has been sent to " + playerB.name);
                     let gameSettings = {firstMove: !Game.firstMove, mandatoryCapture: Game.mandatoryCapture, version: Game.version};
-                    Publish({channel: Lobby.CHANNEL, message: {title: 'RequestPlay', content: gameSettings}});
+                    Publish.send({channel: Lobby.CHANNEL, message: {title: 'RequestPlay', content: gameSettings}});
                     Cancel();
                 }, 200);
                 return;
@@ -3311,7 +3311,7 @@ async function back (undo = false, isComp = false) {
                     return;
                 }
                 else if(Game.mode === "two-player-online" && (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black")) {
-                    Publish({channel: Lobby.CHANNEL, message: {title: "Undone", content: {} } });
+                    Publish.send({channel: Lobby.CHANNEL, message: {title: "Undone", content: {} } });
                 }
                 // To avoid clushing due to multiple click events will use setTimeout function. 
                 clearTimeout(other.timeout);
