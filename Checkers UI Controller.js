@@ -408,7 +408,7 @@ const ShowChat = () => {
     if(parseInt(badge.innerHTML) > 0) {
         $(".center_bubble").scrollIntoView({block: "start", behavior: "smooth"});
     } 
-    
+    $('.chat_field').focus();
     badge.innerHTML = 0;
     badge.style.display = "none";
 } 
