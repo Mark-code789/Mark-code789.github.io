@@ -137,7 +137,7 @@ const ChannelFunction = () => {
 										status.innerHTML = "typing...";
 									} 
 								} 
-								else {
+								else if(!response.state.isTyping) {
 									$("#dragItem").innerHTML = "CHAT";
 									if(GetValue($("#chat-icon"), "display") === "block") {
 										for(let dot of $$(".typing")) {
@@ -149,7 +149,9 @@ const ChannelFunction = () => {
 										let status = $$(".chat_header p")[1];
 										status.innerHTML = "online";
 									} 
-								} } catch(error) {alert(error)} 
+								}
+								
+								 } catch(error) {alert(error)} 
 							} 
                         } 
                     }, 
