@@ -437,7 +437,7 @@ const Message = async (prop) => { try {
     let children = $$(".bubble");
     
     if(prop.action === "send") {
-    	$(".send_button").focus();
+    	$('.chat_field').focus();
         $('.chat_field').innerHTML = "";
         await ChangeTextBox(false, $(".chat_field"));
         await AdjustWidth($(".chat_field"));
@@ -454,7 +454,6 @@ const Message = async (prop) => { try {
             unreadBubble.parentNode.removeChild(unreadBubble);
         
         setTimeout(() => {anchor.scrollIntoView({block: "start", behavior: "smooth"});}, 200);
-        $('.chat_field').focus();
         Publish.send({channel: Lobby.CHANNEL, message: {title: "ChatMessage", content: text} });
         //Message({action: "receive", count: 1, text});
         return;
