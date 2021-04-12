@@ -96,7 +96,6 @@ const ChannelFunction = () => {
                     presence: function(response) { 
 						if(response.channel == Lobby.CHANNEL) {
 	                        if(response.action === 'join') {
-								alert(response.uuid + "\n\n" + Lobby.UUID);
 	                            if(response.occupancy === 1 && !Lobby.isConnected) {
 	                                Lobby.isHost = true;
 	                                Notify("You are the host in this channel.");
@@ -115,7 +114,8 @@ const ChannelFunction = () => {
 									status.innerHTML = "offline";
 								} 
 	                        } 
-							else if(response.action === "leave" && response.uuid != Lobby.PUBNUB.getUUID()) {
+							else if(response.action === "leave") {
+								alert(response.uuid + "\n\n" + Lobby.UUID);
 								Publish.send({
 										 channel: Lobby.CHANNEL, 
                                          message: {
