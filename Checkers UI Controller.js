@@ -3143,6 +3143,13 @@ async function play (isAutoRotate = false, accepted = false) {
         else if(Game.mode === 'two-player-offline')
             Notify("Can't play, you haven't filled out players details. Fill them out and try again.");
     } 
+}
+
+const Fullscreen = (value) => {
+	if(value)
+		$("#item1").style.display = "grid";
+	else
+		$("#item1").style.display = "none";
 } 
 
 async function orientationLocking (elem, orientation) {
@@ -3207,7 +3214,7 @@ async function orientationLocking (elem, orientation) {
             $$("#item0").style.display = "none";
         } 
     }
-} 
+}
 
 async function back (undo = false, isComp = false) {
 	if(Game.thinking && undo) {
