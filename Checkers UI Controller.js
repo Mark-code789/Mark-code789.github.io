@@ -2408,7 +2408,7 @@ const PlayAs = (elem) => { try {
             let num = elem.classList.length - 1;
             Disable($(`#playerB .${elem.classList[num]}`), other.disabled, "#B4B4B4");
             Enable($(`#playerB button:not(.${elem.classList[num]})`), other.default, "#fff");
-            let btns = $$("#settings-window #main-section .inner_item:nth-of-type(4) button");
+            let btns = $$("#item4 button");
             for(let btn of btns) {
             	if(btn.innerHTML.toLowerCase() === elem.classList[num]) {
             	    Clicked(btn, btn.parentNode);
