@@ -464,7 +464,7 @@ const Message = async (prop) => { try {
             bubble.classList.add("same_side_bubble");
         } 
         container.insertBefore(bubble, anchor);
-        pTick.id = $(".right_bubble").length + "";
+        pTick.id = $$(".right_bubble").length + "";
         
         let unreadBubble = $(".center_bubble");
         if(unreadBubble != null) 
@@ -608,11 +608,23 @@ const ChangeTextBox = async (isFocused, elem) => {
 	if($(".send_button") === document.activeElement) {
 		Message({action: "send"});
 	} 
-	else if($(".chat_field") === document.activeElememt) {
+	else if(elem == $(".chat_field") && isFocused) {
 		Lobby.PUBNUB.setState({
 			state: {"isTyping": true}, 
 			channels: [Lobby.CHANNEL]
-		}, function (status, response) {});
+		}, function (status, response) {
+			if(status.error)
+				alert(error);
+		});
+	} 
+	else if(elem == $(".chat_field") && !isFocused) {
+		Lobby.PUBNUB.setState({
+			state: {"isTyping": false}, 
+			channels: [Lobby.CHANNEL]
+		}, function (status, response) {
+			if(status.error)
+				alert(error);
+		});
 	} 
 	if(!elem.className.includes("chat_field")) {
 		elem.scrollIntoView(false);
