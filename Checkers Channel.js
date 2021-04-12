@@ -330,6 +330,7 @@ const Publish = (prop) => {
 		        		Lobby.retryCount = 0;
 		            } 
 		            if(status.error) {
+						alert("Error: " + error);
 						if(Lobby.retryCount <= 2) // retry twice
 		                	++Lobby.retryCount;
 						else 
