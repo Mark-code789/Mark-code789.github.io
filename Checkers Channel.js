@@ -196,9 +196,11 @@ const ChannelFunction = () => {
                                              });
                                 } 
                             } 
-                            else if(msg.message.title === "Delivered") {
-                            	let tick = $(msg.message.content);
-                            	tick.style.background = "#009819";
+                            else if(msg.message.title === "Delivered") { 
+								try {
+                            		let tick = $("#" + msg.message.content);
+                            		tick.style.background = "#009819";
+                            	} 
                             } 
                             else if(msg.message.title === 'ChatMessage') {
                             	Publish.send({channel: Lobby.CHANNEL, message: {title: "Delivered", content: msg.message.id}});
