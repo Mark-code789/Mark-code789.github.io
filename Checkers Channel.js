@@ -306,7 +306,7 @@ const Publish = (prop) => {
 	    } 
 	
 		if(prop.message.title == "Moved") 
-			Notify(prop.message.content.i + " and " + prop.message.content.j + " and " + Lobby.publishMessages.length);
+			Notify("Before: " + prop.message.content.i + " and " + prop.message.content.j + " and " + Lobby.publishMessages.length);
 	    
 	    Lobby.publishMessages.push(PublishConfig);
 	    
