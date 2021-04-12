@@ -294,8 +294,10 @@ const Unsubscribe = async (isFull = false) => {
     } 
 } 
 
-const Publish = (prop) => { 
-	try {
+class Publish { 
+	static messages = [];
+	static retryCount = 0;
+	static send = (prop) {
 	    const MetaConfig = {
 	        "uuid": Lobby.PUBNUB.getUUID()
 	    } 
@@ -306,51 +308,46 @@ const Publish = (prop) => {
 	    } 
 	
 		if(prop.message.title == "Moved") 
-			Notify("Before: " + prop.message.content.i + " and " + prop.message.content.j + " and " + Lobby.publishMessages.length);
+			Notify("Before: " + prop.message.content.i + " and " + prop.message.content.j + " and " + this.messages.length);
 	    
-	    Lobby.publishMessages.push(PublishConfig);
+	    this.messages.push(PublishConfig);
 	    
-	    if(!Lobby.isPublishing)
-	        asyncPublish();
+	    if(this.messages.length == 1)
+	        this.publish();
+	} 
 	    
-	    async function asyncPublish () { 
-			if(Lobby.publishMessages.length > 0) {
-		    	Lobby.isPublishing = true;
-		        let config = Lobby.publishMessages[0];
-		        
-				Lobby.PUBNUB.publish(config, async (status, response) => {
-		            if(!status.error) {
-		                if(config.message.title === 'ConfirmLeave') {
-							Lobby.retryCount = 0;
-		        			Lobby.publishMessages = [];
-		                    Lobby.timeoutID = setTimeout(() => {
-		                        LeftChannel({totalOccupancy: 1});
-		                    }, 5000);
-		                } 
-						await Lobby.publishMessages.shift();
-		        		Lobby.retryCount = 0;
-		            } 
-		            if(status.error) {
-						alert("Error: " + error);
-						if(Lobby.retryCount <= 2) // retry twice
-		                	++Lobby.retryCount;
-						else 
-							Lobby.retryCount = 0;
-				        	Lobby.publishMessages = [];
-				        	Notify({action: "alert", 
-				                    header: "Communication Error", 
-				                    message: "Couldn't communicate with the opponent. Either you have network issues or you are offline."});
-		            } 
-					if(Lobby.publishMessages.length > 0) 
-			        	await asyncPusblish();
-			        else 
-			        	Lobby.isPublishing = false;
-			
-					return Prms("Done");
-			    });
-			} 
-    	} 
-    } catch (error) {alert(error);}
+    static publish = async function () { 
+        let config = this.messages[0];
+		Lobby.PUBNUB.publish(config, async (status, response) => {
+            if(!status.error) {
+                if(config.message.title === 'ConfirmLeave') {
+					this.retryCount = 0;
+        			this.messages = [];
+                    Lobby.timeoutID = setTimeout(() => {
+                        LeftChannel({totalOccupancy: 1});
+                    }, 5000);
+                } 
+				else {
+					this.messages.shift();
+        			this..retryCount = 0;
+				} 
+            } 
+            if(status.error) {
+				alert("Error: " + error);
+				if(this.retryCount <= 2) // retry twice
+                	++this.retryCount;
+				else {
+					this.retryCount = 0;
+		        	this.messages = [];
+		        	Notify({action: "alert", 
+		                    header: "Communication Error", 
+		                    message: "Couldn't communicate with the opponent. Either you have network issues or you are offline."});
+				} 
+            } 
+			if(this.messages.length > 0) 
+	        	this.publish();
+	    });
+	} 
 } 
 
 const LeftChannel = (response) => {
