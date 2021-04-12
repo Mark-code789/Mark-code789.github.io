@@ -151,7 +151,7 @@ const ChannelFunction = () => {
 									} 
 								}
 								
-								 } catch(error) {alert(error)} 
+								} catch(error) {alert(error)} 
 							} 
                         } 
                     }, 
