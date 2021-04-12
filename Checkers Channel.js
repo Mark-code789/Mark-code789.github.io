@@ -196,6 +196,10 @@ const ChannelFunction = () => {
                                              });
                                 } 
                             } 
+                            else if(msg.message.title === "Delivered") {
+                            	let tick = $(msg.message.content);
+                            	tick.style.background = "#009819";
+                            } 
                             else if(msg.message.title === 'ChatMessage') {
                                 let badge = $(".badge");
                                 if(GetValue($("#chat-icon"), "display") === "block") {
