@@ -119,8 +119,8 @@ const ChannelFunction = () => {
 							} 
 							else if(response.action === "state-change") {
 								if(response.state.isTyping) {
+									$("#drag-item").innerHTML = "";
 									if(GetValue($("#chat-icon"), "display") === "block") {
-										
 										for(let dot of $$("typing") {
 											void dot.offsetWidth;
 											dot.style.display = "inline-block";
@@ -133,8 +133,8 @@ const ChannelFunction = () => {
 									} 
 								} 
 								else {
+									$("#drag-item").innerHTML = "CHAT";
 									if(GetValue($("#chat-icon"), "display") === "block") {
-										
 										for(let dot of $$("typing") {
 											dot.classList.remove("boucing");
 											dot.style.display = "none";
