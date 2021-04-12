@@ -93,13 +93,13 @@ article {
 .typing_container {
 	height: 10px;
 	width: 100%;
-	display: flex;
+	display: none;
 	justify-content: center;
 	align-items: center;
 } 
 
 .typing {
-	display: inline-block;
+	display: none;
 	height: 5px;
 	width: 5px;
 	background: #fff;
