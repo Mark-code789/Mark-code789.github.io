@@ -110,7 +110,7 @@ const ChannelFunction = () => {
 	                            Notify(`Connection timeout to ${Lobby.CHANNEL} channel. Reconnecting...`);
 	                        } 
 							else if(response.action === "leave") {
-								Publish({
+								Publish.send({
 										 channel: Lobby.CHANNEL, 
                                          message: {
                                                    title: "ConfirmLeave", 
@@ -133,7 +133,7 @@ const ChannelFunction = () => {
                                     } 
                                     else {
                                         Notify(`Connected Successfully.<br />You are subscribed to ${Lobby.CHANNEL} Channel.`);
-                                        Publish({
+                                        Publish.send({
                                                 channel: Lobby.CHANNEL, 
                                                 message: {
                                                          title: "OpponentName", 
@@ -163,7 +163,7 @@ const ChannelFunction = () => {
                     message: function(msg) {
                         if(msg.channel === Lobby.CHANNEL) {
                             if(msg.message.title === 'ConfirmLeave') {
-                                Publish({
+                                Publish.send({
                                         channel: Lobby.CHANNEL, 
                                         message: {
                                                  title: "StillPresent", 
@@ -185,7 +185,7 @@ const ChannelFunction = () => {
                                 playerB.name = name;
                                 Notify(`Your opponent is; <b><em>${name}</em></b>`);
                                 if(Lobby.isHost) {
-                                    Publish({
+                                    Publish.send({
                                              channel: Lobby.CHANNEL, 
                                              message: {
                                                       title: "OpponentName", 
@@ -457,7 +457,7 @@ const Message = async (prop) => { try {
         
         setTimeout(() => {anchor.scrollIntoView({block: "start", behavior: "smooth"});}, 200);
         $('.chat_field').focus();
-        Publish({channel: Lobby.CHANNEL, message: {title: "ChatMessage", content: text} });
+        Publish.send({channel: Lobby.CHANNEL, message: {title: "ChatMessage", content: text} });
         //Message({action: "receive", count: 1, text});
         return;
     } 
@@ -539,7 +539,7 @@ const Request = async (prop) => {
                 setTimeout( () => Alternate(color), 100);
             }
             setTimeout(async () => {
-                Publish({channel: Lobby.CHANNEL, message: {title: "AcceptedRequest", content: ""} });
+                Publish.send({channel: Lobby.CHANNEL, message: {title: "AcceptedRequest", content: ""} });
                 Notify("The game will start shortly...");
                 Game.whiteTurn = (Game.firstMove)? playerA.pieceColor === "White": playerB.pieceColor === "White";
                 await Mode(3, false);
@@ -561,7 +561,7 @@ const Request = async (prop) => {
             } catch (error) {Notify(error + " request error")}
         } 
         else if(option === "CANCEL") {
-            Publish({channel: Lobby.CHANNEL, message: {title: "DeclinedRequest", content: ""} });
+            Publish.send({channel: Lobby.CHANNEL, message: {title: "DeclinedRequest", content: ""} });
             Cancel();
         } 
         return;
