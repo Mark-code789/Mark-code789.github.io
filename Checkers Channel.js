@@ -590,7 +590,7 @@ const AdjustWidth = (elem) => { try {
 } 
 
 const ChangeTextBox = async (isFocused, elem) => { 
-	if($(".send_button") == document.activeElement) {
+	if($(".send_button") === document.activeElement) {
 		Message({action: "send"});
 	} 
 	if(!elem.className.includes("chat_field")) {
