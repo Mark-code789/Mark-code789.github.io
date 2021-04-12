@@ -3338,7 +3338,7 @@ async function back (undo = false, isComp = false) {
                 Notify("No moves made yet");
             }
             else {
-            	Notify("Wait for opponent's move");
+            	Notify("Please wait for opponent's move");
             } 
         }
         else {
