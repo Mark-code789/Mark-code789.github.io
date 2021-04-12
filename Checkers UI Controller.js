@@ -3159,7 +3159,7 @@ const Fullscreen = (value) => { try {
     other.fullscreenSupport = method? true: false;
 	if(value) {
 		if(enterFullscreen && !isFullScreen()) {
-    		enterFullscreen();
+    		enterFullscreen.call(elem);
 			other.fullscreen = value;
 			$("#item1").style.display = "grid";
     	}
@@ -3168,7 +3168,7 @@ const Fullscreen = (value) => { try {
 	} 
 	else {
 		if(exitFullscreen && isFullScreen()) {
-    		exitFullscreen();
+    		exitFullscreen.call(document);
 			other.fullscreen = value;
 			$("#item1").style.display = "none";
     	}
