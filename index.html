@@ -332,6 +332,11 @@
         <article id="settings-window" hidden>
             <h2>SETTINGS</h2>
             <section id="main-section">
+                <section class="inner_item" id="item1">
+                    <p>VIEW:</p>
+                    <button id="horiz" onclick="Clicked(this, this.parentNode)">HORIZ.</button>
+                    <button id="vert" onclick="Clicked(this, this.parentNode)" class="default">VERT.</button>
+                </section>
                 <section class="inner_item"  >
                     <p>SOUND:</p>
                     <button id="unmute" onclick="Mute(false), Clicked(this, this.parentNode)" class="default">ON</button>
