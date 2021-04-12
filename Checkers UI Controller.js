@@ -195,7 +195,8 @@ var other = {
     orientation: 'natural',
     installed: false, 
     initialLoading: true,
-    fullscreenSupport: false, 
+    fullscreenSupport: false,
+    fullscreen: false, 
     default: "linear-gradient(rgba(0, 152, 25, 0.9), rgba(0, 112, 0, 0.9))", 
     disabled: "linear-gradient(rgba(110, 110, 110, 0.9), rgba(70, 70, 70, 0.9))", 
     background: "linear-gradient(rgba(40, 40, 40, 0.9), rgba(0, 0, 0, 0.9))", 
@@ -1933,9 +1934,12 @@ const Clicked = async (elem, parent, click = true) => { try {
         return;
     } 
     
-    if(click && screen.orientation.type.toLowerCase() != other.orientation || click && other.initialLoading) {
+    if(other.fullscreen && click && screen.orientation.type.toLowerCase() != other.orientation || other.fullscreen && click && other.orientation == "natural") {
         await orientationLocking(document.documentElement, other.orientation);
-        other.initialLoading = false;
+    }
+    if(other.initialLoading) {
+    	await Play.initializeAudios();
+    	other.initialLoading = false;
     } 
     } catch (error) {alert("Click error: " + error.message);}
 }
