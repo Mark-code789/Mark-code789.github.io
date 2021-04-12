@@ -3178,6 +3178,7 @@ async function orientationLocking (elem, orientation) {
             }).catch((error) => {
                 if(other.orientation === "natural") {
                     $$("#item1").style.display = "none";
+                    $$("#item0").style.display = "none";
                     if(screen.orientation.type.toLowerCase().includes("portrait")) {
 	                    setTimeout(() => {AdjustScreen("portrait");}, 1500);
 	                }
@@ -3201,8 +3202,10 @@ async function orientationLocking (elem, orientation) {
             });
         } 
     } catch (error) {
-        if(other.orientation === "natural") 
+        if(other.orientation === "natural") {
             $$("#item1").style.display = "none";
+            $$("#item0").style.display = "none";
+        } 
     }
 } 
 
