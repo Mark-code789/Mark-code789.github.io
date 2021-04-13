@@ -3193,7 +3193,7 @@ const Fullscreen = async (value, isEvent = false) => { try {
 	} 
 	else if(isEvent && !isFullScreen()) {
 		$("#item1").style.display = "none";
-		let btns = $("#item0");
+		let btns = $$("#item0 button");
 		btns[0].style.background = other.background;
 		btns[1].style.background = other.default;
 		other.fullscreen = false;
