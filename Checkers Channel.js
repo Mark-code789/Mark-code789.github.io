@@ -1,6 +1,6 @@
 'use strict' 
 
-const Lobby = {isConnected: false, isHost: false, unreadMessages: []};
+const Lobby = {isConnected: false, isClick: false, isHost: false, unreadMessages: []};
 
 const ChannelFunction = () => {
 	if(!navigator.onLine) {
@@ -120,7 +120,8 @@ const ChannelFunction = () => {
 									status.innerHTML = "offline";
 								} 
 	                        } 
-							else if(response.action === "leave" && response.uuid != Lobby.UUID) {
+							else if(response.action === "leave") {
+								alert(Lobby.UUID + "\n" + Lobby.isClick);
 								Publish.send({
 										 channel: Lobby.CHANNEL, 
                                          message: {
@@ -313,12 +314,13 @@ const ChannelFunction = () => {
     } 
 }
 
-const Unsubscribe = async (isFull = false) => {
-    if(Lobby.isConnected || isFull) {
+const Unsubscribe = async () => {
+    if(Lobby.isConnected) {
+    	Lobby.isClick = true;
         Lobby.PUBNUB.unsubscribe({
             channels: [Lobby.CHANNEL]
         });
-        
+        return;
         Lobby.PUBNUB.removeListener(Lobby.LISTENER);
         
         if(isFull) {
