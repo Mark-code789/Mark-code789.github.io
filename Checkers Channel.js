@@ -696,6 +696,14 @@ class AdjustWidth {
 
 const ChangeTextBox = async (isFocused, elem) => { 
 	if($(".send_button") === document.activeElement) {
+		clearTimeout(Lobby.timeoutID2);
+		if(!Lobby.isTyping) {
+			Lobby.isTyping = true;
+			Lobby.PUBNUB.setState({
+				state: {"isTyping": false}, 
+				channels: [Lobby.CHANNEL]
+			}, function (status, response) {});
+		} 
 		Message({action: "send"});
 	} 
 	if(!elem.className.includes("chat_field")) {
