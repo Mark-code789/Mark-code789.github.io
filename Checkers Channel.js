@@ -231,6 +231,7 @@ const ChannelFunction = () => {
                                 $("#chat-icon").style.display = 'block';
                                 $$(".chat_header h2")[1].innerHTML = name;
                                 playerB.name = name;
+                                Lobby.intentionalExit = false;
                                 Notify(`Your opponent is ${name}`);
                                 if(Lobby.isHost) {
                                     Publish.send({
@@ -346,6 +347,7 @@ const Unsubscribe = async () => {
         $$("#online .player_name")[1].innerHTML = "N/A";
         Lobby.CHANNEL = null;
         Lobby.isConnected = false;
+        Lobby.intentionalExit = false;
         Lobby.PUBNUB = null;
         Lobby.isHost = false;
         $("#chat-icon").style.display = 'none';
