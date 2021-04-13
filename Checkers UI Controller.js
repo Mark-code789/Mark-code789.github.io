@@ -224,6 +224,11 @@ async function LoadingDone () {
     $("#item1").style.display = "none";
     clearInterval(intervalID);
     intervalID = null;
+   
+    document.addEventListener("fullscreenchange", _ => Fullscreen(true, true), false);
+    document.addEventListener("msFullscreenchange", _ => Fullscreen(true, true), false);
+    document.addEventListener("mozFullscreenchange", _ => Fullscreen(true, true), false);
+    document.addEventListener("webkitFullscreenchange", _ => Fullscreen(true, true), false);
     
     $("#chat-icon").addEventListener("touchstart", DragStart, false);
     $("#chat-icon").addEventListener("touchend", DragEnd, false);
@@ -1954,9 +1959,6 @@ const Clicked = async (elem, parent, click = true) => { try {
         return;
     } 
     
-    if(other.fullscreen && click && screen.orientation.type.toLowerCase() != other.orientation || other.fullscreen && click && other.orientation == "natural") {
-        await orientationLocking(document.documentElement, other.orientation);
-    }
     if(other.initialLoading) {
     	await AudioPlayer.initializeAudios();
     	other.initialLoading = false;
@@ -3155,7 +3157,7 @@ async function play (isAutoRotate = false, accepted = false) {
     } 
 }
 
-const Fullscreen = async (value) => { try {
+const Fullscreen = async (value, isEvent = false) => { try {
 	let isFullScreen = () => {
         if(document.fullscreenElement !== undefined) return document.fullscreenElement;
         if(document.webkitFullscreenElement !== undefined) return document.webkitFullscreenElement;
@@ -3166,10 +3168,11 @@ const Fullscreen = async (value) => { try {
     let enterFullscreen = elem.requestFullscreen || elem.webkitRequestFullscreen || elem.mozRequestFullscreen || elem.msRequestFullscreen;
     let exitFullscreen = document.exitFullscreen || document.webkitExitFullscreen || document.mozExitFullscreen || document.msExitFullscreen;
     
-	if(value) {
+	if(value && !isEvent) {
 		if(enterFullscreen && !isFullScreen()) {
 			$("#item1").style.display = "grid";
     		await enterFullscreen.call(elem);
+    		await orientationLocking(document.documentElement, other.orientation);
     		if(screen.orientation.type.toLowerCase().includes("portrait")) 
     			await setTimeout(() => {AdjustScreen("portrait");}, 1000);
     		else
@@ -3180,13 +3183,20 @@ const Fullscreen = async (value) => { try {
     	else
     		Notify("You must browser doesn't support Fullscreen functionality");
 	} 
-	else {
+	else if(!isEvent) {
 		if(exitFullscreen && isFullScreen()) {
 			other.fullscreen = value;
 			$("#item1").style.display = "none";
     		await exitFullscreen.call(document);
     		AdjustScreen("", true);
     	}
+	} 
+	else if(isEvent) {
+		$("#item1").style.display = "none";
+		let btns = $("#item0");
+		btns[0].style.background = other.background;
+		btns[1].style.background = other.default;
+		other.fullscreen = false;
 	} } catch (error) {alert(error)}
 } 
 
