@@ -1,6 +1,6 @@
 'use strict' 
 
-const Lobby = {isConnected: false, isHost: false};
+const Lobby = {isConnected: false, isHost: false, unreadMessages: []};
 
 const ChannelFunction = () => {
 	if(!navigator.onLine) {
