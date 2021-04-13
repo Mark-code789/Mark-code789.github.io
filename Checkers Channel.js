@@ -114,7 +114,6 @@ const ChannelFunction = () => {
 	                        else if(response.action === 'timeout') {
 								if(response.uuid == Lobby.UUID) {
 	                            	Notify(`Connection timeout to ${Lobby.CHANNEL} channel. Reconnecting...`);
-									Lobby.PUBNUB.reconnect();
 								} 
 								else {
 									let status = $$(".chat_header p")[1];
