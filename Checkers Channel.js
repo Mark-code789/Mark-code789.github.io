@@ -457,7 +457,7 @@ const Share = (elem) => {
             }).catch( (error) => { 
                 Notify({action: "alert", 
                         header: "Error!", 
-                        message: ("There was an error while trying sharing. Please use your ordinary means.<br>" + error)});
+                        message: ("There was an error while trying sharing. Please use your ordinary means.<br>" + error.stack)});
             });
         } 
         else {
