@@ -3195,7 +3195,7 @@ async function orientationLocking (elem, orientation, unlock = false) {
                 setTimeout(() => {AdjustScreen("landscape");}, 1500);
             }
         }).catch((error) => {
-            Notify("An error occurred while locking view");
+            alert("An error occurred while locking view\n" + error);
         }); 
     } catch (error) {
         Notify("Locking error: " + error);
