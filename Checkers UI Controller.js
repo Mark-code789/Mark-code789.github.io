@@ -3181,15 +3181,15 @@ async function orientationLocking (elem, orientation) {
 		screen.orientation.lock(orientation).then(_ => {
             let viewBtns = $$("#item1 button");
             if(screen.orientation.type.toLowerCase().includes("portrait")) {
-                viewBtns[2].style.background = other.default;
-                viewBtns[1].style.background = other.background;
+                viewBtns[1].style.background = other.default;
+                viewBtns[0].style.background = other.background;
                 other.orientation = "portrait";
                 
                 setTimeout(() => {AdjustScreen("portrait");}, 1500);
             } 
             else if(screen.orientation.type.toLowerCase().includes("landscape")) {
-                viewBtns[1].style.background = other.default;
-                viewBtns[2].style.background = other.background;
+                viewBtns[0].style.background = other.default;
+                viewBtns[1].style.background = other.background;
                 other.orientation = "landscape";
                 
                 setTimeout(() => {AdjustScreen("landscape");}, 1500);
