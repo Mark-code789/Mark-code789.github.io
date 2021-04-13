@@ -653,22 +653,22 @@ class AdjustWidth {
 	static updateState = (elem) => { try {
 		let self = this;
 		clearTimeout(Lobby.timeoutID2);
-			if(!Lobby.isTyping) {
-				Lobby.isTyping = true;
-				Lobby.PUBNUB.setState({
-					state: {"isTyping": true}, 
-					channels: [Lobby.CHANNEL]
-				}, function (status, response) {});
-			} 
-			
-			Lobby.timeoutID2 = setTimeout(_=> {
-				Lobby.isTyping = false;
-				Lobby.PUBNUB.setState({
-					state: {"isTyping": false}, 
-					channels: [Lobby.CHANNEL]
-				}, function (status, response) {});
-			}, 1000);
-			self.adjustWidth(elem);
+		if(!Lobby.isTyping) {
+			Lobby.isTyping = true;
+			Lobby.PUBNUB.setState({
+				state: {"isTyping": true}, 
+				channels: [Lobby.CHANNEL]
+			}, function (status, response) {});
+		} 
+		
+		Lobby.timeoutID2 = setTimeout(_=> {
+			Lobby.isTyping = false;
+			Lobby.PUBNUB.setState({
+				state: {"isTyping": false}, 
+				channels: [Lobby.CHANNEL]
+			}, function (status, response) {});
+		}, 1000);
+		self.adjustWidth(elem);
 		} catch (error) {Notify(error + "")}
 	} 
 	
