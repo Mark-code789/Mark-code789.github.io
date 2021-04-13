@@ -3176,7 +3176,7 @@ const Fullscreen = async (value) => { try {
 	} } catch (error) {alert(error)}
 } 
 
-async function orientationLocking (elem, orientation, unlock = false) {
+async function orientationLocking (elem, orientation) {
 	try {
 		screen.orientation.lock(orientation).then(_ => {
             let viewBtns = $$("#item1 button");
