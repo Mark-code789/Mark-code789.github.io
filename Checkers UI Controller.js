@@ -3161,7 +3161,8 @@ const Fullscreen = (value) => { try {
 		if(enterFullscreen && !isFullScreen()) {
 			other.fullscreen = value;
 			$("#item1").style.display = "grid";
-    		enterFullscreen.call(elem);
+    		await enterFullscreen.call(elem);
+    		orientationLocking(elem, other.orientation);
     	}
     	else
     		Notify("You must browser doesn't support Fullscreen functionality");
@@ -3177,7 +3178,7 @@ const Fullscreen = (value) => { try {
 
 async function orientationLocking (elem, orientation, unlock = false) {
 	try {
-		screen.orientation.lock(orientation).then(() => {
+		screen.orientation.lock(orientation).then(_ => {
             let viewBtns = $$("#item1 button");
             if(screen.orientation.type.toLowerCase().includes("portrait")) {
                 viewBtns[2].style.background = other.default;
