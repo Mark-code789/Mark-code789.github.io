@@ -430,12 +430,12 @@ const UpdateOnlineStatus = () => {
 	if(!navigator.onLine) {
 	    yourStatus.innerHTML = "OFFLINE";
 	    yourStatus.style.backgroundImage = "linear-gradient(rgba(193, 115, 0, 0.9), rgba(153, 75, 0, 0.9))";
-	    Notify(`You are offline.`);
+	    //Notify(`You are offline.`);
 	} 
 	else {
 		yourStatus.innerHTML = "ONLINE";
 	    yourStatus.style.backgroundImage = other.default;
-	    Notify(`You are online.`);
+	    //Notify(`You are online.`);
 	} 
 } 
 
