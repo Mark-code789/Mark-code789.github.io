@@ -653,8 +653,8 @@ class AdjustWidth {
 			uuid: Lobby.UUID, 
 			channels: [Lobby.CHANNEL] 
 		}, (status, response) => {
+			Notify(response.state.isTyping);
 			if(!status.error) {
-				Notify(response.state.isTyping);
 				if(response.state.isTyping == false) {
 					Lobby.PUBNUB.setState({
 						state: {"isTyping": true}, 
