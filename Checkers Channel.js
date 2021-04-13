@@ -551,8 +551,11 @@ const Message = async (prop) => { try {
         
         if(GetValue($("#chat-window"), "display") === "flex") {
         	Publish.send({channel:Lobby.CHANNEL, message: {title: "Read", content: prop.id}});
+        	Lobby.unreadMessages = [];
             setTimeout(() => {anchor.scrollIntoView({block: "start", behavior: "smooth"});}, 200);
         } 
+        else 
+        	Lobby.unreadMessages.push(prop.id);
     } 
     } catch (error) {Notify(error + "");}
 } 
