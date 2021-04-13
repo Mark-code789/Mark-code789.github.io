@@ -450,7 +450,7 @@ const Share = (elem) => {
             } 
             navigator.share({
                 title: "Checkers Channel Name", 
-                text: `Open this link, and copy the word in quotes below and paste it as channel name under two player online window:\n\n"${link}"\n\n`, 
+                text: `Open this link, and copy the word in quotes below and paste it as channel name under two player online window:\n"${link}"\n`, 
                 url: "https://mark-code789.github.io/Checkers/index.html"
             }).then( () => { 
             	Cancel();
@@ -458,7 +458,7 @@ const Share = (elem) => {
             }).catch( (error) => { 
                 Notify({action: "alert", 
                         header: "Error!", 
-                        message: ("There was an error while trying sharing. Please use your ordinary means.<br>" + error.stack)});
+                        message: ("There was an error while trying sharing. Try again.<br>" + error)});
             });
         } 
         else {
