@@ -224,7 +224,7 @@ const ChannelFunction = () => {
                                 $("#chat-icon").style.display = 'block';
                                 $$(".chat_header h2")[1].innerHTML = name;
                                 playerB.name = name;
-                                Notify(`Your opponent is; <b><em>${name}</em></b>`);
+                                Notify(`Your opponent is ${name}`);
                                 if(Lobby.isHost) {
                                     Publish.send({
                                              channel: Lobby.CHANNEL, 
@@ -412,7 +412,7 @@ const LeftChannel = (response) => {
         $("#chat-icon").style.display = 'none';
         $("#chat-window").style.display = "none";
         Lobby.isHost = true;
-        Notify(`<b><em>${name}</em></b> left <b><em>${Lobby.CHANNEL}</em></b> channel.`);
+        Notify(`${name} left ${Lobby.CHANNEL} channel.`);
     }
 } 
 
