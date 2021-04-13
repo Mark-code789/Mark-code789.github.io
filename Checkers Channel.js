@@ -114,10 +114,7 @@ const ChannelFunction = () => {
 	                        else if(response.action === 'timeout') {
 								if(response.uuid == Lobby.UUID) {
 	                            	Notify(`Connection timeout to ${Lobby.CHANNEL} channel. Reconnecting...`);
-									Lobby.PUBNUB.subscribe({
-	                                    channels: [Lobby.CHANNEL], 
-	                                    withPresence: true
-	                                }); 
+									Lobby.PUBNUB.reconnect();
 								} 
 								else {
 									let status = $$(".chat_header p")[1];
@@ -188,12 +185,12 @@ const ChannelFunction = () => {
                                     } 
                                 }, 5000);
                             } 
-                            else if(event.category === 'PNNetworkUpCategory' || event.category === 'PNReconnectedCategory') {
-                                /*Lobby.PUBNUB.subscribe({
-                                    channels: [Lobby.CHANNEL], 
-                                    withPresence: true
-                                }); */
-                                Notify("You are back online.");
+                            else if(event.category === 'PNReconnectedCategory') {
+                            	Notify(`Reconnected back to ${Lobby.CHANNEL} channel`);
+                            } 
+                            else if(event.category === 'PNNetworkUpCategory') {
+                                Lobby.PUBNUB.reconnect();
+                                Notify("You are back online. Reconnecting...");
                             } 
                             else if(event.category === 'PNNetworkIssueCategory') {
                                 Notify("Having trouble to connect, please check your device internet connection.");
