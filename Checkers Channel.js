@@ -122,13 +122,13 @@ const ChannelFunction = () => {
 								} 
 	                        } 
 							else if(response.action === "leave" && response.uuid != Lobby.UUID) {
-								setTimeout( _=> {
+								/*setTimeout( _=> {
 									if(!Lobby.intentionalExit) {
 										Notify(`${playerB.name} went offline.`);
 										let status = $$(".chat_header p")[1];
 										status.innerHTML = "offline";
 									} 
-								}, 2000);
+								}, 2000);*/
 							} 
 							else if(response.action === "state-change" && response.uuid != Lobby.UUID) { try {
 								if(response.state.isTyping) {
