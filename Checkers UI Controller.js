@@ -3156,7 +3156,7 @@ const Fullscreen = (value) => { try {
     let enterFullscreen = elem.requestFullscreen || elem.webkitRequestFullscreen || elem.mozRequestFullscreen || elem.msRequestFullscreen;
     let exitFullscreen = document.exitFullscreen || document.webkitExitFullscreen || document.mozExitFullscreen || document.msExitFullscreen;
    
-    other.fullscreenSupport = method? true: false;
+    other.fullscreenSupport = enterFullscreen? true: false;
 	if(value) {
 		if(enterFullscreen && !isFullScreen()) {
     		enterFullscreen.call(elem);
