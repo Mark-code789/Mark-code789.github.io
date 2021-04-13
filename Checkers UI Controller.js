@@ -3161,8 +3161,8 @@ const Fullscreen = async (value) => { try {
 		if(enterFullscreen && !isFullScreen()) {
 			other.fullscreen = value;
 			$("#item1").style.display = "grid";
-    		await enterFullscreen.call(elem);
-    		orientationLocking(elem, other.orientation);
+    		//await enterFullscreen.call(elem);
+    		//orientationLocking(elem, other.orientation);
     	}
     	else
     		Notify("You must browser doesn't support Fullscreen functionality");
@@ -3171,7 +3171,7 @@ const Fullscreen = async (value) => { try {
 		if(exitFullscreen && isFullScreen()) {
 			other.fullscreen = value;
 			$("#item1").style.display = "none";
-    		exitFullscreen.call(document);
+    		//exitFullscreen.call(document);
     	}
 	} } catch (error) {alert(error)}
 } 
