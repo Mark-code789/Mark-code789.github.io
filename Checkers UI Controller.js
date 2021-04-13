@@ -3159,17 +3159,17 @@ const Fullscreen = async (value) => { try {
     let elem = document.documentElement;
     let enterFullscreen = elem.requestFullscreen || elem.webkitRequestFullscreen || elem.mozRequestFullscreen || elem.msRequestFullscreen;
     let exitFullscreen = document.exitFullscreen || document.webkitExitFullscreen || document.mozExitFullscreen || document.msExitFullscreen;
-   
-    other.fullscreenSupport = enterFullscreen? true: false;
+    
 	if(value) {
 		if(enterFullscreen && !isFullScreen()) {
-			other.fullscreen = value;
 			$("#item1").style.display = "grid";
     		await enterFullscreen.call(elem);
     		if(screen.orientation.type.toLowerCase().includes("portrait")) 
-    			setTimeout(() => {AdjustScreen("portrait");}, 1000);
+    			await setTimeout(() => {AdjustScreen("portrait");}, 1000);
     		else
-    			setTimeout(() => {AdjustScreen("landscape");}, 1000);
+    			await setTimeout(() => {AdjustScreen("landscape");}, 1000);
+    		
+			other.fullscreen = value;
     	}
     	else
     		Notify("You must browser doesn't support Fullscreen functionality");
