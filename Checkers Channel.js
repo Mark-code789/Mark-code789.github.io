@@ -121,8 +121,9 @@ const ChannelFunction = () => {
 								} 
 	                        } 
 							else if(response.action === "leave" && response.uuid != Lobby.UUID) {
+								Notify(`${playerB.name} went offline.`);
 								let status = $$(".chat_header p")[1];
-								status.innerHTML = "online";
+								status.innerHTML = "offline";
 							} 
 							else if(response.action === "state-change" && response.uuid != Lobby.UUID) { try {
 								if(response.state.isTyping) {
@@ -180,7 +181,8 @@ const ChannelFunction = () => {
                             }, 5000);
                         } 
                         else if(event.category === 'PNReconnectedCategory') {
-                        	Notify(`Reconnected back to ${Lobby.CHANNEL} channel`);
+                        	Publish.send({channel: Lobby.CHANNEL, message: {title: "Reconnected", content: ""}});
+                        	Notify(`Reconnected back to ${Lobby.CHANNEL} channel successfully.`);
                         } 
                         else if(event.category === 'PNNetworkUpCategory') {
                             Lobby.PUBNUB.reconnect();
@@ -209,8 +211,10 @@ const ChannelFunction = () => {
                             else if(msg.message.title === "IntentionalExit") {
                             	LeftChannel({totalOccupancy: 1});
                             } 
-                            else if(msg.message.title === 'StillPresent') {
-                                clearTimeout (Lobby.timeoutID);
+                            else if(msg.message.title === 'Reconnected') {
+                            	Notify(`${playerB.name} is back online.`);
+                                let status = $$(".chat_header p")[1];
+								status.innerHTML = "online";
                             } 
                             else if(msg.message.title === 'OpponentName') {
                                 name = msg.message.content;
@@ -370,14 +374,7 @@ class Publish {
         let self = this;
 		Lobby.PUBNUB.publish(config, (status, response) => {
             if(!status.error) {
-                if(config.message.title === 'ConfirmLeave') {
-					self.retryCount = 0;
-        			self.messages = [];
-                    Lobby.timeoutID = setTimeout(() => {
-                        LeftChannel({totalOccupancy: 1});
-                    }, 5000);
-                } 
-                else if(config.message.title === "IntentionalExit") {
+                if(config.message.title === "IntentionalExit") {
 					self.retryCount = 0;
         			self.messages = [];
         			Lobby.sleep.end();
