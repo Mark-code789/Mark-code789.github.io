@@ -648,7 +648,7 @@ class AdjustWidth {
 	static updateState = (elem) => { try {
 		let self = this;
 		clearTimeout(Lobby.timeoutID2);
-		
+		Notify("getting");
 		Lobby.PUBNUB.getState({
 			uuid: Lobby.UUID, 
 			channels: [Lobby.CHANNEL] 
