@@ -3191,7 +3191,7 @@ const Fullscreen = async (value, isEvent = false) => { try {
     		AdjustScreen("", true);
     	}
 	} 
-	else if(isEvent) {
+	else if(isEvent && !isFullScreen()) {
 		$("#item1").style.display = "none";
 		let btns = $("#item0");
 		btns[0].style.background = other.background;
