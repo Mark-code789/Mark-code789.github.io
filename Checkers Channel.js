@@ -645,6 +645,7 @@ const AdjustWidth = (elem, isKeyDown) => { try {
 			if(!state.error) 
 				state = response.state.isTyping;
 		});
+		Notify(state);
 		if(state == false) {
 			clearTimeout(Lobby.timeoutID);
 			Lobby.PUBNUB.setState({
