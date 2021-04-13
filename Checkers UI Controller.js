@@ -413,6 +413,11 @@ const ShowChat = () => {
     $('.chat_field').focus();
     badge.innerHTML = 0;
     badge.style.display = "none";
+    while(Lobby.unreadMessages.length > 0) {
+    	let id = Lobby.unreadMessages[0];
+    	Publish.send({channel: Lobby.CHANNEL, message: {title: "Read", content: id}});
+    	Lobby.unreadMessages.shift();
+    } 
 } 
     
 const HasNotch = () => {
