@@ -453,6 +453,7 @@ const Share = (elem) => {
                 text: `Open this link, and copy the word in quotes below and paste it as channel name under two player online window:\n\n"${link}"\n\n`, 
                 url: "https://mark-code789.github.io/Checkers/index.html"
             }).then( () => { 
+            	Cancel();
                 Notify("Channel name shared successfully."); 
             }).catch( (error) => { 
                 Notify({action: "alert", 
