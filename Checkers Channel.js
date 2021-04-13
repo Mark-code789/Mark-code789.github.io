@@ -637,7 +637,7 @@ const Request = async (prop) => {
 
 class AdjustWidth {
 	static finishedExecuting = true;
-	static adjust = (elem) {
+	static adjust = (elem) => {
 		if(this.finishedExecuting) {
 			this.finishedExecuting = false;
 			updateState(elem);
