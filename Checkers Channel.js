@@ -635,49 +635,67 @@ const Request = async (prop) => {
     return;
 } 
 
-const AdjustWidth = (elem) => { try {
-	let state = "unassigned";
-	clearTimeout(Lobby.timeoutID2);
-	Lobby.PUBNUB.getState({
-		uuid: Lobby.UUID, 
-		channels: [Lobby.CHANNEL] 
-	}, (status, response) => {
-		if(!status.error) 
-			state = response.state.isTyping;
-	});
-	Notify(state);
-	if(state == false) {
-		Lobby.PUBNUB.setState({
-			state: {"isTyping": true}, 
-			channels: [Lobby.CHANNEL]
-		}, function (status, response) {});
+class AdjustWidth {
+	static finishedExecuting = true;
+	static adjust = (elem) {
+		if(this.finishedExecuting) {
+			this.finishedExecuting = false;
+			updateState(elem);
+		} 
+		else
+			return;
+	} 
+	static updateState = (elem) => { try {
+		let self = this;
+		clearTimeout(Lobby.timeoutID2);
+		Lobby.PUBNUB.getState({
+			uuid: Lobby.UUID, 
+			channels: [Lobby.CHANNEL] 
+		}, (status, response) => {
+			if(!status.error) {
+				Notify(response.state.isTyping);
+				if(response.state.isTyping == false) {
+					Lobby.PUBNUB.setState({
+						state: {"isTyping": true}, 
+						channels: [Lobby.CHANNEL]
+					}, function (status, response) {});
+				} 
+				
+				Lobby.timeoutID2 = setTimeout(_=> {
+					Lobby.PUBNUB.setState({
+						state: {"isTyping": false}, 
+						channels: [Lobby.CHANNEL]
+					}, function (status, response) {});
+				}, 1000);
+			} 
+			else {
+				Notify("Setting status error: " + status.error);
+			} 
+			self.adjustWidth(elem);
+		});
+		} catch (error) {Notify(error + "")}
 	} 
 	
-	Lobby.timeoutID2 = setTimeout(_=> {
-		Lobby.PUBNUB.setState({
-			state: {"isTyping": false}, 
-			channels: [Lobby.CHANNEL]
-		}, function (status, response) {});
-	}, 1000);
-	
-    let sendBtn = $(".send_button");
-    if(elem.innerHTML.toLowerCase().replace(/<div><br><\/div>/gm, '') == "") {
-        elem.innerHTML = "";
-        sendBtn.style.filter = "invert(60%)";
-        sendBtn.style.pointerEvents = "none";
-    } 
-    else {
-        sendBtn.style.filter = "invert(90%)";
-        sendBtn.style.pointerEvents = "auto";
-        
-        if(CalculateSize(elem.innerHTML) >= 32768) {
-            elem.innerHTML = elem.innerHTML.substring(0, elem.innerHTML.length-2);
-            Notify("message size exceeded limit");
-        } 
-    } 
-    let height = elem.clientHeight || parseInt(GetValue(elem, "height"));
-    document.documentElement.style.setProperty("--txtSize", (height + "px"));
-    } catch (error) {Notify(error + "")}
+	static adjustWidth = (elem) => {
+	    let sendBtn = $(".send_button");
+	    if(elem.innerHTML.toLowerCase().replace(/<div><br><\/div>/gm, '') == "") {
+	        elem.innerHTML = "";
+	        sendBtn.style.filter = "invert(60%)";
+	        sendBtn.style.pointerEvents = "none";
+	    } 
+	    else {
+	        sendBtn.style.filter = "invert(90%)";
+	        sendBtn.style.pointerEvents = "auto";
+	        
+	        if(CalculateSize(elem.innerHTML) >= 32768) {
+	            elem.innerHTML = elem.innerHTML.substring(0, elem.innerHTML.length-2);
+	            Notify("message size exceeded limit");
+	        } 
+	    } 
+	    let height = elem.clientHeight || parseInt(GetValue(elem, "height"));
+	    document.documentElement.style.setProperty("--txtSize", (height + "px"));
+		this.finishedExecuting = true;
+	} 
 } 
 
 const ChangeTextBox = async (isFocused, elem) => { 
