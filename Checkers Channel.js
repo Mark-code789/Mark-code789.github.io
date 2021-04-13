@@ -456,10 +456,10 @@ const Share = (elem) => {
             	Cancel();
                 Notify("Channel name shared successfully."); 
             }).catch( (error) => { 
-            	let message = error.toString().split(":")[0]
+            	let message = error.toString().split(":");
                 Notify({action: "alert", 
-                        header: "Error!", 
-                        message: ("There was an error while trying sharing. Try again.<br>" + message)});
+                        header: message[0], 
+                        message: ("There was an error while trying to share the name of the channel.<br> :-" + message[1])});
             });
         } 
         else {
