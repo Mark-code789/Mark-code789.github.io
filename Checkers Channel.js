@@ -17,7 +17,7 @@ const ChannelFunction = () => {
         Notify("You have not provided <b><em>your name</em></b>. Please do so and submit again.");
     } 
     else {
-        channel = channel.replace("https://www.checkers.com/", "");
+        channel = channel.replace("\"", "");
         let isLink = /^(\d+%)+\d+$$/.test(channel);
         if(isLink) {
             let splitedChannel = channel.split("%");
