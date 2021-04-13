@@ -320,7 +320,7 @@ const Unsubscribe = async () => {
         Lobby.PUBNUB.unsubscribe({
             channels: [Lobby.CHANNEL]
         });
-        return;
+        
         Lobby.PUBNUB.removeListener(Lobby.LISTENER);
         
         if(isFull) {
