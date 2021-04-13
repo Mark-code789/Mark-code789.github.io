@@ -3145,7 +3145,7 @@ async function play (isAutoRotate = false, accepted = false) {
     } 
 }
 
-const Fullscreen = (value) => { try {
+const Fullscreen = async (value) => { try {
 	let isFullScreen = () => {
         if(document.fullscreenElement !== undefined) return document.fullscreenElement;
         if(document.webkitFullscreenElement !== undefined) return document.webkitFullscreenElement;
