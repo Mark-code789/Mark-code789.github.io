@@ -638,7 +638,7 @@ const AdjustWidth = (elem, isKeyDown) => { try {
 		let state;
 		Lobby.PUBNUB.getState({
 			uuid: Lobby.UUID, 
-			channels: Lobby.CHANNEL
+			channels: [Lobby.CHANNEL] 
 		}, (state, response) => {
 			if(!state.error) 
 				state = response.state.isTyping;
@@ -655,7 +655,7 @@ const AdjustWidth = (elem, isKeyDown) => { try {
 		let state;
 		Lobby.PUBNUB.getState({
 			uuid: Lobby.UUID, 
-			channels: Lobby.CHANNEL
+			channels: [Lobby.CHANNEL] 
 		}, (state, response) => {
 			if(!state.error) 
 				state = response.state.isTyping;
