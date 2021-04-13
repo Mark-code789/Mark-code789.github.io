@@ -636,7 +636,7 @@ const Request = async (prop) => {
 } 
 
 const AdjustWidth = (elem) => { try {
-	let state;
+	let state = "unassigned";
 	clearTimeout(Lobby.timeoutID2);
 	Lobby.PUBNUB.getState({
 		uuid: Lobby.UUID, 
