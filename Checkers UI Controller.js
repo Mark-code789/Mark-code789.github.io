@@ -3161,6 +3161,7 @@ const Fullscreen = async (value) => { try {
 		if(enterFullscreen && !isFullScreen()) {
 			other.fullscreen = value;
 			$("#item1").style.display = "grid";
+			console.log(GetValue($("#item1"), "display"));
     		//await enterFullscreen.call(elem);
     		//orientationLocking(elem, other.orientation);
     	}
