@@ -162,44 +162,42 @@ const ChannelFunction = () => {
                         } 
                     }, 
                     status: function(event) {
-                        if(event.affectedChannels[0] === Lobby.CHANNEL) {
-                            if(!Lobby.isConnected && event.category === 'PNConnectedCategory') {
-                                Lobby.timeoutID = setTimeout( () => {
-                                    let connectivityStatus = $("#connectivity");
-                                    connectivityStatus.classList.add("default");
-                                    connectivityStatus.innerHTML = "CONNECTED";
-                                    $("#online .lobby_name").innerHTML = Lobby.CHANNEL;
-                                    Lobby.isConnected = true;
-                                    if(Lobby.isHost) {
-                                        Notify(`Connected Successfully.<br />You are subscribed to ${Lobby.CHANNEL} Channel. Waiting for opponent...`);
-                                    } 
-                                    else {
-                                        Notify(`Connected Successfully.<br />You are subscribed to ${Lobby.CHANNEL} Channel.`);
-                                        Publish.send({
-                                                channel: Lobby.CHANNEL, 
-                                                message: {
-                                                         title: "OpponentName", 
-                                                         content: `${$$("#online .player_name")[0].innerHTML}`}
-                                                });
-                                    } 
-                                }, 5000);
-                            } 
-                            else if(event.category === 'PNReconnectedCategory') {
-                            	Notify(`Reconnected back to ${Lobby.CHANNEL} channel`);
-                            } 
-                            else if(event.category === 'PNNetworkUpCategory') {
-                                Lobby.PUBNUB.reconnect();
-                                Notify("You are back online. Reconnecting...");
-                            } 
-                            else if(event.category === 'PNNetworkIssueCategory') {
-                                Notify("Having trouble to connect, please check your device internet connection.");
-                            } 
-                            else if(event.category === 'PNNetworkDownCategory') {
-                                Notify("You are offline.");
-                            } 
-                            else if(event.category === 'PNTimeoutCategory') {
-                                Notify("Timeout while connecting, please try again.");
-                            } 
+                        if(!Lobby.isConnected && event.category === 'PNConnectedCategory') {
+                            Lobby.timeoutID = setTimeout( () => {
+                                let connectivityStatus = $("#connectivity");
+                                connectivityStatus.classList.add("default");
+                                connectivityStatus.innerHTML = "CONNECTED";
+                                $("#online .lobby_name").innerHTML = Lobby.CHANNEL;
+                                Lobby.isConnected = true;
+                                if(Lobby.isHost) {
+                                    Notify(`Connected Successfully.<br />You are subscribed to ${Lobby.CHANNEL} Channel. Waiting for opponent...`);
+                                } 
+                                else {
+                                    Notify(`Connected Successfully.<br />You are subscribed to ${Lobby.CHANNEL} Channel.`);
+                                    Publish.send({
+                                            channel: Lobby.CHANNEL, 
+                                            message: {
+                                                     title: "OpponentName", 
+                                                     content: `${$$("#online .player_name")[0].innerHTML}`}
+                                            });
+                                } 
+                            }, 5000);
+                        } 
+                        else if(event.category === 'PNReconnectedCategory') {
+                        	Notify(`Reconnected back to ${Lobby.CHANNEL} channel`);
+                        } 
+                        else if(event.category === 'PNNetworkUpCategory') {
+                            Lobby.PUBNUB.reconnect();
+                            Notify("You are back online. Reconnecting...");
+                        } 
+                        else if(event.category === 'PNNetworkIssueCategory') {
+                            Notify("Having trouble to connect, please check your device internet connection.");
+                        } 
+                        else if(event.category === 'PNNetworkDownCategory') {
+                            Notify("You are offline.");
+                        } 
+                        else if(event.category === 'PNTimeoutCategory') {
+                            Notify("Timeout while connecting, please try again.");
                         } 
                     }, 
                     message: function(msg) {
