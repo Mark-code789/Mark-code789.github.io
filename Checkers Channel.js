@@ -323,12 +323,9 @@ const Unsubscribe = async () => {
         
         Lobby.PUBNUB.removeListener(Lobby.LISTENER);
         
-        if(isFull) {
-            Notify(`${Lobby.CHANNEL} is full, please try another channel.`);
-        } 
-        else {
-            Notify(`Disconnected<br/>You have unsubscribe from ${Lobby.CHANNEL} channel successfully.`);
-        } 
+        
+        Notify(`Disconnected<br/>You have unsubscribe from ${Lobby.CHANNEL} channel successfully.`);
+        
         clearTimeout(Lobby.timeoutID);
         let connectivityStatus = $("#connectivity");
         connectivityStatus.classList.remove("default");
