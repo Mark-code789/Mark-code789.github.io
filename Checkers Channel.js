@@ -51,10 +51,6 @@ const ChannelFunction = () => {
                     restore: true
                 });
                 Lobby.PUBNUB.setUUID(Lobby.UUID);
-                Lobby.PUBNUB.setState({
-                	state: {"isTyping": false}, 
-                	channels: [Lobby.CHANNEL]
-                }, (status, res) => {});
                 setTimeout( () => {Notify("Connecting..."); }, 100);
                 Lobby.LOBBY_LISTENER = {
                 	presence: function(response) { 
@@ -100,6 +96,10 @@ const ChannelFunction = () => {
                     presence: function(response) { 
 						if(response.channel == Lobby.CHANNEL) {
 	                        if(response.action === 'join' && response.uuid == Lobby.UUID) {
+								Lobby.PUBNUB.setState({
+				                	state: {"isTyping": false}, 
+				                	channels: [Lobby.CHANNEL]
+				                }, (status, res) => {});
 	                            if(response.occupancy === 1 && !Lobby.isConnected) {
 	                                Lobby.isHost = true;
 	                                Notify("You are the host in this channel.");
