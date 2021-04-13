@@ -237,7 +237,7 @@ const ChannelFunction = () => {
                             else if(msg.message.title === "Delivered") { 
 								try {
                             		let tick = $("#" + msg.message.content);
-                            		tick.style.background = "#009819";
+                            		tick.style.background = "#C0C0C0";
                             	} catch (error) {alert(error)} 
                             } 
                             else if(msg.message.title === 'ChatMessage') { 
@@ -248,7 +248,7 @@ const ChannelFunction = () => {
                                     badge.style.display = "block";
                                     Notify(`You have ${parseInt(badge.innerHTML) <= 1? 'a new message': badge.innerHTML + ' new messages'} from ${$$("#online .player_name")[1].innerHTML}`);
                                 } 
-                                Message({action: 'receive', count: parseInt(badge.innerHTML), text: msg.message.content.text});
+                                Message({action: 'receive', count: parseInt(badge.innerHTML), text: msg.message.content.text, id: msg.message.content.id});
                             } 
                             else if(msg.message.title === "RequestPlay") {
                             	Request(msg.message);
