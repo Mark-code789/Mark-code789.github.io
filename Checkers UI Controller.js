@@ -221,6 +221,7 @@ async function LoadingDone () {
     document.body.style.backgroundImage = `var(--bg)`;
     $("#load-window").style.display = "none";
     $("#main-window").style.display = "grid";
+    $("#item1").style.display = "none";
     clearInterval(intervalID);
     intervalID = null;
     
