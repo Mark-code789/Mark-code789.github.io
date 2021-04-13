@@ -3175,7 +3175,7 @@ const Fullscreen = async (value) => { try {
 			other.fullscreen = value;
 			$("#item1").style.display = "none";
     		await exitFullscreen.call(document);
-    		setTimeout(() => {AdjustScreen("", true);}, 1500);
+    		AdjustScreen("", true);
     	}
 	} } catch (error) {alert(error)}
 } 
