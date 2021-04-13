@@ -1,6 +1,6 @@
 'use strict' 
 
-const Lobby = {isConnected: false, isHost: false, unreadMessages: []};
+const Lobby = {isConnected: false, intentionalExit: false, isHost: false, unreadMessages: []};
 
 const ChannelFunction = () => {
 	if(!navigator.onLine) {
@@ -121,9 +121,13 @@ const ChannelFunction = () => {
 								} 
 	                        } 
 							else if(response.action === "leave" && response.uuid != Lobby.UUID) {
-								Notify(`${playerB.name} went offline.`);
-								let status = $$(".chat_header p")[1];
-								status.innerHTML = "offline";
+								setTimeout( _=> {
+									if(!Lobby.intentionalExit) {
+										Notify(`${playerB.name} went offline.`);
+										let status = $$(".chat_header p")[1];
+										status.innerHTML = "offline";
+									} 
+								}, 2000);
 							} 
 							else if(response.action === "state-change" && response.uuid != Lobby.UUID) { try {
 								if(response.state.isTyping) {
@@ -209,6 +213,7 @@ const ChannelFunction = () => {
                                         });
                             } 
                             else if(msg.message.title === "IntentionalExit") {
+                            	Lobby.intentionalExit = true;
                             	LeftChannel({totalOccupancy: 1});
                             } 
                             else if(msg.message.title === 'Reconnected') {
