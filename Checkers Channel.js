@@ -107,8 +107,13 @@ const ChannelFunction = () => {
 	                            } 
 	                        } 
 	                        else if(response.action === 'timeout') {
-								if(response.uuid == Lobby.UUID) 
+								if(response.uuid == Lobby.UUID) {
 	                            	Notify(`Connection timeout to ${Lobby.CHANNEL} channel. Reconnecting...`);
+									Lobby.PUBNUB.subscribe({
+	                                    channels: [Lobby.CHANNEL], 
+	                                    withPresence: true
+	                                }); 
+								} 
 								else {
 									let status = $$(".chat_header p")[1];
 									status.innerHTML = "offline";
