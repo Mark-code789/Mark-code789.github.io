@@ -646,7 +646,7 @@ class AdjustWidth {
 	} 
 	static updateState = (elem) => { try {
 		let self = this;
-		clearTimeout(Lobby.timeoutID2);
+		clearTimeout(Lobby.timeoutID);
 		if(!Lobby.isTyping) {
 			Lobby.isTyping = true;
 			Lobby.PUBNUB.setState({
@@ -655,7 +655,7 @@ class AdjustWidth {
 			}, function (status, response) {});
 		} 
 		
-		Lobby.timeoutID2 = setTimeout(_=> {
+		Lobby.timeoutID = setTimeout(_=> {
 			Lobby.isTyping = false;
 			Lobby.PUBNUB.setState({
 				state: {"isTyping": false}, 
@@ -690,7 +690,7 @@ class AdjustWidth {
 
 const ChangeTextBox = async (isFocused, elem) => { 
 	if($(".send_button") === document.activeElement) {
-		clearTimeout(Lobby.timeoutID2);
+		clearTimeout(Lobby.timeoutID);
 		Lobby.isTyping = false;
 		Lobby.PUBNUB.setState({
 			state: {"isTyping": false}, 
