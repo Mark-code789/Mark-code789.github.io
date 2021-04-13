@@ -113,6 +113,7 @@ const ChannelFunction = () => {
 	                        } 
 	                        else if(response.action === 'timeout') {
 								if(response.uuid == Lobby.UUID) {
+									Lobby.isConnected = false;
 	                            	Notify(`Connection timeout to ${Lobby.CHANNEL} channel. Reconnecting...`);
 								} 
 								else {
@@ -185,20 +186,28 @@ const ChannelFunction = () => {
                             }, 5000);
                         } 
                         else if(event.category === 'PNReconnectedCategory') {
+                        	Lobby.isConnected = true;
                         	Publish.send({channel: Lobby.CHANNEL, message: {title: "Reconnected", content: ""}});
                         	Notify(`Reconnected back to ${Lobby.CHANNEL} channel successfully.`);
                         } 
                         else if(event.category === 'PNNetworkUpCategory') {
-                            Lobby.PUBNUB.reconnect();
-                            Notify("You are back online. Reconnecting...");
+                            if(!Lobby.isConnected) {
+                            	Lobby.PUBNUB.reconnect();
+                            	Notify("You are back online. Reconnecting...");
+                            } 
+                            else {
+                            	Notify("You are back online.");
+                            } 
                         } 
                         else if(event.category === 'PNNetworkIssueCategory') {
+                        	Lobby.isConnected = false;
                             Notify("Having trouble to connect, please check your device internet connection.");
                         } 
                         else if(event.category === 'PNNetworkDownCategory') {
-                            Notify("You are went offline.");
+                            Notify("You went offline.");
                         } 
                         else if(event.category === 'PNTimeoutCategory') {
+                        	Lobby.isConnected = false;
                             Notify("Timeout while connecting, please try again.");
                         } 
                     }, 
