@@ -510,7 +510,7 @@ const Message = async (prop) => { try {
         $('.chat_field').innerHTML = "";
         $('.chat_field').focus();
         await ChangeTextBox(false, $(".chat_field"));
-        await AdjustWidth($(".chat_field"));
+        await AdjustWidth.adjust($(".chat_field"));
         
         bubble.classList.add("bubble", "right_bubble");
         bubble.appendChild(pText);
