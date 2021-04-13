@@ -450,7 +450,7 @@ const Share = (elem) => {
             } 
             navigator.share({
                 title: "Checkers Channel Name", 
-                text: `Open this link, and copy the word in quotes below and paste it as channel name under two player online window:\n"${link}"\n`, 
+                text: `Open this link, and copy the word in quotes below and paste it as channel name under two player online window:\n\n"${link}"\n\n`, 
                 url: "https://mark-code789.github.io/Checkers/index.html"
             }).then( () => { 
             	Cancel();
