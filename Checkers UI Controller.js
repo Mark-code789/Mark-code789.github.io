@@ -3159,18 +3159,18 @@ const Fullscreen = (value) => { try {
     other.fullscreenSupport = enterFullscreen? true: false;
 	if(value) {
 		if(enterFullscreen && !isFullScreen()) {
-    		enterFullscreen.call(elem);
 			other.fullscreen = value;
 			$("#item1").style.display = "grid";
+    		enterFullscreen.call(elem);
     	}
     	else
     		Notify("You must browser doesn't support Fullscreen functionality");
 	} 
 	else {
 		if(exitFullscreen && isFullScreen()) {
-    		exitFullscreen.call(document);
 			other.fullscreen = value;
 			$("#item1").style.display = "none";
+    		exitFullscreen.call(document);
     	}
 	} } catch (error) {alert(error)}
 } 
