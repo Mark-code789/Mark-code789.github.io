@@ -194,7 +194,7 @@ const ChannelFunction = () => {
                             Notify("Having trouble to connect, please check your device internet connection.");
                         } 
                         else if(event.category === 'PNNetworkDownCategory') {
-                            Notify("You are offline.");
+                            Notify("You are went offline.");
                         } 
                         else if(event.category === 'PNTimeoutCategory') {
                             Notify("Timeout while connecting, please try again.");
