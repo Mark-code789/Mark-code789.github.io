@@ -450,8 +450,8 @@ const Share = (elem) => {
             } 
             navigator.share({
                 title: "Checkers Channel Name", 
-                text: `Copy the link that follows and paste it in the checkers channel field and submit it:\n\n`, //https://www.markcheckers.com/${link}`, 
-                url: `https://www.markcheckers.com/${link}`
+                text: `Open this link, and add the word in quotes below in channel name field under two player online window:\n\n"${link}"`, 
+                url: "mark-code789.github.io/Checkers/index.html"
             }).then( () => { 
                 Notify("Channel name shared successfully."); 
             }).catch( (error) => { 
