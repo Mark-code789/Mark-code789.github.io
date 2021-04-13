@@ -1,6 +1,6 @@
 'use strict' 
 
-const Lobby = {isConnected: false, isClick: false, isHost: false, unreadMessages: []};
+const Lobby = {isConnected: false, isHost: false, unreadMessages: []};
 
 const ChannelFunction = () => {
 	if(!navigator.onLine) {
@@ -120,14 +120,9 @@ const ChannelFunction = () => {
 									status.innerHTML = "offline";
 								} 
 	                        } 
-							else if(response.action === "leave") {
-								alert(Lobby.UUID + "\n" + Lobby.isClick);
-								Publish.send({
-										 channel: Lobby.CHANNEL, 
-                                         message: {
-                                                   title: "ConfirmLeave", 
-                                                   content: ""}
-                                        });
+							else if(response.action === "leave" && response.uuid != Lobby.UUID) {
+								let status = $$(".chat_header p")[1];
+								status.innerHTML = "online";
 							} 
 							else if(response.action === "state-change" && response.uuid != Lobby.UUID) { try {
 								if(response.state.isTyping) {
@@ -211,10 +206,13 @@ const ChannelFunction = () => {
                                                  content: ""}
                                         });
                             } 
-                            if(msg.message.title === 'StillPresent') {
+                            else if(msg.message.title === "IntentionalExit") {
+                            	LeftChannel({totalOccupancy: 1});
+                            } 
+                            else if(msg.message.title === 'StillPresent') {
                                 clearTimeout (Lobby.timeoutID);
                             } 
-                            if(msg.message.title === 'OpponentName') {
+                            else if(msg.message.title === 'OpponentName') {
                                 name = msg.message.content;
                                 name = name.replace(/^\w|\s\w/g, t => t.toUpperCase());
                                 $$("#online .player_name")[1].innerHTML = name;
@@ -316,13 +314,14 @@ const ChannelFunction = () => {
 
 const Unsubscribe = async () => {
     if(Lobby.isConnected) {
-    	Lobby.isClick = true;
+    	Lobby.sleep = new Sleep();
+    	Publish.send({channel: Lobby.CHANNEL, message: {title: "IntentionalExit", content: ""}});
+    	await Lobby.sleep.start();
         Lobby.PUBNUB.unsubscribe({
             channels: [Lobby.CHANNEL]
         });
         
         Lobby.PUBNUB.removeListener(Lobby.LISTENER);
-        
         
         Notify(`Disconnected<br/>You have unsubscribe from ${Lobby.CHANNEL} channel successfully.`);
         
@@ -378,6 +377,11 @@ class Publish {
                         LeftChannel({totalOccupancy: 1});
                     }, 5000);
                 } 
+                else if(config.message.title === "IntentionalExit") {
+					self.retryCount = 0;
+        			self.messages = [];
+        			Lobby.sleep.end();
+				} 
 				else {
 					self.messages.shift();
         			self.retryCount = 0;
