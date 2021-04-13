@@ -96,6 +96,7 @@ const ChannelFunction = () => {
                     presence: function(response) { 
 						if(response.channel == Lobby.CHANNEL) {
 	                        if(response.action === 'join' && response.uuid == Lobby.UUID) {
+								Lobby.isTyping = false;
 								Lobby.PUBNUB.setState({
 				                	state: {"isTyping": false}, 
 				                	channels: [Lobby.CHANNEL]
@@ -652,32 +653,22 @@ class AdjustWidth {
 	static updateState = (elem) => { try {
 		let self = this;
 		clearTimeout(Lobby.timeoutID2);
-		Notify("getting");
-		Lobby.PUBNUB.getState({
-			uuid: Lobby.UUID, 
-			channels: [Lobby.CHANNEL] 
-		}, (status, response) => {
-			Notify(response.state.isTyping);
-			if(!status.error) {
-				if(response.state.isTyping == false) {
-					Lobby.PUBNUB.setState({
-						state: {"isTyping": true}, 
-						channels: [Lobby.CHANNEL]
-					}, function (status, response) {});
-				} 
-				
-				Lobby.timeoutID2 = setTimeout(_=> {
-					Lobby.PUBNUB.setState({
-						state: {"isTyping": false}, 
-						channels: [Lobby.CHANNEL]
-					}, function (status, response) {});
-				}, 1000);
+			if(!Lobby.isTyping) {
+				Lobby.isTyping = true;
+				Lobby.PUBNUB.setState({
+					state: {"isTyping": true}, 
+					channels: [Lobby.CHANNEL]
+				}, function (status, response) {});
 			} 
-			else {
-				Notify("Setting status error: " + status.error);
-			} 
+			
+			Lobby.timeoutID2 = setTimeout(_=> {
+				Lobby.isTyping = false;
+				Lobby.PUBNUB.setState({
+					state: {"isTyping": false}, 
+					channels: [Lobby.CHANNEL]
+				}, function (status, response) {});
+			}, 1000);
 			self.adjustWidth(elem);
-		});
 		} catch (error) {Notify(error + "")}
 	} 
 	
