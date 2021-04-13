@@ -636,6 +636,7 @@ const Request = async (prop) => {
 } 
 
 const AdjustWidth = (elem, isKeyDown) => { try {
+	Notify(isKeyDown);
 	if(isKeyDown) {
 		let state;
 		Lobby.PUBNUB.getState({
@@ -645,7 +646,7 @@ const AdjustWidth = (elem, isKeyDown) => { try {
 			if(!state.error) 
 				state = response.state.isTyping;
 		});
-		Notify(state);
+		
 		if(state == false) {
 			clearTimeout(Lobby.timeoutID);
 			Lobby.PUBNUB.setState({
