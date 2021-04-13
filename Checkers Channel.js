@@ -51,6 +51,10 @@ const ChannelFunction = () => {
                     restore: true
                 });
                 Lobby.PUBNUB.setUUID(Lobby.UUID);
+                Lobby.PUBNUB.setState({
+                	state: {"isTyping": false}, 
+                	channels: [Lobby.CHANNEL]
+                }, (status, res) => {});
                 setTimeout( () => {Notify("Connecting..."); }, 100);
                 Lobby.LOBBY_LISTENER = {
                 	presence: function(response) { 
