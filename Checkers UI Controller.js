@@ -3166,6 +3166,10 @@ const Fullscreen = async (value) => { try {
 			other.fullscreen = value;
 			$("#item1").style.display = "grid";
     		await enterFullscreen.call(elem);
+    		if(screen.orientation.type.toLowerCase().includes("portrait")) 
+    			setTimeout(() => {AdjustScreen("portrait");}, 1000);
+    		else
+    			setTimeout(() => {AdjustScreen("landscape");}, 1000);
     	}
     	else
     		Notify("You must browser doesn't support Fullscreen functionality");
@@ -3188,15 +3192,11 @@ async function orientationLocking (elem, orientation) {
                 viewBtns[1].style.background = other.default;
                 viewBtns[0].style.background = other.background;
                 other.orientation = "portrait";
-                
-                setTimeout(() => {AdjustScreen("portrait");}, 1500);
             } 
             else if(screen.orientation.type.toLowerCase().includes("landscape")) {
                 viewBtns[0].style.background = other.default;
                 viewBtns[1].style.background = other.background;
                 other.orientation = "landscape";
-                
-                setTimeout(() => {AdjustScreen("landscape");}, 1500);
             }
         }).catch((error) => {
             alert("An error occurred while locking view\n" + error);
