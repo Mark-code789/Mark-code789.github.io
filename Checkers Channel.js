@@ -550,7 +550,7 @@ const Message = async (prop) => { try {
         container.insertBefore(bubble, anchor);
         
         if(GetValue($("#chat-window"), "display") === "flex") {
-        	Publish({channel:Lobby.CHANNEL, message: {title: "Read", content: prop.id}});
+        	Publish.send({channel:Lobby.CHANNEL, message: {title: "Read", content: prop.id}});
             setTimeout(() => {anchor.scrollIntoView({block: "start", behavior: "smooth"});}, 200);
         } 
     } 
