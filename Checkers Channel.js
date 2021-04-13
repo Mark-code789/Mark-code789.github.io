@@ -640,7 +640,7 @@ class AdjustWidth {
 	static adjust = (elem) => {
 		if(this.finishedExecuting) {
 			this.finishedExecuting = false;
-			updateState(elem);
+			this.updateState(elem);
 		} 
 		else
 			return;
@@ -648,6 +648,7 @@ class AdjustWidth {
 	static updateState = (elem) => { try {
 		let self = this;
 		clearTimeout(Lobby.timeoutID2);
+		
 		Lobby.PUBNUB.getState({
 			uuid: Lobby.UUID, 
 			channels: [Lobby.CHANNEL] 
