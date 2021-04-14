@@ -117,12 +117,7 @@ const ChannelFunction = () => {
 	                            	Notify(`Connection timeout to ${Lobby.CHANNEL} channel. Try subscribing to the channel again.`);
 								} 
 								else {
-									Notify(`${playerB.name} went offline.`);
-									let status = $$(".chat_header p")[1];
-									status.innerHTML = "offline";
-									let opponentStatus = $("#player-2-status");
-							        opponentStatus.innerHTML = "OFFLINE";
-							        opponentStatus.style.backgroundImage = "linear-gradient(rgba(193, 115, 0, 0.9), rgba(153, 75, 0, 0.9))";
+									LeftChannel({totalOccupancy: 1});
 								} 
 	                        } 
 							else if(response.action === "leave" && response.uuid != Lobby.UUID) {
