@@ -286,7 +286,7 @@ const ChannelFunction = () => {
                                     	AudioPlayer.play("notification", 1);
                                     else 
                                     	try {
-                                    		navigator.vibrate([200, 100]);
+                                    		navigator.vibrate(200);
                                     	} catch (error) {} 
                                 } 
                                 Message({action: 'receive', count: parseInt(badge.innerHTML), text: msg.message.content.text, id: msg.message.content.id});
