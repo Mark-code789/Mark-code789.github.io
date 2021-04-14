@@ -759,6 +759,7 @@ const Game = {
     countMoves: 0,
     top: -5,
     path: {index: 0},
+    isComputer: false, 
     pieceSelected: false, 
     thinking: false,
     alternatePlayAs: false, 
@@ -1461,7 +1462,7 @@ const ValidateMove = async (prop) => {
                     return;
                 } 
             } 
-           else if(Game.possibleCaptures.length > 0 && isEmpty) {
+           else if(Game.possibleCaptures.length > 0 && isEmpty && Game.isComputer == prop.isComputer) {
            	prop.sorted = await SortCaptures(other.capturePath);
            	prop.captureMove = true;
            	let validMove = await Move(prop);
@@ -1476,7 +1477,7 @@ const ValidateMove = async (prop) => {
                     return;
                 } 
             } 
-            else {
+            else if(Game.isComputer == prop.isComputer) {
                 for(let type of Game.possibleMoves) {
                     if(type.empty == posId && type.cell == `${Game.prop.i}${Game.prop.j}`) {
                     	prop.movePiece = true;
