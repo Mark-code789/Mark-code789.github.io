@@ -46,7 +46,7 @@ const ChannelFunction = () => {
                     publish_key: 'pub-c-1d3446b1-0874-4490-9ac7-20c09c56bf71',
                     subscribe_key: 'sub-c-3a0c6c3e-bfc7-11ea-bcf8-42a3de10f872',
                     ssl: true, 
-                    presenceTimeout: 60, 
+                    presenceTimeout: 120, 
                     sendByPost: true, 
                     restore: true
                 });
@@ -117,6 +117,7 @@ const ChannelFunction = () => {
 	                            	Notify(`Connection timeout to ${Lobby.CHANNEL} channel. Reconnecting...`);
 								} 
 								else {
+									Notify(`${playerB.name} went offline.`);
 									let status = $$(".chat_header p")[1];
 									status.innerHTML = "offline";
 									let opponentStatus = $("#player-2-status");
@@ -125,13 +126,16 @@ const ChannelFunction = () => {
 								} 
 	                        } 
 							else if(response.action === "leave" && response.uuid != Lobby.UUID) {
-								/*setTimeout( _=> {
+								setTimeout( _=> {
 									if(!Lobby.intentionalExit) {
 										Notify(`${playerB.name} went offline.`);
 										let status = $$(".chat_header p")[1];
 										status.innerHTML = "offline";
+										let opponentStatus = $("#player-2-status");
+							        	opponentStatus.innerHTML = "OFFLINE";
+							        	opponentStatus.style.backgroundImage = "linear-gradient(rgba(193, 115, 0, 0.9), rgba(153, 75, 0, 0.9))";
 									} 
-								}, 2000);*/
+								}, 2000);
 							} 
 							else if(response.action === "state-change" && response.uuid != Lobby.UUID) { try {
 								if(response.state.isTyping) {
@@ -154,6 +158,9 @@ const ChannelFunction = () => {
 										for(let dot of $$(".typing")) {
 											dot.classList.remove("bouncing");
 											dot.style.display = "none";
+											let opponentStatus = $("#player-2-status");
+							        		opponentStatus.innerHTML = "ONLINE";
+							        		opponentStatus.style.backgroundImage = other.default;
 										} 
 									} 
 									else {
@@ -194,6 +201,7 @@ const ChannelFunction = () => {
                         	Notify(`Reconnected back to ${Lobby.CHANNEL} channel successfully.`);
                         } 
                         else if(event.category === 'PNNetworkUpCategory') {
+                        	Publish.send({channel: Lobby.CHANNEL, message: {title: "Reconnected", content: ""}});
                             if(!Lobby.isConnected) {
                             	Lobby.PUBNUB.reconnect();
                             	Notify("You are back online. Reconnecting...");
@@ -232,6 +240,9 @@ const ChannelFunction = () => {
                             	Notify(`${playerB.name} is back online.`);
                                 let status = $$(".chat_header p")[1];
 								status.innerHTML = "online";
+								let opponentStatus = $("#player-2-status");
+							    opponentStatus.innerHTML = "ONLINE";
+							    opponentStatus.style.backgroundImage = other.default;
                             } 
                             else if(msg.message.title === 'OpponentName') {
                                 name = msg.message.content;
