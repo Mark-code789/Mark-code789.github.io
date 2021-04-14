@@ -534,7 +534,7 @@ const Message = async (prop) => { try {
         $('.chat_field').innerHTML = "";
         $('.chat_field').focus();
         await ChangeTextBox(false, $(".chat_field"));
-        await AdjustWidth.adjust($(".chat_field"));
+        await AdjustWidth.adjust($(".chat_field", false));
         
         bubble.classList.add("bubble", "right_bubble");
         bubble.appendChild(pText);
@@ -666,32 +666,34 @@ const Request = async (prop) => {
 
 class AdjustWidth {
 	static finishedExecuting = true;
-	static adjust = (elem) => {
+	static adjust = (elem, isEvent = true) => {
 		if(this.finishedExecuting) {
 			this.finishedExecuting = false;
-			this.updateState(elem);
+			this.updateState(elem, isEvent);
 		} 
 		else
 			return;
 	} 
-	static updateState = (elem) => { try {
+	static updateState = (elem, isEvent) => { try {
 		let self = this;
 		clearTimeout(Lobby.timeoutID);
-		if(!Lobby.isTyping) {
-			Lobby.isTyping = true;
-			Lobby.PUBNUB.setState({
-				state: {"isTyping": true}, 
-				channels: [Lobby.CHANNEL]
-			}, function (status, response) {});
+		if(isEvent) {
+			if(!Lobby.isTyping) {
+				Lobby.isTyping = true;
+				Lobby.PUBNUB.setState({
+					state: {"isTyping": true}, 
+					channels: [Lobby.CHANNEL]
+				}, function (status, response) {});
+			} 
+			
+			Lobby.timeoutID = setTimeout(_=> {
+				Lobby.isTyping = false;
+				Lobby.PUBNUB.setState({
+					state: {"isTyping": false}, 
+					channels: [Lobby.CHANNEL]
+				}, function (status, response) {});
+			}, 1000);
 		} 
-		
-		Lobby.timeoutID = setTimeout(_=> {
-			Lobby.isTyping = false;
-			Lobby.PUBNUB.setState({
-				state: {"isTyping": false}, 
-				channels: [Lobby.CHANNEL]
-			}, function (status, response) {});
-		}, 1000);
 		self.adjustWidth(elem);
 		} catch (error) {Notify(error + "")}
 	} 
