@@ -95,8 +95,10 @@ let sounds = [//"@button_click_003.mp3",
                 "https://dl.dropbox.com/s/qiyucvychewpiwk/collect.mp3?raw=1",
                 //"@game win.mp3", 
                 "https://dl.dropbox.com/s/z9wf6nxyyrxx9cq/game%20win.mp3?raw=1", 
-                //"@game lose.mp3"
-                "https://dl.dropbox.com/s/uchjgfosuf17kkk/game%20lose.mp3?raw=1"
+                //"@game lose.mp3", 
+                "https://dl.dropbox.com/s/uchjgfosuf17kkk/game%20lose.mp3?raw=1", 
+                //"@notification.mp3"
+                "https://dl.dropbox.com/s/y6uo6wipmpqkfhr/notification.mp3?raw=1"
                ];
 // to access audio object keys
 let soundProps = Object.keys(Sound);
