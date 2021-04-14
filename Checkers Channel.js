@@ -126,16 +126,14 @@ const ChannelFunction = () => {
 								} 
 	                        } 
 							else if(response.action === "leave" && response.uuid != Lobby.UUID) {
-								setTimeout( _=> {
-									if(!Lobby.intentionalExit) {
-										Notify(`${playerB.name} went offline.`);
-										let status = $$(".chat_header p")[1];
-										status.innerHTML = "offline";
-										let opponentStatus = $("#player-2-status");
-							        	opponentStatus.innerHTML = "OFFLINE";
-							        	opponentStatus.style.backgroundImage = "linear-gradient(rgba(193, 115, 0, 0.9), rgba(153, 75, 0, 0.9))";
-									} 
-								}, 2000);
+								if(!Lobby.intentionalExit) {
+									Notify(`${playerB.name} went offline.`);
+									let status = $$(".chat_header p")[1];
+									status.innerHTML = "offline";
+									let opponentStatus = $("#player-2-status");
+						        	opponentStatus.innerHTML = "OFFLINE";
+						        	opponentStatus.style.backgroundImage = "linear-gradient(rgba(193, 115, 0, 0.9), rgba(153, 75, 0, 0.9))";
+								} 
 							} 
 							else if(response.action === "state-change" && response.uuid != Lobby.UUID) { try {
 								if(response.state.isTyping) {
