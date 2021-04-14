@@ -1036,7 +1036,7 @@ const Move = async (prop) => {
         let w1 = piece.offsetWidth; 
         scene.style.display = "none";
         Game.pieceSelected = true;
-        Game.isComputer = prop.isComputer? true: false;
+        Game.isComputer = prop.isComputer;
         Game.prop = {cell: prop.cell, x1, y1, h1, w1, i: prop.i, j: prop.j};
         
         prop.cell.classList.add("valid");
