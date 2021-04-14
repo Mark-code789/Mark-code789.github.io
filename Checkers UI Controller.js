@@ -2423,7 +2423,10 @@ const Helper = async (moves, state, isMultJump = false) => {
 	    } 
 	    
 	    if(isSingleCell) {
-	        await ValidateMove({cell: $("#table").rows[i].cells[j], i, j});
+			if(Game.mode != "two-player-online")
+	        	await ValidateMove({cell: $("#table").rows[i].cells[j], i, j});
+			else
+				$("#table").rows[i].cells[j].classList.add("helper_filled");
 	        return;
 	    } 
 	    else if(Game.helper || Game.capturesHelper) {
