@@ -16,7 +16,8 @@ const Sound = {
     king: "", 
     collect: "", 
     game_win: "", 
-    game_lose: "", 
+    game_lose: "",
+    notification: "", 
     muted: false
 }
 // for caching purposes 
@@ -1886,11 +1887,13 @@ class AudioPlayer {
 	    Sound.collect.muted = true;
 	    Sound.game_win.muted = true;
 	    Sound.game_lose.muted = true;
+		Sound.notification.muted = true;
 	    Sound.capture.play();
 	    Sound.king.play();
 	    Sound.collect.play();
 	    Sound.game_win.play();
 	    Sound.game_lose.play();
+		Sound.notification.play();
 	} 
 } 
 
