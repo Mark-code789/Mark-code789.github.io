@@ -113,10 +113,11 @@ const ChannelFunction = () => {
 	                        } 
 	                        else if(response.action === 'timeout') {
 								if(response.uuid == Lobby.UUID) {
-									Unsubscribe();
 	                            	Notify(`Connection timeout to ${Lobby.CHANNEL} channel. Try subscribing to the channel again.`);
+									Unsubscribe(false);
 								} 
 								else {
+									Lobby.intentionalExit = true;
 									LeftChannel({totalOccupancy: 1});
 								} 
 	                        } 
@@ -205,7 +206,7 @@ const ChannelFunction = () => {
                         } 
                         else if(event.category === 'PNTimeoutCategory') {
                             Notify("Connection Timeout. Subscribe again to " + Lobby.CHANNEL + " to get connected");
-                            Unsubscribe();
+                            Unsubscribe(false);
                         } 
                     }, 
                     message: function(msg) {
@@ -337,7 +338,7 @@ const ChannelFunction = () => {
     } 
 }
 
-const Unsubscribe = async () => {
+const Unsubscribe = async (intentional = true) => {
     if(Lobby.isConnected) {
     	Lobby.sleep = new Sleep();
     	Publish.send({channel: Lobby.CHANNEL, message: {title: "IntentionalExit", content: ""}});
@@ -347,8 +348,8 @@ const Unsubscribe = async () => {
         });
         
         Lobby.PUBNUB.removeListener(Lobby.LISTENER);
-        
-        Notify(`Disconnected<br/>You have unsubscribe from ${Lobby.CHANNEL} channel successfully.`);
+        if(intentional) 
+        	Notify(`Disconnected<br/>You have unsubscribe from ${Lobby.CHANNEL} channel successfully.`);
         
         clearTimeout(Lobby.timeoutID);
         let connectivityStatus = $("#connectivity");
