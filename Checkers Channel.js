@@ -282,6 +282,12 @@ const ChannelFunction = () => {
                                     badge.innerHTML = parseInt(badge.innerHTML)+1;
                                     badge.style.display = "block";
                                     Notify(`You have ${parseInt(badge.innerHTML) <= 1? 'a new message': badge.innerHTML + ' new messages'} from ${$$("#online .player_name")[1].innerHTML}`);
+                                    if(!Sound.muted)
+                                    	AudioPlayer.play("notification", 1);
+                                    else 
+                                    	try {
+                                    		navigator.vibrate([200, 100]);
+                                    	} catch (error) {} 
                                 } 
                                 Message({action: 'receive', count: parseInt(badge.innerHTML), text: msg.message.content.text, id: msg.message.content.id});
                             } 
