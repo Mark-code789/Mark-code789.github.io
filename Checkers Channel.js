@@ -205,8 +205,7 @@ const ChannelFunction = () => {
                             Notify("You are offline.");
                         } 
                         else if(event.category === 'PNTimeoutCategory') {
-                            Notify("Connection Timeout. Subscribe again to " + Lobby.CHANNEL + " to get connected");
-                            Unsubscribe(false);
+                            Notify("Connection Timeout.");
                         } 
                     }, 
                     message: function(msg) {
