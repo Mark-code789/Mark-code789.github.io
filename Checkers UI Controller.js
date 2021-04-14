@@ -2423,7 +2423,7 @@ const Helper = async (moves, state, isMultJump = false) => {
 	    } 
 	    
 	    if(isSingleCell) {
-	        await ValidateMove({cell: $("#table").rows[i].cells[j], i, j, isComputer: true});
+	        await ValidateMove({cell: $("#table").rows[i].cells[j], i, j});
 	        return;
 	    } 
 	    else if(Game.helper || Game.capturesHelper) {
