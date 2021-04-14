@@ -574,6 +574,7 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
     Game.possibleCaptures = [];
     Game.possibleMoves = [];
     Game.over = false;
+    Game.isComputer = false;
     Game.pieceSelected = false;
     Game.validForHint = true;
     Game.prop = null;
@@ -1034,6 +1035,7 @@ const Move = async (prop) => {
         let w1 = piece.offsetWidth; 
         scene.style.display = "none";
         Game.pieceSelected = true;
+        Game.isComputer = prop.isComputer? true: false;
         Game.prop = {cell: prop.cell, x1, y1, h1, w1, i: prop.i, j: prop.j};
         
         prop.cell.classList.add("valid");
