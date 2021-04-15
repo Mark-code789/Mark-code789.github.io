@@ -1,6 +1,6 @@
 'use strict' 
 
-const Lobby = {isConnected: false, intentionalExit: false, isHost: false, unreadMessages: [], movesQueue: []};
+const Lobby = {isConnected: false, intentionalExit: false, isHost: false, unreadMessages: []};
 
 const ChannelFunction = () => {
 	if(!navigator.onLine) {
@@ -292,12 +292,7 @@ const ChannelFunction = () => {
                                 Cancel();
                             } 
                             else if(msg.message.title === "Moved") { 
-								try {
-	                                let i = 7 - msg.message.content.i, 
-	                                    j = 7 - msg.message.content.j,
-	                                    cell = $("#table").rows[i].cells[j];
-	                                ValidateMove({cell, i, j, isComputer: true});
-                                } catch (error) {alert(error + "")}
+                            	OpponentMove.move(msg.message.content);
                             } 
                             else if(msg.message.title === "Undone") {
                             	Notify(playerB.name + " undid the move");
@@ -364,6 +359,31 @@ const Unsubscribe = async (intentional = true) => {
     else {
         Notify("You have not joined any channel.");
     } 
+} 
+
+class OpponentMove {
+	static moves = [];
+	static move = (prop) => {
+		this.moves.push(prop);
+		if(this.moves.length == 1)
+			this.make();
+	} 
+	static make = async () => {
+		try {
+			let self = this;
+			await setTimeout( _=> {
+				let prop = self.moves[0];
+	            let i = 7 - prop.i, 
+	                j = 7 - prop.j,
+	                cell = $("#table").rows[i].cells[j];
+	            ValidateMove({cell, i, j, isComputer: true});
+			}, 1000);
+			this.moves.shift();
+			if(this.moves.length > 0)
+				this.make();
+			return;
+        } catch (error) {alert(error + "")}
+	} 
 } 
 
 class Publish { 
