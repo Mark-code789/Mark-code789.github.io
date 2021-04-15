@@ -562,14 +562,14 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
    
     // reset all the game states and players states 
     BackState.moves = [];
-    Game.state = /*[["NA", "EC", "NA", "EC", "NA", "EC", "NA", "EC"],
+    Game.state = [["NA", "EC", "NA", "EC", "NA", "EC", "NA", "MB"],
+				  ["EC", "NA", "EC", "NA", "EC", "NA", "MB", "NA"],
+				  ["NA", "EC", "NA", "EC", "NA", "MB", "NA", "MB"],
+				  ["EC", "NA", "EC", "NA", "EC", "NA", "EC", "NA"],
+				  ["NA", "EC", "NA", "EC", "NA", "MW", "NA", "MW"],
 				  ["EC", "NA", "EC", "NA", "EC", "NA", "EC", "NA"],
 				  ["NA", "EC", "NA", "EC", "NA", "EC", "NA", "EC"],
-				  ["EC", "NA", "EC", "NA", "EC", "NA", "EC", "NA"],
-				  ["NA", "EC", "NA", "EC", "NA", "EC", "NA", "EC"],
-				  ["EC", "NA", "EC", "NA", "EC", "NA", "EC", "NA"],
-				  ["NA", "EC", "NA", "EC", "NA", "EC", "NA", "EC"],
-				  ["EC", "NA", "EC", "NA", "EC", "NA", "EC", "NA"]];*/[];
+				  ["EC", "NA", "EC", "NA", "MW", "NA", "EC", "NA"]];//[];
     Game.track = [];
     Game.possibleCaptures = [];
     Game.possibleMoves = [];
