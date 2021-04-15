@@ -2570,7 +2570,7 @@ const Mode = async (type, click = true) => {
         playerA.name = $("#playerA-name").value;
         playerB.name = $("#playerB-name").value;
         $("#two-players-window h2").innerHTML = "TWO PLAYERS OFFLINE";
-        $("#item3").style.display = "none";
+        $("#item4").style.display = "none";
         $("#online").style.display = "none";
         $("#offline").style.display = "grid";
       
@@ -2582,7 +2582,7 @@ const Mode = async (type, click = true) => {
         playerA.name = $$("#online .player_name")[0].innerHTML;
         playerB.name = $$("#online .player_name")[1].innerHTML;
         $("#two-players-window h2").innerHTML = "TWO PLAYERS ONLINE";
-        $("#item3").style.display = "grid";
+        $("#item4").style.display = "grid";
         $("#online").style.display = "grid";
         $("#offline").style.display = "none";
        
@@ -2593,7 +2593,7 @@ const Mode = async (type, click = true) => {
         Game.mode = "single-player";
         playerA.name = "You";
         playerB.name = "AI";
-        $("#item3").style.display = "grid";
+        $("#item4").style.display = "grid";
        
         let elem = $$("#main div")[0];
         await Clicked(elem, elem.parentNode, click);
