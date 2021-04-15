@@ -420,8 +420,10 @@ class Publish {
 
 const LeftChannel = (response) => {
     if(response.totalOccupancy < 2) {
-    	if(GetValue($("#play-window"), "display") == "grid") 
+    	if(Game.mode ==" two-player-online" && GetValue($("#play-window"), "display") == "grid") {
+    		Cancel();
     		back();
+    	} 
         name = $$("#online .player_name")[1].innerHTML;
         $$("#online .player_name")[1].innerHTML = "N/A";
         let opponentStatus = $("#player-2-status");
