@@ -2723,7 +2723,7 @@ const Notify = (data) => {
             note_buttons[0].addEventListener("click", other.Handler0, true);
             note_buttons[1].addEventListener("click", other.Handler1, true);
             note_buttons[2].addEventListener("click", other.Handler2, true);
-            note_close_button.addEventListener("click", other.Handler3, true);
+            note_close_button.addEventListener("click", other.Handler2, true);
             note_close_button.style.pointerEvents = "auto";
         }
         
