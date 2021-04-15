@@ -371,6 +371,7 @@ class OpponentMove {
 	static make = async () => {
 		try {
 			let self = this;
+			Notify(self.i + ", " + self.j);
 			await new Sleep().wait(5);
 			let prop = self.moves[0];
             let i = 7 - prop.i, 
