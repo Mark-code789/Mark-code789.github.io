@@ -988,7 +988,7 @@ const Move = async (prop) => {
 				break;
 			} 
     	}
-    	console.log("Return value:", prop);
+    	alert("Return value:", prop);
     	if(validMove && Game.mode === "two-player-online" && (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") ) {
             Publish.send({channel: Lobby.CHANNEL, message: {title: "Moved", content: {i: prop.i, j: prop.j} } });
         }
