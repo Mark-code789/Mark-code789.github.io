@@ -302,7 +302,6 @@ const ChannelFunction = () => {
 	                                let i = 7 - msg.message.content.i, 
 	                                    j = 7 - msg.message.content.j,
 	                                    cell = $("#table").rows[i].cells[j];
-									Notify(i + ", " + j);
 	                                ValidateMove({cell, i, j, isComputer: true});
                                 } catch (error) {alert(error + "")}
                             } 
