@@ -375,8 +375,7 @@ class OpponentMove {
 	static make = async () => {
 		try {
 			let self = this;
-			Notify(self.moves[0].i + ", " + self.moves[0].j);
-			await new Sleep().wait(5);
+			await new Sleep().wait(1);
 			let prop = self.moves[0];
             let i = 7 - prop.i, 
                 j = 7 - prop.j,
@@ -402,8 +401,7 @@ class Publish {
 	        message: prop.message, 
 	        meta: MetaConfig 
 	    } 
-		if(prop.message.title == "Moved") 
-	    alert(prop.message.content.i + ", " + prop.message.content.j);
+		
 	    this.messages.push(PublishConfig);
 	    
 	    if(this.messages.length == 1)
