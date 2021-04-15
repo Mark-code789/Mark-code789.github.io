@@ -918,7 +918,6 @@ const Move = async (prop) => {
     		for(let move of sort) {
     			let empty = `${prop.i}${prop.j}`;
     			if((!Game.path.sort || JSON.stringify(Game.path.sort.slice(0, Game.path.sort.indexOf(move))) == JSON.stringify(sort.slice(0, sort.indexOf(move)))) && move.empty == empty) {
-    				//Publish for capturing moves
     				Game.path = {sort, index: sort.indexOf(move)};
     				validMove = true;
 					for(let move2 of sort.slice(0, sort.indexOf(move) + 1)) {
@@ -2447,7 +2446,7 @@ const PlayAs = (elem) => { try {
             Enable($(`#playerB button:not(.${elem.classList[num]})`), other.default, "#fff");
             let btns = $$("#item4 button");
             for(let btn of btns) {
-            	if(btn.innerHTML.toLowerCase() === elem.classList[num]) {
+            	if(btn.innerHTML === elem.innerHTML) {
             	    Clicked(btn, btn.parentNode);
                     break;
             	} 
@@ -2455,7 +2454,7 @@ const PlayAs = (elem) => { try {
         }
         else {
             Game.alternatePlayAs = true;
-            let btns = $$("#main-section .inner_item:nth-of-type(4) .third_item")[0];
+            let btns = $$("#item4 button")[2];
             Clicked(btns, btns.parentNode, false);
            
             btns = $$("#playerB button");
@@ -2488,7 +2487,7 @@ const PlayAs = (elem) => { try {
     } 
     else {
         Game.alternatePlayAs = true;
-        let btns = $$("#playerA .third_item")[0];
+        let btns = $$("#playerA button")[2];
         Clicked(btns, btns.parentNode, false);
         btns = $$("#playerB button");
         for(let btn of btns) {
