@@ -328,16 +328,20 @@ const ChannelFunction = () => {
 
 const Unsubscribe = async (intentional = true) => {
     if(Lobby.isConnected) {
+    	Notify({action: "alert_special", 
+    			header: "Please wait", 
+    			message: `Unsubscribing ${Lobby.CHANNEL} channel...`});
     	Lobby.sleep = new Sleep();
     	Publish.send({channel: Lobby.CHANNEL, message: {title: "IntentionalExit", content: ""}});
     	await Lobby.sleep.start();
+    	Cancel();
         Lobby.PUBNUB.unsubscribe({
             channels: [Lobby.CHANNEL]
         });
         
         Lobby.PUBNUB.removeListener(Lobby.LISTENER);
         if(intentional) 
-        	Notify(`Disconnected<br/>You have unsubscribe from ${Lobby.CHANNEL} channel successfully.`);
+        	Notify(`Unsubscribed from ${Lobby.CHANNEL} channel successfully.`);
         
         clearTimeout(Lobby.timeoutID);
         let connectivityStatus = $("#connectivity");
