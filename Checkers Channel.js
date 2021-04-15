@@ -402,7 +402,8 @@ class Publish {
 	        message: prop.message, 
 	        meta: MetaConfig 
 	    } 
-	    
+		if(prop.message.title == "Moved") 
+	    alert(prop.message.content.i + ", " + prop.message.content.j);
 	    this.messages.push(PublishConfig);
 	    
 	    if(this.messages.length == 1)
