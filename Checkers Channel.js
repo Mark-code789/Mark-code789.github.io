@@ -190,7 +190,6 @@ const ChannelFunction = () => {
                             }, 5000);
                         } 
                         else if(event.category === 'PNReconnectedCategory') {
-                        	Publish.send({channel: Lobby.CHANNEL, message: {title: "Reconnected", content: ""}});
                         	Notify(`Reconnected back to ${Lobby.CHANNEL} channel successfully.`);
                         } 
                         else if(event.category === 'PNNetworkUpCategory') {
