@@ -605,6 +605,11 @@ class Sleep {
 	end = () => {
 		this.i = this.j;
 	} 
+	wait = async (sec) => {
+		this.j = sec;
+		await this.start();
+		return "done";
+	} 
 } 
 
 
