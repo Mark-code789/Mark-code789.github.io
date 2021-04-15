@@ -2565,7 +2565,6 @@ const GetStats = (no) => { try {
 } 
 
 const Mode = async (type, click = true) => {
-	alert(type);
     if(type == 2) {
         Game.mode = "two-player-offline";
         playerA.name = $("#playerA-name").value;
