@@ -2639,7 +2639,8 @@ const Notify = (data) => {
             note_head = $(".note_header"), 
             note_body = $(".note_body"), 
             note_footer = $(".note_footer"), 
-            note_buttons = note_footer.children;
+            note_buttons = note_footer.children,
+            note_close_button = $("#note .close_btn");
             
         note_head.innerHTML = data.header;
         note_body.innerHTML = data.message;
@@ -2653,10 +2654,11 @@ const Notify = (data) => {
             note_buttons[2].innerHTML = "OK";
             note_buttons[2].addEventListener("click", Cancel, true);
             note_window.addEventListener("click", Cancel, true);
+            note_close_button.addEventListener("click", Cancel, true);
             
             note_buttons[1].removeEventListener("click", other.Handler1, true);
             note_buttons[2].removeEventListener("click", other.Handler2, true);
-            $("#note .close_btn").style.pointerEvents = "auto";
+            note_close_button.style.pointerEvents = "auto";
         }
         else if(data.action === "alert_special") {
             note_image.src = Icons.loadIcon;
@@ -2665,7 +2667,7 @@ const Notify = (data) => {
             note_buttons[0].style.display = "none";
             note_buttons[1].style.display = "none";
             note_buttons[2].style.display = "none";
-            $("#note .close_btn").style.pointerEvents = "none";
+            note_close_button.style.pointerEvents = "none";
         } 
         else if(data.action == "confirm") {
             note_image.style.height = "60px";
@@ -2688,10 +2690,11 @@ const Notify = (data) => {
             note_buttons[2].innerHTML = data.type.split("/")[1];
             note_buttons[1].addEventListener("click", other.Handler1, true);
             note_buttons[2].addEventListener("click", other.Handler2, true);
+            note_close_button.addEventListener("click", other.Handler2, true);
             
             note_buttons[2].removeEventListener("click", Cancel, true);
             note_window.removeEventListener("click", Cancel, true);
-            $("#note .close_btn").style.pointerEvents = "auto";
+            note_close_button.style.pointerEvents = "auto";
         }
         else if(data.action == "other") {
             note_buttons[1].removeEventListener("click", other.Handler1, true);
@@ -2720,7 +2723,8 @@ const Notify = (data) => {
             note_buttons[0].addEventListener("click", other.Handler0, true);
             note_buttons[1].addEventListener("click", other.Handler1, true);
             note_buttons[2].addEventListener("click", other.Handler2, true);
-            $("#note .close_btn").style.pointerEvents = "auto";
+            note_close_button.addEventListener("click", other.Handler3, true);
+            note_close_button.style.pointerEvents = "auto";
         }
         
         note_window.style.display = "flex";
