@@ -371,16 +371,15 @@ class OpponentMove {
 	static make = async () => {
 		try {
 			let self = this;
-			await setTimeout( _=> {
-				let prop = self.moves[0];
-	            let i = 7 - prop.i, 
-	                j = 7 - prop.j,
-	                cell = $("#table").rows[i].cells[j];
-	            ValidateMove({cell, i, j, isComputer: true});
-			}, 1000);
+			await new Sleep().wait(1);
+			let prop = self.moves[0];
+            let i = 7 - prop.i, 
+                j = 7 - prop.j,
+                cell = $("#table").rows[i].cells[j];
+            await ValidateMove({cell, i, j, isComputer: true});
 			this.moves.shift();
 			if(this.moves.length > 0)
-				this.make();
+				await this.make();
 			return;
         } catch (error) {alert(error + "")}
 	} 
