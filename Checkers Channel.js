@@ -176,10 +176,10 @@ const ChannelFunction = () => {
                                 $("#online .lobby_name").innerHTML = Lobby.CHANNEL;
                                 Lobby.isConnected = true;
                                 if(Lobby.isHost) {
-                                    Notify(`Connected Successfully.<br />You are subscribed to ${Lobby.CHANNEL} Channel. Waiting for opponent...`);
+                                    Notify(`Connected to ${Lobby.CHANNEL} channel successfully. Waiting for opponent...`);
                                 } 
                                 else {
-                                    Notify(`Connected Successfully.<br />You are subscribed to ${Lobby.CHANNEL} Channel.`);
+                                    Notify(`Connected to ${Lobby.CHANNEL} channel successfully.`);
                                     Publish.send({
                                             channel: Lobby.CHANNEL, 
                                             message: {
