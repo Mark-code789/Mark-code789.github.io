@@ -1453,7 +1453,8 @@ const ValidateMove = async (prop) => {
                         prop.cell.classList.remove("invalid");
                         void prop.cell.offsetWidth;
                         prop.cell.classList.add("invalid");
-                        Notify("You must capture");
+                        if(Game.mode != "two-player-online") 
+                        	Notify("You must capture");
                         setTimeout(() => {
 							prop.cell.classList.remove("invalid");
 						}, 750);
