@@ -3259,7 +3259,7 @@ async function back (undo = false, isComp = false) {
 	                    other.orientation = "portrait-primary";
 	                    break;
 	                } 
-					AdjustScreen(other.irientation);
+					AdjustScreen(other.orientation);
 	            } 
 	        }
 		} 
