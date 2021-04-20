@@ -1624,7 +1624,8 @@ const GameOver = async (isDraw = false) => { try {
                 score = Math.max(playerA.pieces, score);
                 Game.levels[Game.level].score = score;
             }
-            let level = Game.level;
+            let level = Game.level++;
+            //Unlock the next level
             await Level(false);
             Notify({action: (level < Game.levels.length-1)? "other": "confirm", 
                     header: "YOU WIN!", 
@@ -2858,8 +2859,7 @@ const Level = async (elem, index, click = true) => {
         }
     } 
     else if(elem) { try {
-        let level = $$("#levels #nav div")[++Game.level];
-        level.children[0].innerHTML = Game.levels[Game.level].level.replace(" ", "<br>").toUpperCase();
+        let level = $$("#levels #nav div")[Game.level];
         await Clicked(level, level.parentNode, false);
         $("#play-window .header_section h3").innerHTML = `${$("#levels h2").innerHTML}`;
         $(".face_bottom #level").innerHTML = `${$("#levels h2").innerHTML}`;
