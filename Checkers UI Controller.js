@@ -1595,8 +1595,8 @@ const GameOver = async (isDraw = false) => { try {
         } 
         else { 
             if(Game.validForHint) {
-                let labels = $$("#levels #nav div")[Game.level-1].children[1].children;
-                let score = Game.levels[Game.level-1].score;
+                let labels = $$("#levels #nav div")[Game.level].children[1].children;
+                let score = Game.levels[Game.level].score;
                 
                 // only change when there is an improvement
                 if(score < playerA.pieces) {
@@ -1629,7 +1629,7 @@ const GameOver = async (isDraw = false) => { try {
             Notify({action: (level < Game.levels.length)? "other": "confirm", 
                     header: "YOU WIN!", 
                     message: "Congratulations!",
-                    type: (level < Game.levels.length)? "MENU/REPLAY/NEXT LEVEL": "MENU/REPLAY", 
+                    type: (level < Game.levels.length-1)? "MENU/REPLAY/NEXT LEVEL": "MENU/REPLAY", 
                     icon: Icons.winnerIcon,
                     iconType: "winner", 
                     onResponse: GameOverOption});
@@ -1710,7 +1710,7 @@ const GameOver = async (isDraw = false) => { try {
             Notify({action: "confirm", 
                     header: "YOU WIN!", 
                     message: "Congratulations!",
-                    type: (Game.level < Game.levels.length)? "MENU/REPLAY": "MENU/REPLAY", 
+                    type: (Game.level < Game.levels.length-1)? "MENU/REPLAY": "MENU/REPLAY", 
                     icon: Icons.winnerIcon,
                     iconType: "winner", 
                     onResponse: GameOverOption});
@@ -1718,7 +1718,7 @@ const GameOver = async (isDraw = false) => { try {
     
     if(!Game.over) {
         await UpdatePiecesStatus("Game Over!");
-        Game.levels[Game.level-1].validForHint = Game.validForHint;
+        Game.levels[Game.level].validForHint = Game.validForHint;
         playerA.captures = Game.boardSize / 2 * Game.rowNo - playerB.pieces;
         playerB.captures = Game.boardSize / 2 * Game.rowNo - playerA.pieces;
         // Caching stats
