@@ -1719,7 +1719,7 @@ const GameOver = async (isDraw = false) => { try {
     
     if(!Game.over) {
         await UpdatePiecesStatus("Game Over!");
-        Game.levels[Game.level].validForHint = Game.validForHint;
+        Game.levels[Game.level-1].validForHint = Game.validForHint;
         playerA.captures = Game.boardSize / 2 * Game.rowNo - playerB.pieces;
         playerB.captures = Game.boardSize / 2 * Game.rowNo - playerA.pieces;
         // Caching stats
@@ -2869,7 +2869,7 @@ const Level = async (elem, index, click = true) => {
                 break;
             } 
         } 
-        alert(Game.levels[Game.level-1].level);
+        
         if(Game.levels[Game.level-1].validForHint) {
             $("#play-window .middle_section .horiz_controls:nth-of-type(3)").style.backgroundImage = "var(--hint)";
             $("#play-window .controls_section .controls:nth-of-type(3)").style.backgroundImage = "var(--hint)";
