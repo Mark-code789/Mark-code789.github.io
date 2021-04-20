@@ -12,7 +12,7 @@ onmessage = async (e) => { try {
 	let alpha = e.data[6];
 	let beta = e.data[7];
 	let ai = new AI({state, depth});
-	let value = await ai.minimax(cloneState, moves, depth, isMax, alpha, beta, isContJump);
+	let value = await ai.minimax(cloneState, moves, depth, isMax, alpha, beta);
 	postMessage({move, value});
 	} catch (error) {
 		postMessage(error.message + " at\n " + error.stack);
