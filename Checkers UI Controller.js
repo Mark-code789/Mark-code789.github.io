@@ -108,7 +108,6 @@ try {
 load(srcs[i]);
 
 async function load (src) { try {
-    src = src.replace('@', '');
     let response = await fetch(src);
     if(response.status === 200) {
         let arrBuff = await response.arrayBuffer();
@@ -146,7 +145,7 @@ async function load (src) { try {
         } 
     }
     else {
-        alert("LOADING ERROR!\nFailed to load AppShellFiles. Either you have bad network or you have lost internet connection.\n" + src);
+        alert("LOADING ERROR!\nFailed to load AppShellFiles - " + src + ". Either you have bad network or you have lost internet connection.");
     } 
     } catch (error) {alert("load error: " + error.message)}
 } 
@@ -1851,12 +1850,14 @@ class AudioPlayer {
 	    }
 	}
 	static initializeAudios = () => {
+		Sound.click.muted = true;
 		Sound.capture.muted = true;
 	    Sound.king.muted = true;
 	    Sound.collect.muted = true;
 	    Sound.game_win.muted = true;
 	    Sound.game_lose.muted = true;
 		Sound.notification.muted = true;
+		Sound.click.play();
 	    Sound.capture.play();
 	    Sound.king.play();
 	    Sound.collect.play();
