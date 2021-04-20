@@ -560,7 +560,6 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
     $("#play-window .header_section h2").innerHTML = Game.version.toUpperCase() + " CHECKERS";
     
     if(restart && Game.mode != "two-player-online") {
-        alert(Game.level);
         start();
         return;
     }
@@ -2887,7 +2886,9 @@ const Level = async (elem, index, click = true) => {
         } 
         await setTimeout(() => Refresh(true), 200);
         index = 0;
-        } catch (error) {Notify(error + "");}
+        } catch (error) {Notify({action: "alert", 
+                                header: error.name, 
+                                message: error.message + "\n" + error.lineNumber})}
     } 
     else {
         let level = $$("#levels #nav div")[Game.level];
