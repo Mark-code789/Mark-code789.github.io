@@ -2817,8 +2817,7 @@ const Version = async (elem, index, click = true) => { try {
             Game.rowNo = 4;
         }
         document.documentElement.style.setProperty("--board-size", Game.boardSize);
-        // Since m in the loop above started at 0, we increment Game level by one
-        Game.level += 1;
+        Game.level;
     } 
     } catch (error) {alert("Version error: " + error.message);}
 }
