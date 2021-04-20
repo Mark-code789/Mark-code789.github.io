@@ -11,7 +11,6 @@ onmessage = async (e) => { try {
 	let isMax = e.data[5];
 	let alpha = e.data[6];
 	let beta = e.data[7];
-	let isContJump = e.data[8];
 	let ai = new AI({state, depth});
 	let value = await ai.minimax(cloneState, moves, depth, isMax, alpha, beta, isContJump);
 	postMessage({move, value});
