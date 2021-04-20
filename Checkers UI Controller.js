@@ -2869,7 +2869,7 @@ const Level = async (elem, index, click = true) => {
                 break;
             } 
         } 
-        alert(Game.levels[Game.level-1].validForHint);
+        alert(Game.levels[Game.level-1].level);
         if(Game.levels[Game.level-1].validForHint) {
             $("#play-window .middle_section .horiz_controls:nth-of-type(3)").style.backgroundImage = "var(--hint)";
             $("#play-window .controls_section .controls:nth-of-type(3)").style.backgroundImage = "var(--hint)";
