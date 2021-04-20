@@ -1171,7 +1171,7 @@ const Move = async (prop) => {
                         AudioPlayer.play("king", 1);
                     } 
                     else {
-                        AudioPlayer.play("click", 0.1);
+                        AudioPlayer.play("click", 1);
                     } 
                     
                     if(Game.mode === "single-player" && (Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black") ) {
@@ -1872,7 +1872,7 @@ class AudioPlayer {
 
 const Clicked = async (elem, parent, click = true) => { try {
     if(click) 
-        AudioPlayer.play("click", 0.1);
+        AudioPlayer.play("click", 1);
     if(elem != undefined && !elem.innerHTML.includes("LOCKED") || elem != undefined && !click) {
         let btns = parent.children;
         for(let btn of btns) {
