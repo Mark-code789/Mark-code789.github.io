@@ -1820,7 +1820,9 @@ const GameOver = async (isDraw = false) => { try {
         else
             return;
     }
-    } catch (error) {alert(error)}
+    } catch (error) {Notify({action: "alert",
+                             header: error.name,
+                             message: error.message + " at GameOver at line" + error.lineNumber)}
 } 
 
 class AudioPlayer {
