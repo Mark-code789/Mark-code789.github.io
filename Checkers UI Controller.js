@@ -2978,7 +2978,8 @@ const Home = async () => {
     return true;
 }
 
-async function play (isAutoRotate = false, accepted = false) { 
+async function play (isAutoRotate = false, accepted = false) {
+    alert(Game.level);
     if(Lobby != undefined && Lobby.isConnected && Game.mode === "two-player-online" || Game.mode === "single-player") {
         if(GetValue($("#play-window"), "display") == "none" && !isAutoRotate || accepted) {
         	// If game mode is online, request consent from opponent, otherwise just display the play window
