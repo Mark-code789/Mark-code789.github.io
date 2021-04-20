@@ -718,7 +718,7 @@ const Game = {
                }, 
     boardSize: 8,
     rowNo: 3,
-    level: 1,
+    level: 0,
     count: 1,
     countMoves: 0,
     top: -5,
