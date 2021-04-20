@@ -2859,7 +2859,7 @@ const Level = async (elem, index, click = true) => {
         }
     } 
     else if(elem) { try {
-        let level = $$("#levels #nav div")[Game.level];
+        let level = $$("#levels #nav div")[++Game.level];
         await Clicked(level, level.parentNode, false);
         $("#play-window .header_section h3").innerHTML = `${$("#levels h2").innerHTML}`;
         $(".face_bottom #level").innerHTML = `${$("#levels h2").innerHTML}`;
@@ -2890,7 +2890,7 @@ const Level = async (elem, index, click = true) => {
         index = 0;
         } catch (error) {Notify({action: "alert", 
                                 header: error.name, 
-                                message: error.message + "\n" + error.lineNumber})}
+                                message: error.message + " at Level."})}
     } 
     else {
         let level = $$("#levels #nav div")[Game.level];
