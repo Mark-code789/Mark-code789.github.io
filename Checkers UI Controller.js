@@ -1622,7 +1622,7 @@ const GameOver = async (isDraw = false) => { try {
                 }
                 
                 score = Math.max(playerA.pieces, score);
-                Game.levels[Game.level-1].score = score;
+                Game.levels[Game.level].score = score;
             }
             let level = Game.level;
             await Level(false);
