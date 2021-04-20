@@ -2179,7 +2179,7 @@ const Hint = async (elem, state=JSON.parse(JSON.stringify(Game.state))) => {
     if(!Game.over) { try {
         // if player won previous level without using hints and undo
         // is allowed to use hint
-        if(Game.mode === "two-player-offline" || Game.mode === "two-player-online" && (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") || Game.mode === "single-player" && (Game.level === 1 || Game.levels[Game.level-2].validForHint)) {
+        if(Game.mode === "two-player-offline" || Game.mode === "two-player-online" && (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") || Game.mode === "single-player" && (Game.level === 0 || Game.levels[Game.level-1].validForHint)) {
         	if(Game.mode === "single-player") {
 				Game.validForHint = false;
 				$("#play-window .footer_section p label:last-of-type").style.backgroundImage = "var(--hint)";
