@@ -2768,7 +2768,7 @@ const Version = async (elem, index, click = true) => { try {
         let level = levels[m];
         
         if(m < Game.versions[Game.version].length) {
-            Game.level = m;
+            Game.level = m-1;
             await Level(false, "version");
             
             Game.levels[Game.level].validForHint = Game.versions[Game.version][m].validForHint;
@@ -2893,6 +2893,7 @@ const Level = async (elem, index, click = true) => {
                                 message: error.message + " at Level."})}
     } 
     else {
+        Game.level++;
         let level = $$("#levels #nav div")[Game.level];
         if(level.children[0].innerHTML === "LOCKED") {
             level.style.backgroundImage = other.background;
