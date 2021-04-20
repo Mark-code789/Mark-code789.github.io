@@ -2860,7 +2860,7 @@ const Level = async (elem, index, click = true) => {
     } 
     else if(elem) { try {
         let level = $$("#levels #nav div")[++Game.level];
-        level.children[0].innerHTML = Game.levels[Game.level].level.replace(" ", "<br>");
+        level.children[0].innerHTML = Game.levels[Game.level].level.replace(" ", "<br>").toUpperCase();
         await Clicked(level, level.parentNode, false);
         $("#play-window .header_section h3").innerHTML = `${$("#levels h2").innerHTML}`;
         $(".face_bottom #level").innerHTML = `${$("#levels h2").innerHTML}`;
