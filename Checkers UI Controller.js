@@ -1719,7 +1719,7 @@ const GameOver = async (isDraw = false) => { try {
     
     if(!Game.over) {
         await UpdatePiecesStatus("Game Over!");
-        Game.levels[Game.level-1].validForHint = Game.validForHint;
+        Game.levels[Game.level].validForHint = Game.validForHint;
         playerA.captures = Game.boardSize / 2 * Game.rowNo - playerB.pieces;
         playerB.captures = Game.boardSize / 2 * Game.rowNo - playerA.pieces;
         // Caching stats
@@ -1794,7 +1794,7 @@ const GameOver = async (isDraw = false) => { try {
                     let gameSettings = {firstMove: !Game.firstMove, mandatoryCapture: Game.mandatoryCapture, version: Game.version};
                     Publish.send({channel: Lobby.CHANNEL, message: {title: 'RequestReplay', content: gameSettings}});
                     return;
-                } 
+                }
                 await Refresh(true);
                 Cancel();
                 return;
