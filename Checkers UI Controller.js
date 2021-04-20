@@ -1719,6 +1719,7 @@ const GameOver = async (isDraw = false) => { try {
     
     if(!Game.over) {
         await UpdatePiecesStatus("Game Over!");
+        alert(Game.level);
         Game.levels[Game.level].validForHint = Game.validForHint;
         playerA.captures = Game.boardSize / 2 * Game.rowNo - playerB.pieces;
         playerB.captures = Game.boardSize / 2 * Game.rowNo - playerA.pieces;
@@ -2859,7 +2860,7 @@ const Level = async (elem, index, click = true) => {
         }
     } 
     else if(elem) { try {
-        let level = $$("#levels #nav div")[Game.level];
+        let level = $$("#levels #nav div")[Game.level+1];
         await Clicked(level, level.parentNode, false);
         $("#play-window .header_section h3").innerHTML = `${$("#levels h2").innerHTML}`;
         $(".face_bottom #level").innerHTML = `${$("#levels h2").innerHTML}`;
@@ -2893,11 +2894,10 @@ const Level = async (elem, index, click = true) => {
                                 message: error.message + " at Level."})}
     } 
     else {
-        Game.level++;
-        let level = $$("#levels #nav div")[Game.level];
+        let level = $$("#levels #nav div")[Game.level+1];
         if(level.children[0].innerHTML === "LOCKED") {
             level.style.backgroundImage = other.background;
-            level.children[0].innerHTML = Game.levels[Game.level].level.replace(" ", "<br/>");
+            level.children[0].innerHTML = Game.levels[Game.level+1].level.replace(" ", "<br/>");
             level.children[1].style.filter = "grayscale(0) invert(0) brightness(1)";
             level.children[1].style.backgroundImage = `none`;
     
