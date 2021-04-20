@@ -2767,7 +2767,7 @@ const Version = async (elem, index, click = true) => { try {
         let level = levels[m];
         
         if(m < Game.versions[Game.version].length) {
-            Game.level = m+1;
+            Game.level = m;
             await Level(false, "version");
             
             Game.levels[Game.level].validForHint = Game.versions[Game.version][m].validForHint;
