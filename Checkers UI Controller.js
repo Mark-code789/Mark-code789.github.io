@@ -3022,13 +3022,13 @@ async function play (isAutoRotate = false, accepted = false) {
             }
            
             // choosing whether to display the hint button or not
-            if(Game.mode === "two-player-online" || Game.level === 1 || Game.levels[Game.level-2].validForHint) {
+            if(Game.mode === "two-player-online" || Game.level === 0 || Game.levels[Game.level-1].validForHint) {
                 $("#play-window .middle_section .horiz_controls:nth-of-type(3)").style.backgroundImage = "var(--hint)";
                 $("#play-window .controls_section .controls:nth-of-type(3)").style.backgroundImage = "var(--hint)";
                 $("#play-window .controls_section .controls:nth-of-type(3)").style.backgroundSize = "30px 25px";
                 $("#play-window .middle_section .horiz_controls:nth-of-type(3)").style.backgroundSize = "30px 25px";
             } 
-            else if(!Game.levels[Game.level-2].validForHint) {
+            else if(!Game.levels[Game.level-1].validForHint) {
                 $("#play-window .middle_section .horiz_controls:nth-of-type(3)").style.backgroundImage = `url(${srcs[srcs.length-2]})`;
                 $("#play-window .controls_section .controls:nth-of-type(3)").style.backgroundImage = `url(${srcs[srcs.length-2]})`;
                 $("#play-window .controls_section .controls:nth-of-type(3)").style.backgroundSize = "25px 30px";
@@ -3051,7 +3051,7 @@ async function play (isAutoRotate = false, accepted = false) {
                 $(".face_bottom #level").innerHTML = `${$("#levels h2").innerHTML}`;
                 for(let level of Game.levels) {
                     if(level.level === $("#levels h2").innerHTML) {
-                        Game.level = Game.levels.indexOf(level) + 1;
+                        Game.level = Game.levels.indexOf(level);
                     } 
                 } 
             } 
