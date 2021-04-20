@@ -1626,7 +1626,7 @@ const GameOver = async (isDraw = false) => { try {
             }
             let level = Game.level;
             await Level(false);
-            Notify({action: (level < Game.levels.length)? "other": "confirm", 
+            Notify({action: (level < Game.levels.length-1)? "other": "confirm", 
                     header: "YOU WIN!", 
                     message: "Congratulations!",
                     type: (level < Game.levels.length-1)? "MENU/REPLAY/NEXT LEVEL": "MENU/REPLAY", 
@@ -1737,7 +1737,7 @@ const GameOver = async (isDraw = false) => { try {
         let subSec = $$$("section");
         subSec.classList.add("sub_item");
         let p = $$$("p");
-        p.innerHTML = `${playerA.name} [${playerA.pieceColor.toUpperCase()}] VS ${playerB.name} [${playerB.pieceColor.toUpperCase()}] ${(Game.mode === "single-player")? "<br/><br/> " + Game.version.substring(0,3).toUpperCase() + ": " + Game.levels[Game.level-1].level: ""}`;
+        p.innerHTML = `${playerA.name} [${playerA.pieceColor.toUpperCase()}] VS ${playerB.name} [${playerB.pieceColor.toUpperCase()}] ${(Game.mode === "single-player")? "<br/><br/> " + Game.version.substring(0,3).toUpperCase() + ": " + Game.levels[Game.level].level: ""}`;
         let btn = $$$("button");
         btn.classList.add("default", "middle_top");
         btn.innerHTML = "SEE STATS";
@@ -1748,7 +1748,7 @@ const GameOver = async (isDraw = false) => { try {
        
         try {
             if(Game.mode === "single-player") {
-                Game.stats[length-1].level = Game.levels[Game.level-1].level;
+                Game.stats[length-1].level = Game.levels[Game.level].level;
                 Game.stats[length-1].version = Game.version.substring(0,3).toUpperCase();
             }
             
