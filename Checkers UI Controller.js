@@ -560,6 +560,7 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
     $("#play-window .header_section h2").innerHTML = Game.version.toUpperCase() + " CHECKERS";
     
     if(restart && Game.mode != "two-player-online") {
+        alert(Game.level);
         start();
         return;
     }
@@ -2979,7 +2980,6 @@ const Home = async () => {
 }
 
 async function play (isAutoRotate = false, accepted = false) {
-    alert(Game.level);
     if(Lobby != undefined && Lobby.isConnected && Game.mode === "two-player-online" || Game.mode === "single-player") {
         if(GetValue($("#play-window"), "display") == "none" && !isAutoRotate || accepted) {
         	// If game mode is online, request consent from opponent, otherwise just display the play window
