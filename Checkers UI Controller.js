@@ -216,9 +216,9 @@ async function LoadingDone () {
     
     if(storage === null || storage.getItem("versions") === null) {
         for(btn of btns) {
+            alert(btn.children[0].innerHTML);
             p = btn.children[1];
             if(btn.children[0].innerHTML != "LOCKED") {
-                alert(btn.children[0].innerHTML);
                 p.children[0].classList.add("not_achieved");
                 p.children[1].classList.add("not_achieved");
                 p.children[2].classList.add("not_achieved");
