@@ -151,12 +151,12 @@ class AI {
 	                        moves2 = await RemoveUnwantedCells({captures: moves2, state: cloneState});
 	                    } 
 						
-	                    value = await this.minimax(cloneState, moves2, depth-1, !isMax, alpha, beta, false); // first branch
+	                    value = await this.minimax(cloneState, moves2, depth-1, !isMax, alpha, beta); // first branch
 					} 
 					else {
 						let moves2 = res.continuousJump;
 						
-						value = await this.minimax(cloneState, moves2, depth, isMax, alpha, beta, true);
+						value = await this.minimax(cloneState, moves2, depth, isMax, alpha, beta);
 					} 
 					
 					if(isMax) {
