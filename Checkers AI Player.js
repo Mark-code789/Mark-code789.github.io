@@ -117,7 +117,7 @@ class AI {
     
     minimax = async (state, moves, depth, isMax, alpha, beta, isContJump) => { 
     	
-        if(!moves.length || depth === 0) {
+        if(!moves.length || depth === -1) {
         	let leafScore = !moves.length? (isMax? -10: 10): 0;
         	let actualDepth = this.depth - depth;
         	let score = await this.evaluate(state);
