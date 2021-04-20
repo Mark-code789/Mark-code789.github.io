@@ -169,7 +169,6 @@ class AI {
 					} 
 					
 					if(alpha >= beta) {
-						//console.log("Pruned: ", move);
 						KillerMove.add(move, this.timestamp);
 						return Prms(alpha); // alpha cut-off
 					} 
