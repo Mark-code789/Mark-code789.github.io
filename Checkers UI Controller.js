@@ -2765,7 +2765,7 @@ const Version = async (elem, index, click = true) => { try {
         let level = levels[m];
         
         if(m < Game.versions[Game.version].length) {
-            Game.level = m;
+            Game.level = m+1;
             await Level(false, "version");
             
             Game.levels[Game.level].validForHint = Game.versions[Game.version][m].validForHint;
@@ -2853,8 +2853,7 @@ const Level = async (elem, index, click = true) => {
                 let level = index;
                 storage.setItem("currentLevel", (level).toString());
             } catch (error) {} 
-            Game.level = (index + 1);
-            //Notify(Game.level);
+            Game.level = index;
         }
     } 
     else if(elem) { try {
@@ -2864,18 +2863,18 @@ const Level = async (elem, index, click = true) => {
         $(".face_bottom #level").innerHTML = `${$("#levels h2").innerHTML}`;
         for(level of Game.levels) {
             if(level.level === $("#levels h2").innerHTML) {
-                Game.level = Game.levels.indexOf(level) + 1;
+                Game.level = Game.levels.indexOf(level);
                 break;
             } 
         } 
         //alert($("#levels h2").innerHTML);
-        if(Game.levels[Game.level-2].validForHint) {
+        if(Game.levels[Game.level-1].validForHint) {
             $("#play-window .middle_section .horiz_controls:nth-of-type(3)").style.backgroundImage = "var(--hint)";
             $("#play-window .controls_section .controls:nth-of-type(3)").style.backgroundImage = "var(--hint)";
             $("#play-window .controls_section .controls:nth-of-type(3)").style.backgroundSize = "30px 25px";
             $("#play-window .middle_section .horiz_controls:nth-of-type(3)").style.backgroundSize = "30px 25px";
         } 
-        else if(!Game.levels[Game.level-2].validForHint) {
+        else if(!Game.levels[Game.level-1].validForHint) {
             $("#play-window .middle_section .horiz_controls:nth-of-type(3)").style.backgroundImage = `url(${srcs[srcs.length-2]})`;
             $("#play-window .controls_section .controls:nth-of-type(3)").style.backgroundImage = `url(${srcs[srcs.length-2]})`;
             $("#play-window .controls_section .controls:nth-of-type(3)").style.backgroundSize = "25px 30px";
