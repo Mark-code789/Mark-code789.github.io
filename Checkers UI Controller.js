@@ -2935,7 +2935,7 @@ const Level = async (elem, index, click = true) => {
         storage.setItem("versions", JSON.stringify(Game.versions));
         storage.setItem("version", Game.version);
     }
-    return;
+    return Prms("done");
 } 
 
 const End = (event) => {
