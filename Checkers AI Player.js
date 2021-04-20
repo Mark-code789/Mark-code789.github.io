@@ -192,7 +192,7 @@ class AI {
         let count = 0;
         let sleep = new Sleep();
         
-        if(moves.length > 1 && this.depth > 1) { 
+        if(moves.length > 1 && this.depth > 0) { 
         	if(window.Worker && (this.depth > 4 || Game.version == "international" || Game.version == "nigerian")) {
         		worker = new Worker("Checkers Web Worker.js");
         		worker.onmessage = message;
@@ -274,7 +274,7 @@ class AI {
 		        return Prms(bestMove);
 			} 
 		} 
-		else if(moves.length > 1 && this.depth == 1) {
+		else if(moves.length > 1 && this.depth == 0) {
 			let random = Math.round(Math.random() * (moves.length - 1));
 	        bestMove = moves[random];
 	        return Prms(bestMove);
