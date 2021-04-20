@@ -1719,7 +1719,6 @@ const GameOver = async (isDraw = false) => { try {
     
     if(!Game.over) {
         await UpdatePiecesStatus("Game Over!");
-        alert(Game.level);
         Game.levels[Game.level].validForHint = Game.validForHint;
         playerA.captures = Game.boardSize / 2 * Game.rowNo - playerB.pieces;
         playerB.captures = Game.boardSize / 2 * Game.rowNo - playerA.pieces;
@@ -2870,7 +2869,7 @@ const Level = async (elem, index, click = true) => {
                 break;
             } 
         } 
-        alert("Level: " + Game.level);
+        
         if(Game.levels[Game.level-1].validForHint) {
             $("#play-window .middle_section .horiz_controls:nth-of-type(3)").style.backgroundImage = "var(--hint)";
             $("#play-window .controls_section .controls:nth-of-type(3)").style.backgroundImage = "var(--hint)";
@@ -2885,9 +2884,15 @@ const Level = async (elem, index, click = true) => {
         } 
         if(Game.alternatePlayAs) {
             let color = playerA.pieceColor;
-            await setTimeout( () => Alternate(color), 100);
+            await setTimeout(async () => {
+                await Alternate(color); 
+                return Prms("done");
+            }, 100);
         } 
-        await setTimeout(() => Refresh(true), 200);
+        await setTimeout(async () => {
+            await Refresh(true)
+            return Prms("done");
+        }, 200);
         index = 0;
         } catch (error) {Notify({action: "alert", 
                                 header: error.name, 
