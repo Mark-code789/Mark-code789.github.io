@@ -237,7 +237,7 @@ async function LoadingDone () {
         if(!JSON.parse(storage.getItem("NotifiedUpdate"))) 
             Notify({action: "alert",
                     header: "What's New!", 
-                    message: "Made app installable. Only for supported browsers.<br>Added fullscreen option.<br>Added helper feature for non-capturing moves.<br>Added notification tone for new message.<br>Fixed share channel name not working.<br>Fixed channel timeout and exiting issues.<br>Fixed game freezing while playing advanced levels that require more time to think.<br>Fixed other bugs.<br>If you experience any errors kindly contact me using the contact option in the settings window."});
+                    message: "Made app installable. Only for supported browsers. For non-supported browsers just use 'Add to homescreen' option.<br>Added fullscreen option.<br>Added helper feature for non-capturing moves.<br>Added notification tone for new message.<br>Fixed share channel name not working.<br>Fixed channel timeout and exiting issues.<br>Fixed game freezing while playing advanced levels that require more time to think.<br>Fixed other bugs.<br>If you experience any errors kindly contact me using the contact option in the settings window."});
             storage.setItem("NotifiedUpdate", "true");
         } 
     	other.installed = JSON.parse(storage.getItem("installed"));
@@ -288,17 +288,6 @@ async function LoadingDone () {
     UpdateOnlineStatus();
     window.addEventListener("online", UpdateOnlineStatus, false);
     window.addEventListener("offline", UpdateOnlineStatus, false);
-    
-    await setTimeout( () => {
-		if(!other.installed) {
-		    Notify({action: "alert",
-					header: "App Installation",
-					message: "Hello, you can install this app in your device by going to your browser menu and selecting <b><em>Add to Home Screen</em></b> or <b><em>Install</em></b> option. Click it and accept the prompt and you will will be done. Happy Gaming!.<br><br><b>Ignore this if you have already installed.</b>"
-					});
-					
-			storage.setItem("installed", JSON.stringify(true));
-		}
-	}, 1000);
 }
 
 const DragStart = (e) => {
