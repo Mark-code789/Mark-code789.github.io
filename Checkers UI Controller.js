@@ -3208,6 +3208,8 @@ const Fullscreen = async (value, isEvent = false) => { try {
 		btns[1].style.background = other.default;
 		other.fullscreen = false;
 	} } catch (error) {
+		if(!other.fullscreen)
+		    $("#item1").style.display = "none";
 		Notify({action: "alert",
 				header: "Fullscreen Error",
 				message: "Your browser doesn't support Fullscreen functionality."});
