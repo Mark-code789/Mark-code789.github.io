@@ -1193,9 +1193,9 @@ const Move = async (prop) => {
                                 moves = Game.possibleMoves;
                             } 
                             else if(!Game.mandatoryCapture) {
-                                Game.possibleMoves = await Iterate({id, state: Game.state, func: AssesMoves});
+                                //Game.possibleMoves = await Iterate({id, state: Game.state, func: AssesMoves});
                                 alert(Game.possibleMoves.length);
-                                moves.concat(Game.possibleMoves);
+                                moves = moves.concat(Game.possibleMoves);
                             } 
                             
                             let ai = new AI({state, moves, depth: Game.level});
@@ -1313,9 +1313,9 @@ const Move = async (prop) => {
                                     moves = Game.possibleMoves;
                                 } 
                                 else if(!Game.mandatoryCapture) {
-                                    Game.possibleMoves = await Iterate({id, state: Game.state, func: AssesMoves});
+                                    //Game.possibleMoves = await Iterate({id, state: Game.state, func: AssesMoves});
                                     alert(Game.possibleMoves.length);
-                                    moves.concat(Game.possibleMoves);
+                                    moves = moves.concat(Game.possibleMoves);
                                 } 
                                 
                                 let ai = new AI({state, moves, depth: Game.level});
