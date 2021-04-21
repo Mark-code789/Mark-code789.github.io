@@ -1437,7 +1437,7 @@ const ValidateMove = async (prop) => {
            if(!isEmpty) {
                 Game.possibleMoves = await AssesMoves({id, i: prop.i, j: prop.j, state: Game.state});
                 if(Game.possibleMoves.length > 0) {
-                    if(Game.helper && other.aiPath.length > 0) {
+                    if(Game.helper && other.aiPath.length == 0) {
                         for(let move of Game.possibleMoves)
                             $("#table").rows[parseInt(move.empty.slice(0,1))].cells[parseInt(move.empty.slice(1,2))].classList.add("hint");
                     } 
