@@ -1171,7 +1171,7 @@ const Move = async (prop) => {
                         AudioPlayer.play("king", 1);
                     } 
                     else {
-                        AudioPlayer.play("click", 1);
+                        AudioPlayer.play("click", 0.8);
                     } 
                     
                     if(Game.mode === "single-player" && (Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black") ) {
