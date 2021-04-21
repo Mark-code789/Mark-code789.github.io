@@ -518,6 +518,7 @@ class KillerMove {
 	static queue = [];
 	static moves = new Array(1_597_957);
 	static add = (move, timestamp) => {
+		move = JSON.parse(JSON.stringify(move));
 		this.queue.push({move, timestamp});
 		if(this.queue.length == 1) 
 			this.addMove();
