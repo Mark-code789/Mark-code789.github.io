@@ -327,7 +327,6 @@ class AI {
     	Game.thinking = true;
         let state = JSON.parse(JSON.stringify(this.state));
         let moves = this.moves;
-        alert(moves.length);
         let bestMove = await this.findBestMove(state, moves);
         let i = parseInt(bestMove.cell.slice(0,1));
         let j = parseInt(bestMove.cell.slice(1,2));
