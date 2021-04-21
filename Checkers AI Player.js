@@ -152,7 +152,7 @@ class AI {
 	                    }
 	                    else if(!Game.mandatoryCapture) {
 		                    let moves3 = await Iterate({id: opp, state: cloneState, func: AssesMoves});
-		                    moves2.concat(moves3);
+		                    moves2 = moves2.concat(moves3);
 		                } 
 						
 	                    value = await this.minimax(cloneState, moves2, depth-1, !isMax, alpha, beta); // first branch
@@ -216,7 +216,7 @@ class AI {
 	                    }
 	                    else if(!Game.mandatoryCapture) {
 		                    let moves3 = await Iterate({id: opp, state: cloneState, func: AssesMoves});
-		                    moves2.concat(moves3);
+		                    moves2 = moves2.concat(moves3);
 		                } 
 			            worker.postMessage([this.state, move, cloneState, moves2, this.depth-1, !isMax, this.MIN, this.MAX]);
 					} 
@@ -249,7 +249,7 @@ class AI {
 	                    }
 	                    else if(!Game.mandatoryCapture) {
 		                    let moves3 = await Iterate({id: opp, state: cloneState, func: AssesMoves});
-		                    moves2.concat(moves3);
+		                    moves2 = moves2.concat(moves3);
 		                } 
 						
 			            value = await this.minimax(cloneState, moves2, this.depth-1, !isMax, this.MIN, this.MAX);
@@ -586,7 +586,7 @@ class KillerMove {
 					} 
 					if(!value || pos == key) 
 						break;
-					if(pos >= self.moves.length - 1)
+					if(pos >= this.moves.length - 1)
 						pos = -1;
 				} 
 			} 
