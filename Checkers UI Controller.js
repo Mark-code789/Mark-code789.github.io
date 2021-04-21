@@ -1015,7 +1015,7 @@ const Move = async (prop) => {
         } 
         scene.style.display = "table";
         if(!capture) {
-            for(let cell of $("#table .hint"))
+            for(let cell of $$("#table .hint"))
                 cell.classList.remove("hint");
         	Game.prop.cell.classList.remove("valid");
         } 
