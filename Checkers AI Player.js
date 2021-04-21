@@ -5,14 +5,12 @@ class AI {
 	opp = playerA.pieceColor.slice(0,1);
 	MAX = 1000000;
 	MIN = -1000000;
-	timestamp = Date.now();     
-    tree; 
+	timestamp = Date.now();      
 	
 	constructor (prop) {
 	    this.state = prop.state;
 	    this.depth = prop.depth;
 	    this.moves = prop.moves;
-	    this.tree = new Array(this.depth+1)
     } 
     
     // Evaluation function 
@@ -163,15 +161,6 @@ class AI {
 						let moves2 = res.continuousJump;
 						
 						value = await this.minimax(cloneState, moves2, depth, isMax, alpha, beta);
-					} 
-					
-					if(this.tree[depth]) {
-						let dup = this.tree[depth].some(obj => JSON.stringify(obj) == JSON.stringify({move, value}));
-						if(!dup)
-						    this.tree[depth].push({move, value});
-					} 
-					else {
-						this.tree[depth] = [{move, value}];
 					} 
 					
 					if(isMax) {
