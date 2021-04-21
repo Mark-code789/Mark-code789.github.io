@@ -274,7 +274,7 @@ async function LoadingDone () {
     if(!JSON.parse(storage.getItem("NotifiedUpdate"))) {
         Notify({action: "alert",
                 header: "What's New! Version 3.0", 
-                message: "<ul><li>Made app installable. Only for supported browsers. For non-supported browsers just use 'Add to homescreen' option.</li><li>Added fullscreen option.</li><li>Added helper feature for non-capturing moves.</li><li>Added notification tone for new message.</li><li>Fixed share channel name not working.</li><li>Fixed channel timeout and exiting issues.</li><li>Fixed game freezing while playing advanced levels that require more time to think.</li><li>Fixed other bugs.</li><li>If you experience any errors kindly contact me using the contact option in the settings window.</li></ul>"});
+                message: "<ul><li>Made app installable. Only for supported browsers. For non-supported browsers just use 'Add to homescreen' option.</li><li>Added fullscreen option.</li><li>Added helper feature for non-capturing moves.</li><li>Added notification tone for new message.</li><li>Fixed share channel name not working.</li><li>Fixed channel timeout and exiting issues.</li><li>Fixed game freezing while playing advanced levels that require more time to think.</li><li>Fixed other bugs.</li></ul>If you experience any errors kindly contact me using the contact option in the settings window."});
         storage.setItem("NotifiedUpdate", "true");
     } 
     
