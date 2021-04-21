@@ -145,11 +145,15 @@ class AI {
                     if(res.continuousJump.length === 0) {
                     	cloneState = await this.correct(cloneState); // Removing the ip cells
 	                    let moves2 = await Iterate({id: opp, state: cloneState, func: AssesCaptures});
-	                    if(moves2.length === 0) {
-	                        moves2 = await Iterate({id: opp, state: cloneState, func: AssesMoves});
-	                    } else {
+	                    if(moves2.length > 0)
 	                        moves2 = await RemoveUnwantedCells({captures: moves2, state: cloneState});
-	                    } 
+	                    if(Game.mandatoryCapture && moves2.length === 0) {
+	                        moves2 = await Iterate({id: opp, state: cloneState, func: AssesMoves});
+	                    }
+	                    else if(!Game.mandatoryCapture) {
+		                    let moves3 = await Iterate({id: opp, state: cloneState, func: AssesMoves});
+		                    moves2.concat(moves3);
+		                } 
 						
 	                    value = await this.minimax(cloneState, moves2, depth-1, !isMax, alpha, beta); // first branch
 					} 
@@ -205,12 +209,15 @@ class AI {
 		            if(res.continuousJump.length === 0) {
 		            	cloneState = await this.correct(cloneState);
 			            let moves2 = await Iterate({id: opp, state: cloneState, func: AssesCaptures});
-			            if(moves2.length === 0) {
-			                moves2 = await Iterate({id: opp, state: cloneState, func: AssesMoves});
-			            } 
-			            else {
-			                moves2 = await RemoveUnwantedCells({captures: moves2, state: cloneState});
-			            } 
+			            if(moves2.length > 0)
+	                        moves2 = await RemoveUnwantedCells({captures: moves2, state: cloneState});
+	                    if(Game.mandatoryCapture && moves2.length === 0) {
+	                        moves2 = await Iterate({id: opp, state: cloneState, func: AssesMoves});
+	                    }
+	                    else if(!Game.mandatoryCapture) {
+		                    let moves3 = await Iterate({id: opp, state: cloneState, func: AssesMoves});
+		                    moves2.concat(moves3);
+		                } 
 			            worker.postMessage([this.state, move, cloneState, moves2, this.depth-1, !isMax, this.MIN, this.MAX]);
 					} 
 					else {
@@ -235,12 +242,15 @@ class AI {
 		            if(res.continuousJump.length === 0) {
 		            	cloneState = await this.correct(cloneState);
 			            let moves2 = await Iterate({id: opp, state: cloneState, func: AssesCaptures});
-			            if(moves2.length === 0) {
-			                moves2 = await Iterate({id: opp, state: cloneState, func: AssesMoves});
-			            } 
-			            else {
-			                moves2 = await RemoveUnwantedCells({captures: moves2, state: cloneState});
-			            } 
+			            if(moves2.length > 0)
+	                        moves2 = await RemoveUnwantedCells({captures: moves2, state: cloneState});
+	                    if(Game.mandatoryCapture && moves2.length === 0) {
+	                        moves2 = await Iterate({id: opp, state: cloneState, func: AssesMoves});
+	                    }
+	                    else if(!Game.mandatoryCapture) {
+		                    let moves3 = await Iterate({id: opp, state: cloneState, func: AssesMoves});
+		                    moves2.concat(moves3);
+		                } 
 						
 			            value = await this.minimax(cloneState, moves2, this.depth-1, !isMax, this.MIN, this.MAX);
 					} 
