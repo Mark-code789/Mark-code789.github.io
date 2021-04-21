@@ -3266,7 +3266,7 @@ async function back (undo = false, isComp = false) {
             } 
         } 
         
-        btns = $$("item6 button");
+        btns = $$("#item6 button");
         for(let btn of btns) {
             if(GetValue(btn, "background-image") === other.default) {
                 if(btn.id === "active") {
