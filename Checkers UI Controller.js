@@ -660,7 +660,9 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
         let n = parseInt(bestMove.empty.slice(1,2));
         
         setTimeout( async () => {
+            other.aiPath = [1];
             await ValidateMove({cell: $("#table").rows[i].cells[j], i, j, isComputer: true});
+            other.aiPath = [];
             await ValidateMove({cell: $("#table").rows[m].cells[n], i: m, j: n, isComputer: true});
         }, 250);
         return;
