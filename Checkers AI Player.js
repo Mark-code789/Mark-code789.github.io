@@ -323,7 +323,7 @@ class AI {
         } 
     } 
     
-    makeMove = async (returnable = false) => { //try {
+    makeMove = async (returnable = false) => { try {
     	Game.thinking = true;
         let state = JSON.parse(JSON.stringify(this.state));
         let moves = this.moves;
@@ -393,7 +393,7 @@ class AI {
         Game.thinking = false;
         return;
         
-        //} catch (error) {}
+        } catch (error) {alert("Make move error\n" + error);}
     } 
 }
 
