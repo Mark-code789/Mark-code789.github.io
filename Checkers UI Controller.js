@@ -1170,21 +1170,6 @@ const Move = async (prop) => {
                     else {
                         AudioPlayer.play("click", 0.8);
                     } 
-                    
-                    if(Game.mode === "single-player" && (Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black") ) {
-                        UpdatePiecesStatus("thinking...");
-                        setTimeout( async () => {
-                            let id = playerB.pieceColor.substring(0,1);
-                            let state = JSON.parse(JSON.stringify(Game.state));
-                            let moves = Game.possibleCaptures;
-                            if(moves.length == 0)
-                                moves = Game.possibleMoves;
-                            
-                            let ai = new AI({state, moves, depth: Game.level});
-                            await ai.makeMove();
-                            ai = null;
-                        }, 1);
-                    }
                     if(Game.possibleCaptures.length) {
                     	if(!Game.mandatoryCapture) {
                     		Game.possibleMoves = await Iterate({id, state: Game.state, func: AssesMoves});
@@ -1196,7 +1181,27 @@ const Move = async (prop) => {
                     }
                     else if(Game.mode == "two-player-offline" || (Game.mode === "single-player" || Game.mode === "two-player-online") && Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") {
                     	Helper(Game.possibleMoves, JSON.parse(JSON.stringify(Game.state)));
-                    } 
+                    }
+                    
+                    if(Game.mode === "single-player" && (Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black") ) {
+                        UpdatePiecesStatus("thinking...");
+                        setTimeout( async () => {
+                            let id = playerB.pieceColor.substring(0,1);
+                            let state = JSON.parse(JSON.stringify(Game.state));
+                            let moves = Game.possibleCaptures;
+                            if(Game.mandatoryCapture && moves.length == 0) {
+                                moves = Game.possibleMoves;
+                            } 
+                            else if(!Game.mandatoryCapture) {
+                                moves.concat(Game.possibleMoves);
+                            } 
+                            
+                            let ai = new AI({state, moves, depth: Game.level});
+                            await ai.makeMove();
+                            ai = null;
+                        }, 1);
+                    }
+                    
                 } // End of else if isOver 
             } // End of if other.capture
             else {
@@ -1282,22 +1287,6 @@ const Move = async (prop) => {
                         } 
                             
                         Game.track = [];
-                        
-                        if(Game.mode === "single-player" && (Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black") ) {
-                            UpdatePiecesStatus("thinking...");
-                            setTimeout( async () => {
-                                let id = playerB.pieceColor.substring(0,1);
-                                let state = JSON.parse(JSON.stringify(Game.state));
-                                let moves = Game.possibleCaptures;
-                                if(moves.length == 0)
-                                    moves = Game.possibleMoves;
-                                
-                                let ai = new AI({state, moves, depth: Game.level});
-                                await ai.makeMove();
-                                ai = null;
-                            }, 1);
-                        }
-                        
                         if(Game.possibleCaptures.length) {
                         	if(!Game.mandatoryCapture) {
                         		Game.possibleMoves = await Iterate({id, state: Game.state, func: AssesMoves});
@@ -1309,7 +1298,26 @@ const Move = async (prop) => {
                         }
                         else if(Game.mode == "two-player-offline" || (Game.mode === "single-player" || Game.mode === "two-player-online") && Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") {
                         	Helper(Game.possibleMoves, JSON.parse(JSON.stringify(Game.state)));
-                        } 
+                        }
+                        
+                        if(Game.mode === "single-player" && (Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black") ) {
+                            UpdatePiecesStatus("thinking...");
+                            setTimeout( async () => {
+                                let id = playerB.pieceColor.substring(0,1);
+                                let state = JSON.parse(JSON.stringify(Game.state));
+                                let moves = Game.possibleCaptures;
+                                if(Game.mandatoryCapture && moves.length == 0) {
+                                    moves = Game.possibleMoves;
+                                } 
+                                else if(!Game.mandatoryCapture) {
+                                    moves.concat(Game.possibleMoves);
+                                } 
+                                
+                                let ai = new AI({state, moves, depth: Game.level});
+                                await ai.makeMove();
+                                ai = null;
+                            }, 1);
+                        }
                     } // end of else if isOver
                 } // end of if is prop.final
             } // End of if other.capture
