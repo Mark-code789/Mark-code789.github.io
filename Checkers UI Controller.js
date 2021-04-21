@@ -1185,7 +1185,7 @@ const Move = async (prop) => {
                     
                     if(Game.mode === "single-player" && (Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black") ) {
                         UpdatePiecesStatus("thinking...");
-                        setTimeout( async () => {
+                        setTimeout( async () => { try {
                             let id = playerB.pieceColor.substring(0,1);
                             let state = JSON.parse(JSON.stringify(Game.state));
                             let moves = Game.possibleCaptures;
@@ -1199,6 +1199,7 @@ const Move = async (prop) => {
                             let ai = new AI({state, moves, depth: Game.level});
                             await ai.makeMove();
                             ai = null;
+                            } catch (error) {alert("Non capture Error\n" + error);} 
                         }, 1);
                     }
                     
@@ -1302,7 +1303,7 @@ const Move = async (prop) => {
                         
                         if(Game.mode === "single-player" && (Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black") ) {
                             UpdatePiecesStatus("thinking...");
-                            setTimeout( async () => {
+                            setTimeout( async () => { try {
                                 let id = playerB.pieceColor.substring(0,1);
                                 let state = JSON.parse(JSON.stringify(Game.state));
                                 let moves = Game.possibleCaptures;
@@ -1316,6 +1317,7 @@ const Move = async (prop) => {
                                 let ai = new AI({state, moves, depth: Game.level});
                                 await ai.makeMove();
                                 ai = null;
+                               } catch (error) {alert("Capture Error\n" + error);} 
                             }, 1);
                         }
                     } // end of else if isOver
