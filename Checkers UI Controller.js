@@ -208,6 +208,8 @@ async function LoadingDone () {
     Disable($("#two-players-window #playerB .white"), other.disabled, "#B4B4B4");
     other.selected = $("#main .default");
     other.level = $("#nav .default");
+    //check if has notch
+    other.notch = await HasNotch();
     
     let btns = $$("#main-window #levels #nav div");
     let btn = null;
@@ -238,7 +240,6 @@ async function LoadingDone () {
                     message: "Made app installable. Only for supported browsers. For non-supported browsers just use 'Add to homescreen' option.<br>Added fullscreen option.<br>Added helper feature for non-capturing moves.<br>Added notification tone for new message.<br>Fixed share channel name not working.<br>Fixed channel timeout and exiting issues.<br>Fixed game freezing while playing advanced levels that require more time to think.<br>Fixed other bugs.<br>If you experience any errors kindly contact me using the contact option in the settings window."});
             storage.setItem("NotifiedUpdate", "true");
         } 
-    	other.installed = JSON.parse(storage.getItem("installed"));
         try {
             Game.versions = JSON.parse(storage.getItem("versions"));
             let version = storage.getItem("version");
@@ -275,9 +276,6 @@ async function LoadingDone () {
         }
         } catch (error) {/*alert(error + "" + JSON.parse(storage.getItem("stats")).length);*/}
     }
-    
-    //check if has notch
-    other.notch = await HasNotch();
     
     window.addEventListener("orientationchange", () => {
         setTimeout(() => {play(true);}, 300);
