@@ -234,6 +234,12 @@ async function LoadingDone () {
         } 
     }
     else {
+        if(!JSON.parse(storage.getItem("NotifiedUpdate"))) 
+            Notify({action: "alert",
+                    header: "What's New!", 
+                    message: "Made app installable. Only for supported browsers.<br>Added fullscreen option.<br>Added helper feature for non-capturing moves.<br>Added notification tone for new message.<br>Fixed share channel name not working.<br>Fixed channel timeout and exiting issues.<br>Fixed game freezing while playing advanced levels that require more time to think.<br>Fixed other bugs.<br>If you experience any errors kindly contact me using the contact option in the settings window."});
+            storage.setItem("NotifiedUpdate", "true");
+        } 
     	other.installed = JSON.parse(storage.getItem("installed"));
         try {
             Game.versions = JSON.parse(storage.getItem("versions"));
