@@ -1441,7 +1441,7 @@ const ValidateMove = async (prop) => {
                         for(let move of Game.possibleMoves) {
                             let m = parseInt(move.empty.slice(0,1));
                             let n = parseInt(move.empty.slice(1,2));
-                            alert(m + "," + n);
+                            alert($("#table").rows[m].cells[n]);
                             $("#table").rows[m].cells[n].classList.add("hint");
                         } 
                     } 
