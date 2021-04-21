@@ -160,7 +160,6 @@ var other = {
     active: false, 
     
     orientation: 'natural',
-    installed: false, 
     initialLoading: true,
     fullscreenSupport: false,
     fullscreen: false, 
