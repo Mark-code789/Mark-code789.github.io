@@ -3179,6 +3179,7 @@ const Fullscreen = async (value, isEvent = false) => { try {
 			$("#item1").style.display = "grid";
     		await enterFullscreen.call(elem);
     		await orientationLocking(document.documentElement, other.orientation);
+    		Clicked($("#fs-off"), $("#fs-off").parentNode);
     		if(screen.orientation.type.toLowerCase().includes("portrait")) 
     			await setTimeout(() => {AdjustScreen("portrait");}, 1000);
     		else
@@ -3187,7 +3188,9 @@ const Fullscreen = async (value, isEvent = false) => { try {
 			other.fullscreen = value;
     	}
     	else
-    		Notify("You must browser doesn't support Fullscreen functionality");
+    		Notify({action: "alert",
+					header: "Fullscreen Error",
+					message: "Your browser doesn't support Fullscreen functionality."});
 	} 
 	else if(!isEvent) {
 		if(exitFullscreen && isFullScreen()) {
@@ -3195,6 +3198,7 @@ const Fullscreen = async (value, isEvent = false) => { try {
 			$("#item1").style.display = "none";
     		await exitFullscreen.call(document);
     		AdjustScreen("", true);
+    		Clicked($("#fs-off"), $("#fs-off").parentNode);
     	}
 	} 
 	else if(isEvent && !isFullScreen()) {
@@ -3203,7 +3207,11 @@ const Fullscreen = async (value, isEvent = false) => { try {
 		btns[0].style.background = other.background;
 		btns[1].style.background = other.default;
 		other.fullscreen = false;
-	} } catch (error) {alert(error)}
+	} } catch (error) {
+		Notify({action: "alert",
+				header: "Fullscreen Error",
+				message: "Your browser doesn't support Fullscreen functionality."});
+	}
 } 
 
 async function orientationLocking (elem, orientation) {
