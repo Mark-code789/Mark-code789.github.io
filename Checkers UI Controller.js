@@ -1014,8 +1014,11 @@ const Move = async (prop) => {
             Publish.send({channel: Lobby.CHANNEL, message: {title: "Moved", content: {i: prop.i, j: prop.j} } });
         } 
         scene.style.display = "table";
-        if(!capture) 
+        if(!capture) {
+            for(let cell of $("#table .hint"))
+                cell.classList.remove("hint");
         	Game.prop.cell.classList.remove("valid");
+        } 
         let clone = prop.cell.lastChild || Game.prop.cell.lastChild.cloneNode(true);
         if(prop.cell.children.length == 0) {
 	        clone.style.opacity = "0.5";
@@ -1437,16 +1440,15 @@ const ValidateMove = async (prop) => {
            if(!isEmpty) {
                 Game.possibleMoves = await AssesMoves({id, i: prop.i, j: prop.j, state: Game.state});
                 if(Game.possibleMoves.length > 0) {
+                	prop.select = true;
+                    Move(prop);
                     if(Game.helper && other.aiPath.length == 0) {
                         for(let move of Game.possibleMoves) {
                             let m = parseInt(move.empty.slice(0,1));
                             let n = parseInt(move.empty.slice(1,2));
-                            alert($("#table").rows[m].cells[n]);
                             $("#table").rows[m].cells[n].classList.add("hint");
                         } 
                     } 
-                	prop.select = true;
-                    Move(prop);
                     return;
                 } 
             } 
