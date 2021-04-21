@@ -1194,6 +1194,7 @@ const Move = async (prop) => {
                             } 
                             else if(!Game.mandatoryCapture) {
                                 Game.possibleMoves = await Iterate({id, state: Game.state, func: AssesMoves});
+                                alert(Game.possibleMoves.length);
                                 moves.concat(Game.possibleMoves);
                             } 
                             
@@ -1313,6 +1314,7 @@ const Move = async (prop) => {
                                 } 
                                 else if(!Game.mandatoryCapture) {
                                     Game.possibleMoves = await Iterate({id, state: Game.state, func: AssesMoves});
+                                    alert(Game.possibleMoves.length);
                                     moves.concat(Game.possibleMoves);
                                 } 
                                 
