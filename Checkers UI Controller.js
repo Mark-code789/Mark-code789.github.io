@@ -188,8 +188,6 @@ async function LoadingDone () {
     $("#load-window").style.display = "none";
     $("#main-window").style.display = "grid";
     $("#item1").style.display = "none";
-    clearInterval(intervalID);
-    intervalID = null;
    
     document.addEventListener("fullscreenchange", _ => Fullscreen(true, true), false);
     document.addEventListener("msFullscreenchange", _ => Fullscreen(true, true), false);
