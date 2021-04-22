@@ -275,7 +275,7 @@ async function LoadingDone () {
             storage.setItem("NotifiedUpdate", "true");
     }
   
-    alert(deferredEvent)
+    alert(deferredEvent);
     if(deferredEvent)
         $(".install").classList.add("show_install_prompt");
     
