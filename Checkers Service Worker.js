@@ -43,7 +43,7 @@ const appShellFiles = [
     "Checkers Channel.js", 
     "Checkers Core Engine.js", 
     "Checkers Web Worker.js", 
-    "index.html"
+    "/index.html"
 ];
 
 self.addEventListener("install", (e) => {
