@@ -592,10 +592,10 @@
             
             function pageComplete () {
                 window.addEventListener("beforeinstallprompt", e => {
-                    alert($(".install"));
                     e.preventDefault();
                     deferredEvent = e;
                     $(".install").classList.add("show_install_prompt");
+                    alert("showing");
                 });
                 let head = document.head;
                 let SheetLink = $$$("link");
