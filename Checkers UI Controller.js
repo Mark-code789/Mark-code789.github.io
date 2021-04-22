@@ -67,7 +67,7 @@ let sounds = ["/click.mp3",
 // to access audio object keys
 let soundProps = Object.keys(Sound);
 // to access css values and image keys
-let imageProps = ["--english-flag",
+let imageProps =   ["--english-flag",
                     "--kenyan-flag",
                     "--international-flags",
                     "--pool-flag",
