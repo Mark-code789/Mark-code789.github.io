@@ -2526,8 +2526,10 @@ const ClearGames = () => {
 			Cancel();
 		}
 		else if(response == "CLEAR") {
+			Cancel();
 			$("#games").innerHTML = "";
 		    Game.stats = [];
+		    Notify("Games cleared successfully");
 		    if(storage) {
 			    storage.removeItem("stats");
 		    } 
