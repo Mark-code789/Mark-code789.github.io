@@ -30,6 +30,79 @@
                 user-select: none;
             } 
             
+            .install {
+                position: absolute;
+                top: -100%;
+                left: 50%;
+                transform: translate(-50%, 0%);
+                height: fit-content;
+                width: fit-content;
+                padding: 10px;
+                border: none;
+                border-radius: 0 0 10px 10px;
+                background: linear-gradient(rgba(0, 152, 25, 0.9), rgba(0, 112, 0, 0.9));
+                color: #fff;
+                font-size: 1.2rem;
+                z-index: 5;
+            } 
+            
+            .install section {
+                padding-bottom: 10px;
+                display: grid;
+                grid-template-columns: 30px auto;
+                grid-template-rows: 30px;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
+            } 
+            
+            .install_icon {
+                height: 30px;
+                width: 30px;
+                background: url("./homescreen 48icon.png"), linear-gradient(rgba(0, 152, 25, 0.9), rgba(0, 112, 0, 0.9));
+                background-size: cover;
+                background-repeat: no-repeat;
+            } 
+            
+            .install_prompt {
+                height: 100%;
+                font-size: 1.2rem;
+                font-weight: 500;
+                padding: 10px;
+                display: flex;
+                align-items: center;
+                background: linear-gradient(rgba(0, 152, 25, 0.9), rgba(0, 112, 0, 0.9));
+            } 
+            
+            .install_btn {
+                color: #fff;
+                float: right;
+                padding: 10px;
+                margin: 0 10px;
+                border: none;
+                outline: none;
+                border-radius: 10px;
+                font-weight: 500;
+                background: linear-gradient(#001AFF, #00008B);
+            } 
+            
+            .show_install_prompt {
+                animation: slide_in 1s ease-out 0s 1 normal forwards;
+            } 
+            
+            .hide_install_prompt {
+                animation: slide_out 1s ease-out 0s 1 normal forwards;
+            } 
+            
+            @keyframes slide_in {
+                0% {top: -100%;}
+                100% {top: 0%;}
+            } 
+            @keyframes slide_out {
+                0% {top: 0%;}
+                100% {top: -100%;}
+            } 
+            
             #load-window {
             	position: relative;
                 height: 100vh;
@@ -83,6 +156,14 @@
         </style>
     </head>
     <body>
+        <article class="install">
+            <section>
+                <label class="install_icon"></label>
+                <label class="install_prompt">Play this game even while offline.</label>
+            </section>
+            <button class="install_btn" onclick="InstallApp()">Install</button>
+            <button class="install_btn" onclick="HideInstallPrompt()">Cancel</button>
+        </article>
         <article id="chat-icon" hidden>
             <section class="chat_icon_container">
                 <p id="dragItem">CHAT</p>
@@ -479,6 +560,22 @@
         
         <script>
         	'use strict' 
+            const HideInstallPrompt = () => {
+                $(".install").classList.remove("show_install_prompt");
+                $(".install").classList.add("hide_install_prompt");
+            } 
+            const InstallApp = async () => {
+                HideInstallPrompt();
+                deferredEvent.prompt();
+                const {outcome} = await deferredEvent.userChoice;
+                if(outcome === 'accepted') {
+                    Notify("Installation successfully");
+                } 
+                else {
+                    Notify("Installation canceled");
+                } 
+                deferredEvent = null;
+            } 
             function $(elem) {
                 return document.querySelector(elem);
             } 
@@ -493,6 +590,11 @@
             var intervalID;
             
             function pageComplete () {
+                window.addEventListener("beforeinstallprompt", e => {
+                    e.preventDefault();
+                    deferredEvent = e;
+                    $(".install").classList.add("show_install_prompt");
+                });
                 let head = document.head;
                 let SheetLink = $$$("link");
                 let JsLink0 = $$$("script");
