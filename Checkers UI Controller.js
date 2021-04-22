@@ -2502,26 +2502,37 @@ const FollowUp = () => {
 } 
 
 const GetGames = () => {
-    if(Game.stats.length > 0) {
-        BackState.state.push(["#main-window", "#games-window"]);
-        $("#main-window").style.display = "none";
-        $("#games-window").style.display = "grid";
-    } 
-    else 
-        Notify("No games played yet.");
+    BackState.state.push(["#main-window", "#games-window"]);
+    $("#main-window").style.display = "none";
+    $("#games-window").style.display = "grid";
+    if(Game.stats.length == 0)
+        Notify("Your Games will be displayed here.");
 }
 
 const ClearGames = () => {
 	Clicked();
 	if(Game.stats.length > 0) {
-		$("#games").innerHTML = "";
-		Game.stats = [];
-		if(storage) {
-			storage.removeItem("stats");
-		} 
+		Notify({action: "confirm",
+		        header: "Are you sure you want clear?", 
+		        message: "Once done this action can not be undone.", 
+                type: "CANCEL/CLEAR", 
+                onResponse: ClearResponse});
 	} else {
 		Notify("No games played yet.");
 	}
+	
+	function ClearResponse (response) {
+		if(response == "CANCEL") {
+			Cancel();
+		}
+		else if(response == "CLEAR") {
+			$("#games").innerHTML = "";
+		    Game.stats = [];
+		    if(storage) {
+			    storage.removeItem("stats");
+		    } 
+		} 
+    } 
 } 
 
 const GetStats = (no) => { try {
