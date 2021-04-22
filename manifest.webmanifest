@@ -23,12 +23,12 @@
             "src": "https://www.dropbox.com/s/rwh5xsm52gmftpy/homescreen%20192icon.png?raw=1",
             "sizes": "192x192",
             "type": "image/png"
-        }
+        }, 
         {
             "src": "https://www.dropbox.com/s/tycumxu27g44ns9/homescreen%20256icon.png?raw=1",
             "sizes": "256x256",
             "type": "image/png"
-        }
+        }, 
         {
             "src": "https://www.dropbox.com/s/hhhjxdptlhvkxmz/homescreen%20512icon.png?raw=1",
             "sizes": "512x512",
