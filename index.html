@@ -588,7 +588,7 @@
             function $$$(type) {
                 return document.createElement(type);
             } 
-            var intervalID;
+            var deferredEvent;
             
             function pageComplete () {
                 window.addEventListener("beforeinstallprompt", e => {
