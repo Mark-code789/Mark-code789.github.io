@@ -38,7 +38,7 @@
     --txtSize: 40px;
     --M: 5px;
 } 
-article {
+article:not(.install) {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -47,17 +47,6 @@ article {
     border-top: var(--border-top) solid #000;
     background: transparent;
     z-index: 0;
-} 
-
-.install_btn {
-    position: absolute;
-    top: 10px !important;
-    left: 10px !important;
-    height: content-fit !important;
-    width: content-fit !important;
-    padding: 5px !important;
-    background: linear-gradient(rgba(0, 152, 25, 0.9), rgba(0, 112, 0, 0.9)) !important;
-    color: #fff;
 } 
 
 #chat-icon {
