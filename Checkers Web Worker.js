@@ -1,6 +1,6 @@
-importScripts("Checkers UI Controller.js");
-importScripts("Checkers AI Player.js"); 
-importScripts("Checkers Core Engine.js");
+importScripts("/Checkers UI Controller.js");
+importScripts("/Checkers AI Player.js"); 
+importScripts("/Checkers Core Engine.js");
 				
 onmessage = async (e) => { try {
 	let state = e.data[0];
