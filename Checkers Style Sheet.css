@@ -56,6 +56,7 @@ article {
     width: content-fit !important;
     padding: 5px !important;
     background: linear-gradient(rgba(0, 152, 25, 0.9), rgba(0, 112, 0, 0.9)) !important;
+    color: #fff;
 } 
 
 #chat-icon {
