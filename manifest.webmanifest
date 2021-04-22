@@ -4,32 +4,32 @@
     "description": "Standalone Frontend Checkers Game",
     "icons": [
         {
-            "src": "homescreen 48icon.png",
+            "src": "https://www.dropbox.com/s/1xgge3n9to3q8nu/homescreen%2048icon.png?raw=1",
             "sizes": "48x48",
             "type": "image/png"
         },
         {
-            "src": "homescreen 96icon.png",
+            "src": "https://www.dropbox.com/s/fj8m23zuzh2locj/homescreen%2096icon.png?raw=1",
             "sizes": "96x96",
             "type": "image/png"
         },
         {
-            "src": "homescreen 144icon.png?raw=1",
+            "src": "https://www.dropbox.com/s/gl5ab8u8lup0ayi/homescreen%20144icon.png?raw=1",
             "sizes": "144x144",
             "type": "image/png"
         },
         {
-            "src": "homescreen 192icon.png",
+            "src": "https://www.dropbox.com/s/rwh5xsm52gmftpy/homescreen%20192icon.png?raw=1",
             "sizes": "192x192",
             "type": "image/png"
         }
         {
-            "src": "homescreen 256icon.png",
+            "src": "https://www.dropbox.com/s/tycumxu27g44ns9/homescreen%20256icon.png?raw=1",
             "sizes": "256x256",
             "type": "image/png"
         }
         {
-            "src": "homescreen 512icon.png",
+            "src": "https://www.dropbox.com/s/hhhjxdptlhvkxmz/homescreen%20512icon.png?raw=1",
             "sizes": "512x512",
             "type": "image/png"
         }
