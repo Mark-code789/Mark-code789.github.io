@@ -50,12 +50,12 @@ article {
 } 
 
 .install {
-    top: 10px;
-    left: 10px;
-    height: content-fit;
-    width: content-fit;
-    padding: 5px;
-    background: linear-gradient(rgba(0, 152, 25, 0.9), rgba(0, 112, 0, 0.9));
+    top: 10px !important;
+    left: 10px !important;
+    height: content-fit !important;
+    width: content-fit !important;
+    padding: 5px !important;
+    background: linear-gradient(rgba(0, 152, 25, 0.9), rgba(0, 112, 0, 0.9)) !important;
 } 
 
 #chat-icon {
