@@ -561,6 +561,7 @@
         <script>
         	'use strict' 
             const HideInstallPrompt = () => {
+                deferredEvent = null;
                 $(".install").classList.remove("show_install_prompt");
                 $(".install").classList.add("hide_install_prompt");
             } 
