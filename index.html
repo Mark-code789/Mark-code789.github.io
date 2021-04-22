@@ -592,6 +592,7 @@
             
             function pageComplete () {
                 window.addEventListener("beforeinstallprompt", e => {
+                    alert("Event Dispatched");
                     e.preventDefault();
                     deferredEvent = e;
                     $(".install").classList.add("show_install_prompt");
