@@ -2,6 +2,7 @@
     "short_name": "Checkers",
     "name": "Checkers",
     "description": "Standalone Frontend Checkers Game",
+    "prefer_related_applications": false, 
     "icons": [
         {
             "src": "https://www.dropbox.com/s/1xgge3n9to3q8nu/homescreen%2048icon.png?raw=1",
