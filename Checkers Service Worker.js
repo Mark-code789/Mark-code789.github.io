@@ -35,7 +35,7 @@ const appShellFiles = [
     "/collect.mp3",
     "/game win.mp3", 
     "/game lose.mp3", 
-    "/notification.mp3"
+    "/notification.mp3", 
     "https://cdn.pubnub.com/sdk/javascript/pubnub.4.29.9.js", 
     "/Checkers Style Sheet.css", 
     "/Checkers AI Player.js", 
