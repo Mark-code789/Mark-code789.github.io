@@ -570,7 +570,7 @@
                 deferredEvent.prompt();
                 const {outcome} = await deferredEvent.userChoice;
                 if(outcome === 'accepted') {
-                    Notify("Installation successfully");
+                    Notify("Installating...");
                 } 
                 else {
                     Notify("Installation canceled");
@@ -591,11 +591,13 @@
             var deferredEvent;
             
             function pageComplete () {
+                window.addEventListener("appinstalled", _ => {
+                    Notify("Installation successfull.");
+                });
                 window.addEventListener("beforeinstallprompt", e => {
                     e.preventDefault();
                     deferredEvent = e;
                     $(".install").classList.add("show_install_prompt");
-                    alert("showing");
                 });
                 let head = document.head;
                 let SheetLink = $$$("link");
