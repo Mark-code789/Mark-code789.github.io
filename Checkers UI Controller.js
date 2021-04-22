@@ -273,7 +273,10 @@ async function LoadingDone () {
                 message: "<ul><li>Made app installable. Only for supported browsers. For non-supported browsers just use 'Add to homescreen' option.</li><li>Added fullscreen option.</li><li>Added helper feature for non-capturing moves.</li><li>Added notification tone for new message.</li><li>Fixed share channel name not working.</li><li>Fixed channel timeout and exiting issues.</li><li>Fixed game freezing while playing advanced levels that require more time to think.</li><li>Fixed other bugs.</li></ul>If you experience any errors kindly contact me using the contact option in the settings window."});
         if(storage)
             storage.setItem("NotifiedUpdate", "true");
-    } 
+    }
+   
+    if(deferredEvent)
+        $(".install").classList.add("show_install_prompt");
     
     window.addEventListener("orientationchange", () => {
         setTimeout(() => {play(true);}, 300);
