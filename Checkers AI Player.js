@@ -63,7 +63,7 @@ class AI {
         let absoluteValue = initAI - initHuman;
         let currentValue = ai - human;
         let relativeValue = currentValue - absoluteValue;
-        return Prms(relativeValue);
+        return Prms(currentValue);
     } 
     
     move = async (state, move) => { try {
