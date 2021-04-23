@@ -227,6 +227,8 @@ class AI {
 		        } 
         		await sleep.start();
         		worker.terminate();
+                sleep = null;
+                worker = null;
                 let random = Math.round(Math.random() * (bestPossibleMoves.length - 1));
 		        bestMove = bestPossibleMoves[random];
 		        return Prms(bestMove);
