@@ -585,7 +585,7 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
             	await Notify({action: "alert_special", 
 							  header: "Please Wait!", 
 							  message: "Loading..."});
-                aiStartl();
+                aiStart();
             }
             else if(Game.helper) {
                 let id = playerA.pieceColor.slice(0,1);
