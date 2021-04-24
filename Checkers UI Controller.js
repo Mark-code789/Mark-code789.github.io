@@ -585,6 +585,7 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
             	await Notify({action: "alert_special", 
 							  header: "Please Wait!", 
 							  message: "Loading..."});
+			    KillerMove.moves = new Array(1_597_957);
                 aiStart();
             }
             else if(Game.helper) {
