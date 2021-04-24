@@ -101,7 +101,7 @@ class AI {
         } 
         state[m][n] = id;
         return Prms({state, continuousJump});
-        } catch (error) {alert"AI move Error!\n" + error);} 
+        } catch (error) {alert("AI move Error!\n" + error);} 
     } 
     
     correct = (state) => {
