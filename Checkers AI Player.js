@@ -115,14 +115,13 @@ class AI {
         return Prms(state);
     } 
     
-    minimax = async (state, moves, depth, isMax, alpha, beta, isContJump) => { 
-    	
+    minimax = async (state, moves, depth, isMax, alpha, beta, currentPlayer) => { // currentPlayer : true = ai || false = opp
         if(!moves.length || depth === -1) {
-        	let leafScore = !moves.length? (isMax? -10: 10): 0;
+        	let leafScore = !moves.length? (currentPlayer? 10: -10): 0;
         	let actualDepth = this.depth - depth;
         	let score = await this.evaluate(state);
         	score = score + leafScore;
-            score += (isMax? -actualDepth: actualDepth);
+            score += (currentPlayer? -actualDepth: actualDepth);
             return Prms(score); 
         } 
         else {
@@ -156,12 +155,12 @@ class AI {
 		                    moves2 = moves2.concat(moves3);
 		                } 
 						
-	                    value = await this.minimax(cloneState, moves2, depth-1, !isMax, alpha, beta); // first branch
+	                    value = await this.minimax(cloneState, moves2, depth-1, !isMax, alpha, beta, isMax); // first branch
 					} 
 					else {
 						let moves2 = res.continuousJump;
 						
-						value = await this.minimax(cloneState, moves2, depth, isMax, alpha, beta);
+						value = await this.minimax(cloneState, moves2, depth, isMax, alpha, beta, isMax);
 					} 
 					
 					if(isMax) {
@@ -219,11 +218,11 @@ class AI {
 		                    let moves3 = await Iterate({id: opp, state: cloneState, func: AssesMoves});
 		                    moves2 = moves2.concat(moves3);
 		                } 
-			            worker.postMessage([this.state, move, cloneState, moves2, this.depth-1, !isMax, this.MIN, this.MAX]);
+			            worker.postMessage([this.state, move, cloneState, moves2, this.depth-1, !isMax, this.MIN, this.MAX, isMax]);
 					} 
 					else {
 						let moves2 = res.continuousJump;
-						worker.postMessage([this.state, move, cloneState, moves2, this.depth, isMax, this.MIN, this.MAX]);
+						worker.postMessage([this.state, move, cloneState, moves2, this.depth, isMax, this.MIN, this.MAX, isMax]);
 					}
 		        } 
         		await sleep.start();
@@ -255,11 +254,11 @@ class AI {
 		                    moves2 = moves2.concat(moves3);
 		                } 
 						
-			            value = await this.minimax(cloneState, moves2, this.depth-1, !isMax, this.MIN, this.MAX);
+			            value = await this.minimax(cloneState, moves2, this.depth-1, !isMax, this.MIN, this.MAX, isMax);
 					} 
 					else {
 						let moves2 = res.continuousJump;
-						value = await this.minimax(cloneState, moves2, this.depth, isMax, this.MIN, this.MAX);
+						value = await this.minimax(cloneState, moves2, this.depth, isMax, this.MIN, this.MAX, isMax);
 					}
 					
 		            if(isMax && bestValue <= value) {
