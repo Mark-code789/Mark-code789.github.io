@@ -122,7 +122,7 @@ class AI {
         	let actualDepth = this.depth - depth;
         	let score = await this.evaluate(state);
         	score = score + leafScore;
-            score += isMax? -actualDepth: actualDepth;
+            score += (isMax? -actualDepth: actualDepth);
             return Prms(score); 
         } 
         else {
