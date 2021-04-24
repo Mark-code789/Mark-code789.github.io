@@ -380,6 +380,7 @@ class AI {
         } 
         
     	//return;
+        Cancel();
     	if($("#play-window").style.display == "grid") 
         await setTimeout( async () => {
         	let cell1 = other.aiPath[0];
