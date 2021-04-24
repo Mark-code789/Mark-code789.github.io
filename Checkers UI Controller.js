@@ -585,7 +585,7 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
             	await Notify({action: "alert_special", 
 							  header: "Please Wait!", 
 							  message: "Loading..."});
-                setTimeout(aiStart, 100);
+                aiStartl();
             }
             else if(Game.helper) {
                 let id = playerA.pieceColor.slice(0,1);
@@ -642,21 +642,16 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
         } 
         let state = Game.state;
     	let id = playerB.pieceColor.substring(0,1);
-        let moves = await Iterate({id, state, func: AssesMoves});
-        let chosen = (Math.random()*(moves.length - 1)).toFixed(0);
-        
-        let bestMove = moves[chosen];
-        let i = parseInt(bestMove.cell.slice(0,1));
-        let j = parseInt(bestMove.cell.slice(1,2));
-        let m = parseInt(bestMove.empty.slice(0,1));
-        let n = parseInt(bestMove.empty.slice(1,2));
-        
-        setTimeout( async () => {
-            other.aiPath = [1];
-            await ValidateMove({cell: $("#table").rows[i].cells[j], i, j, isComputer: true});
-            other.aiPath = [];
-            await ValidateMove({cell: $("#table").rows[m].cells[n], i: m, j: n, isComputer: true});
-        }, 250);
+        let moves = await Iterate({id, state, func: AssesCaptures});
+        if(Game.mandatoryCapture && moves.length == 0) {
+            moves = await Iterate({id, state, func: AssesMoves});
+        }
+        else {
+            moves.concat(await Iterate({id, state, func: AssesMoves}));
+        }
+        AI ai = new AI({state: Game.state, depth: Game.level, moves});
+        await ai.makeMove();
+        ai = null;
         return;
     } 
 } 
