@@ -649,7 +649,7 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
             let moves2 = await Iterate({id, state, func: AssesMoves});
             moves.concat(moves2);
         }
-        AI ai = new AI({state, depth: Game.level, moves});
+        AI ai = new AI({state, moves, depth: Game.level});
         await ai.makeMove();
         ai = null;
         return;
