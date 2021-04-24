@@ -101,7 +101,7 @@ class AI {
         } 
         state[m][n] = id;
         return Prms({state, continuousJump});
-        } catch (error) {document.write("AI move Error!<br/>" + error);} 
+        } catch (error) {alert"AI move Error!\n" + error);} 
     } 
     
     correct = (state) => {
@@ -122,6 +122,7 @@ class AI {
         	let actualDepth = this.depth - depth;
         	let score = await this.evaluate(state);
         	score = score + leafScore;
+            score += isMax? -actualDepth: actualDepth;
             return Prms(score); 
         } 
         else {
