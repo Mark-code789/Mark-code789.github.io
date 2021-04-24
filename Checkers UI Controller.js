@@ -586,7 +586,7 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
 							  header: "Please Wait!", 
 							  message: "Loading..."});
 			    KillerMove.moves = new Array(1_597_957);
-                aiStart();
+                setTimeout(aiStart, 100);
             }
             else if(Game.helper) {
                 let id = playerA.pieceColor.slice(0,1);
@@ -650,9 +650,16 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
             let moves2 = await Iterate({id, state, func: AssesMoves});
             moves.concat(moves2);
         }
-        let ai = new AI({state, moves, depth: Game.level});
-        await ai.makeMove();
-        ai = null;
+        let bestMove = moves[chosen];
+        let i = parseInt(bestMove.cell.slice(0,1));
+        let j = parseInt(bestMove.cell.slice(1,2));
+        let m = parseInt(bestMove.empty.slice(0,1));
+        let n = parseInt(bestMove.empty.slice(1,2));
+        
+        setTimeout( async () => {
+            await ValidateMove({cell: $("#table").rows[i].cells[j], i, j, isComputer: true});
+            await ValidateMove({cell: $("#table").rows[m].cells[n], i: m, j: n, isComputer: true});
+        }, 250);
         return;
     } 
 } 
