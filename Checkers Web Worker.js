@@ -11,8 +11,9 @@ onmessage = async (e) => { try {
 	let isMax = e.data[5];
 	let alpha = e.data[6];
 	let beta = e.data[7];
+	let currentPlayer= e.data[8];
 	let ai = new AI({state, depth});
-	let value = await ai.minimax(cloneState, moves, depth, isMax, alpha, beta, isMax);
+	let value = await ai.minimax(cloneState, moves, depth, isMax, alpha, beta, currentPlayer);
 	postMessage({move, value});
 	} catch (error) {
 		postMessage(error.message + " at\n " + error.stack);
