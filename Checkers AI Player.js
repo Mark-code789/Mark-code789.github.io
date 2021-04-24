@@ -129,9 +129,9 @@ class AI {
         	let isFoundMove = false;
             let opp = isMax? this.opp: this.ai;
             let id = isMax? this.ai: this.opp;
-            if(moves.length > 1) {
+            /*if(moves.length > 1) { 
             	moves = await KillerMove.sort(moves);
-            } 
+            } */
             
             for(let i = 0; i < moves.length; i++) {
                 if(state[parseInt(moves[i].cell.slice(0,1))][parseInt(moves[i].cell.slice(1,2))].includes(id) &&
@@ -173,7 +173,7 @@ class AI {
 					} 
 					
 					if(alpha >= beta) {
-						KillerMove.add(move, this.timestamp);
+						//KillerMove.add(move, this.timestamp);
 						return Prms(alpha); // alpha cut-off
 					} 
 				} 
