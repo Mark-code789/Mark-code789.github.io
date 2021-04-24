@@ -647,6 +647,7 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
             let moves2 = await Iterate({id, state, func: AssesMoves});
             moves.concat(moves2);
         }
+        let chosen = (Math.random()*(moves.length - 1)).toFixed(0);
         let bestMove = moves[chosen];
         let i = parseInt(bestMove.cell.slice(0,1));
         let j = parseInt(bestMove.cell.slice(1,2));
