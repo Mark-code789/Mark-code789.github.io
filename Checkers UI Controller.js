@@ -582,9 +582,6 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
         if(Game.mode === "single-player") {
             //Notify("AMERICAN CHECKERS<br/>---------------------------------------<br/>" + Game.levels[Game.level-1].level);
             if(Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black") {
-            	await Notify({action: "alert_special", 
-							  header: "Please Wait!", 
-							  message: "Loading..."});
 			    KillerMove.moves = new Array(1_597_957);
                 setTimeout(aiStart, 100);
             }
