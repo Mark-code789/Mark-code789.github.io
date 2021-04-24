@@ -583,7 +583,7 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
             //Notify("AMERICAN CHECKERS<br/>---------------------------------------<br/>" + Game.levels[Game.level-1].level);
             if(Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black") {
 			    KillerMove.moves = new Array(1_597_957);
-                setTimeout(aiStart, 100);
+                setTimeout(_ => aiStart(), 100);
             }
             else if(Game.helper) {
                 let id = playerA.pieceColor.slice(0,1);
