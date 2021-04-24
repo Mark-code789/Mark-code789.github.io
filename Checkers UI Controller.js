@@ -632,7 +632,6 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
     } 
         
     async function aiStart () {
-    	Cancel();
     	for(let cell of $$("#table .valid, #table .pre_valid, #table .hint, .helper_empty, .helper_filled")) { 
             cell.classList.remove("valid");
             cell.classList.remove("pre_valid");
