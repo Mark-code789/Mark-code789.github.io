@@ -278,8 +278,10 @@ async function LoadingDone () {
         Notify({action: "alert",
                 header: "What's New! Version 4.0", 
                 message: "<ul><li>Fixed bugs.</li><li>Improved internal operation.</li></ul>If you experience any errors kindly contact me using the contact option in the settings window."});
-        if(storage)
-            storage.setItem("NotifiedUpdate", "true");
+        if(storage) {
+            storage.setItem("NotifiedUpdateV4.0", "true");
+            storage.removeItem("NotifiedUpdate");
+        } 
     }
     
     if(deferredEvent)
