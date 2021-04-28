@@ -210,6 +210,16 @@ async function LoadingDone () {
     let btns = $$("#main-window #levels #nav div");
     let btn = null;
     let p = null;
+   
+    if(!storage || !JSON.parse(storage.getItem("NotifiedUpdateV4.0"))) {
+        Notify({action: "alert",
+                header: "What's New! Version 4.0", 
+                message: "<ul><li>Fixed bugs.</li><li>Improved internal operation.</li></ul>If you experience any errors kindly contact me using the contact option in the settings window."});
+        if(storage) {
+            storage.clear();
+            storage.setItem("NotifiedUpdateV4.0", "true");
+        } 
+    }
     
     if(storage === null || storage.getItem("versions") === null) {
         for(btn of btns) {
@@ -272,16 +282,6 @@ async function LoadingDone () {
                 TranspositionTable[table] = await Copy(item);
             } 
         } catch (error) {}
-    }
-   
-    if(!storage || !JSON.parse(storage.getItem("NotifiedUpdateV4.0"))) {
-        Notify({action: "alert",
-                header: "What's New! Version 4.0", 
-                message: "<ul><li>Fixed bugs.</li><li>Improved internal operation.</li></ul>If you experience any errors kindly contact me using the contact option in the settings window."});
-        if(storage) {
-            storage.setItem("NotifiedUpdateV4.0", "true");
-            storage.removeItem("NotifiedUpdate");
-        } 
     }
     
     if(deferredEvent)
