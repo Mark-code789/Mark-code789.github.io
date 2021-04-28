@@ -579,7 +579,7 @@ class TranspositionTable {
 		        else 
 			        this[Game.version][pos] = obj;
 	        } 
-	        else if(this[Game.version][key].depth <= obj.depth) {
+	        else if(this[Game.version][key].depth >= obj.depth) {
 			    this[Game.version][key] = obj;
 	        } 
 	        this.queue.shift();
