@@ -104,9 +104,9 @@ class AI {
         return Prms(state);
     } 
     
-    minimax = async (state, moves, depth, isMax, alpha, beta, currentPlayer) => { // currentPlayer : true = ai || false = opp 
+    minimax = async (state, moves, depth, isMax, alpha, beta, currentPlayer, currentDepth) => { // currentPlayer : true = ai || false = opp 
         if(moves.length) { 
-            let score = await TranspositionTable.getState(state, depth);
+            let score = await TranspositionTable.getState(state, currentDepth);
             if(score) {
                 return {score};
             } 
@@ -148,12 +148,12 @@ class AI {
 	                    moves2 = moves2.concat(moves3);
 	                } 
 					
-                    value = await this.minimax(cloneState, moves2, depth-1, !isMax, alpha, beta, isMax); // first branch
+                    value = await this.minimax(cloneState, moves2, depth-1, !isMax, alpha, beta, isMax, depth); // first branch
 				} 
 				else {
 					let moves2 = res.continuousJump;
 					
-					value = await this.minimax(cloneState, moves2, depth, isMax, alpha, beta, isMax);
+					value = await this.minimax(cloneState, moves2, depth, isMax, alpha, beta, isMax, depth);
 				}
 				
 				if(typeof value != "object") {
@@ -215,11 +215,11 @@ class AI {
 		                    let moves3 = await Iterate({id: opp, state: cloneState, func: AssesMoves});
 		                    moves2 = moves2.concat(moves3);
 		                } 
-			            worker.postMessage([this.state, this.depth, this.moves, move, cloneState, moves2, this.depth-1, !isMax, this.MIN, this.MAX, isMax, HashTable.ZobristTable]);
+			            worker.postMessage([this.state, this.depth, this.moves, move, cloneState, moves2, this.depth-1, !isMax, this.MIN, this.MAX, isMax, this.depth, HashTable.ZobristTable]);
 					} 
 					else {
 						let moves2 = res.continuousJump;
-						worker.postMessage([this.state, this.depth, this.moves, move, cloneState, moves2, this.depth, isMax, this.MIN, this.MAX, isMax, HashTable.ZobristTable]);
+						worker.postMessage([this.state, this.depth, this.moves, move, cloneState, moves2, this.depth, isMax, this.MIN, this.MAX, isMax, this.depth, HashTable.ZobristTable]);
 					}
 		        } 
         		await sleep.start();
@@ -251,11 +251,11 @@ class AI {
 		                    moves2 = moves2.concat(moves3);
 		                } 
 						
-			            value = await this.minimax(cloneState, moves2, this.depth-1, !isMax, this.MIN, this.MAX, isMax);
+			            value = await this.minimax(cloneState, moves2, this.depth-1, !isMax, this.MIN, this.MAX, isMax, this.depth);
 					} 
 					else {
 						let moves2 = res.continuousJump;
-						value = await this.minimax(cloneState, moves2, this.depth, isMax, this.MIN, this.MAX, isMax);
+						value = await this.minimax(cloneState, moves2, this.depth, isMax, this.MIN, this.MAX, isMax, this.depth);
 					}
 					if(typeof value == "object") 
 					    value = value.score;
