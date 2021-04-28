@@ -248,29 +248,36 @@ async function LoadingDone () {
         let length = Game.stats.length;
         let mainSec = $("#games-window #games");
         try {
-            //alert(length);
-        for(let i = 0; i < length; i++) {
-            let no = i;
-            let stat = Game.stats[no];
-            let subSec = $$$("section");
-            subSec.classList.add("sub_item");
-            p = $$$("p");
-            p.innerHTML = `${stat.playerName[0]} [${stat.pieceColor[0]}] VS ${stat.playerName[1]} [${stat.pieceColor[1]}] ${(stat.level != undefined)? "<br/><br/> " + stat.version + ": " + stat.level: ""}`;
-            let btn = $$$("button");
-            btn.classList.add("default", "middle_top");
-            btn.innerHTML = "SEE STATS";
-            btn.addEventListener("click", () => GetStats(no), false);
-            subSec.appendChild(p);
-            subSec.appendChild(btn);
-            mainSec.appendChild(subSec);
-        }
+            for(let i = 0; i < length; i++) {
+                let no = i;
+                let stat = Game.stats[no];
+                let subSec = $$$("section");
+                subSec.classList.add("sub_item");
+                p = $$$("p");
+                p.innerHTML = `${stat.playerName[0]} [${stat.pieceColor[0]}] VS ${stat.playerName[1]} [${stat.pieceColor[1]}] ${(stat.level != undefined)? "<br/><br/> " + stat.version + ": " + stat.level: ""}`;
+                let btn = $$$("button");
+                btn.classList.add("default", "middle_top");
+                btn.innerHTML = "SEE STATS";
+                btn.addEventListener("click", () => GetStats(no), false);
+                subSec.appendChild(p);
+                subSec.appendChild(btn);
+                mainSec.appendChild(subSec);
+            }
         } catch (error) {/*alert(error + "" + JSON.parse(storage.getItem("stats")).length);*/}
+       
+        try {
+            for(let table of ["americanTable", "kenyanTable", "internationalTable", "poolTable", "russianTable", "nigerianTable"]) {
+                let item = await JSON.parse(storage.getItem(table));
+                table = table.replace("Table");
+                TranspositionTable[table] = await Copy(item);
+            } 
+        } catch (error) {}
     }
    
-    if(!storage || !JSON.parse(storage.getItem("NotifiedUpdate"))) {
+    if(!storage || !JSON.parse(storage.getItem("NotifiedUpdateV4.0"))) {
         Notify({action: "alert",
-                header: "What's New! Version 3.0", 
-                message: "<ul><li>Made app installable. Only for supported browsers. For non-supported browsers just use 'Add to homescreen' option.</li><li>Added fullscreen option.</li><li>Added helper feature for non-capturing moves.</li><li>Added notification tone for new message.</li><li>Fixed share channel name not working.</li><li>Fixed channel timeout and exiting issues.</li><li>Fixed game freezing while playing advanced levels that require more time to think.</li><li>Fixed other bugs.</li></ul>If you experience any errors kindly contact me using the contact option in the settings window."});
+                header: "What's New! Version 4.0", 
+                message: "<ul><li>Fixed bugs.</li><li>Improved internal operation.</li></ul>If you experience any errors kindly contact me using the contact option in the settings window."});
         if(storage)
             storage.setItem("NotifiedUpdate", "true");
     }
@@ -518,13 +525,13 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
    
     // reset all the game states and players states 
     BackState.moves = [];
-    Game.state = /*[["NA", "EC", "NA", "EC", "NA", "EC", "NA", "MB"],
+    Game.state = /*[["NA", "EC", "NA", "IP", "NA", "MB", "NA", "MB"],
 				  ["EC", "NA", "EC", "NA", "EC", "NA", "MB", "NA"],
-				  ["NA", "EC", "NA", "EC", "NA", "MB", "NA", "MB"],
+				  ["NA", "EC", "NA", "EC", "NA", "EC", "NA", "MB"],
 				  ["EC", "NA", "EC", "NA", "EC", "NA", "EC", "NA"],
 				  ["NA", "EC", "NA", "EC", "NA", "MW", "NA", "MW"],
 				  ["EC", "NA", "EC", "NA", "EC", "NA", "EC", "NA"],
-				  ["NA", "EC", "NA", "EC", "NA", "EC", "NA", "EC"],
+				  ["NA", "EC", "NA", "IP", "NA", "EC", "NA", "EC"],
 				  ["EC", "NA", "EC", "NA", "MW", "NA", "EC", "NA"]];*/[];
     Game.track = [];
     Game.possibleCaptures = [];
@@ -559,10 +566,9 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
         await LoadBoard(playerA.pieceColor, playerB.pieceColor);
         await UpdatePiecesStatus();
         if(Game.firstMove) {
-            //Notify(Game.whiteTurn);
             let id = playerA.pieceColor.slice(0,1);
             Game.possibleMoves = await Iterate({id, state: Game.state, func: AssesMoves});
-            await Helper(Game.possibleMoves, JSON.parse(JSON.stringify(Game.state)));
+            await Helper(Game.possibleMoves, Copy(Game.state));
         } 
     } 
     
@@ -578,28 +584,27 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
         } 
         await LoadBoard(playerA.pieceColor, playerB.pieceColor);
         await UpdatePiecesStatus();
-        Game.baseState = JSON.parse(JSON.stringify(Game.state));
+        Game.baseState = Copy(Game.state);
         if(Game.mode === "single-player") {
             //Notify("AMERICAN CHECKERS<br/>---------------------------------------<br/>" + Game.levels[Game.level-1].level);
             if(Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black") {
-			    KillerMove.moves = new Array(1_597_957);
                 setTimeout(_ => aiStart(), 100);
             }
             else if(Game.helper) {
                 let id = playerA.pieceColor.slice(0,1);
                 Game.possibleMoves = await Iterate({id, state: Game.state, func: AssesMoves});
-                await Helper(Game.possibleMoves, JSON.parse(JSON.stringify(Game.state)));
+                await Helper(Game.possibleMoves, Copy(Game.state));
             } 
         }
         else if(Game.helper && Game.mode === "two-player-offline") {
             let id = (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black")? playerA.pieceColor.slice(0,1): playerB.pieceColor.slice(0,1);
             Game.possibleMoves = await Iterate({id, state: Game.state, func: AssesMoves});
-            await Helper(Game.possibleMoves, JSON.parse(JSON.stringify(Game.state)));
+            await Helper(Game.possibleMoves, Copy(Game.state));
         }
         else if(Game.helper && (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black")) {
             let id = playerA.pieceColor.slice(0,1);
             Game.possibleMoves = await Iterate({id, state: Game.state, func: AssesMoves});
-            await Helper(Game.possibleMoves, JSON.parse(JSON.stringify(Game.state)));
+            await Helper(Game.possibleMoves, Copy(Game.state));
         } 
         
         if(Game.rollDice) {
@@ -658,7 +663,7 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
             await ValidateMove({cell: $("#table").rows[i].cells[j], i, j, isComputer: true});
             await ValidateMove({cell: $("#table").rows[m].cells[n], i: m, j: n, isComputer: true});
         }, 250);
-        return;
+        return Prms("");
     } 
 } 
 
@@ -763,6 +768,9 @@ playerA.name = "You";
 playerB.pieceColor = "Black";
 playerB.name = "AI";
 
+function Copy (obj) {
+    return JSON.parse(JSON.stringify(obj));
+} 
 function Prms (value) {
 	return new Promise(resolve => {return resolve(value)});
 } 
@@ -848,25 +856,30 @@ const GetPosition = function (child, parent = document.body) {
     } 
 } 
 
-const Move = async (prop) => {
-    let scene = $("#transmitter");
-    let moving = $$("#transmitter .outer");
-    let root = document.documentElement;
-    
-    if(moving.length === 0 && prop.select) {
-        select(prop);
-        return;
+class Move {
+    scene = $("#transmitter");
+    moving = $$("#transmitter .outer");
+    root = document.documentElement;
+    constructor (prop) {
+        if(this.moving.length === 0 && prop.select) {
+            this.select(prop);
+            return;
+        }
+        else if(this.moving.length === 0 && prop.movePiece) {
+            this.makePath(prop);
+            return;
+        } 
+        else if(this.moving.length === 0 && prop.capture) { 
+        	this.select(prop);
+        	return;
+        }
+        else if(this.moving.length === 0 && prop.captureMove) {
+        	return this.captures(prop);
+        }
     }
-    else if(moving.length === 0 && prop.movePiece) {
-        makePath(prop);
-        return;
-    } 
-    else if(moving.length === 0 && prop.capture) { 
-    	select(prop);
-    	return;
-    }
-    else if(moving.length === 0 && prop.captureMove) {
-    	let final = false;
+   
+    captures = async function (prop) {
+        let final = false;
     	let validMove = false;
     	// Remove Helper cells for filtering purposes 
     	for(let cell of $$("#table .helper_empty, #table .pre_valid")) {
@@ -879,101 +892,103 @@ const Move = async (prop) => {
     			if((!Game.path.sort || JSON.stringify(Game.path.sort.slice(0, Game.path.sort.indexOf(move))) == JSON.stringify(sort.slice(0, sort.indexOf(move)))) && move.empty == empty) {
     				Game.path = {sort, index: sort.indexOf(move)};
     				validMove = true;
-					for(let move2 of sort.slice(0, sort.indexOf(move) + 1)) {
-						let cell = $("#table").rows[parseInt(move2.empty.slice(0,1))].cells[parseInt(move2.empty.slice(1,2))];
-						cell.classList.remove("helper_empty");
-						cell.classList.remove("pre_valid");
-						cell.classList.remove("invalid");
-				        cell.classList.add("valid");
-						cell.style.pointerEvents = "none";
-						if(cell.lastChild)
-							cell.removeChild(cell.lastChild);
-					}
+				    for(let move2 of sort.slice(0, sort.indexOf(move) + 1)) {
+					    let cell = $("#table").rows[parseInt(move2.empty.slice(0,1))].cells[parseInt(move2.empty.slice(1,2))];
+					    cell.classList.remove("helper_empty");
+					    cell.classList.remove("pre_valid");
+					    cell.classList.remove("invalid");
+			            cell.classList.add("valid");
+					    cell.style.pointerEvents = "none";
+					    if(cell.lastChild)
+						    cell.removeChild(cell.lastChild);
+				    }
     				$$(".controls")[1].style.pointerEvents = "none";
+                    $$(".controls")[2].style.pointerEvents = "none";
                     $$(".horiz_controls")[1].style.pointerEvents = "none";
-					
+                    $$(".horiz_controls")[2].style.pointerEvents = "none";
+				    
     				if(sort.indexOf(move) != sort.length-1) {
     					let clone = Game.prop.cell.lastChild.cloneNode(true);
-	    				clone.style.opacity = "0.5";
-				        prop.cell.appendChild(clone);
-						Game.prop.cell.style.pointerEvents = "none";
+        				clone.style.opacity = "0.5";
+			            prop.cell.appendChild(clone);
+					    Game.prop.cell.style.pointerEvents = "none";
     				} 
     				else {
-						final = true;
+					    final = true;
     				} 
     			}
     			//Filter helper cells
     			if(!(Game.mode == "single-player" && (Game.whiteTurn && playerB.pieceColor == "White" || !Game.whiteTurn && playerB.pieceColor == "Black")) && (!Game.path.sort || (Game.helper || Game.capturesHelper) && sort.indexOf(move) > Game.path.index && JSON.stringify(Game.path.sort.slice(0, Game.path.sort.indexOf(move))) == JSON.stringify(sort.slice(0, sort.indexOf(move))))) {
     				let m = parseInt(move.empty.slice(0,1));
-					let n = parseInt(move.empty.slice(1,2));
-					let cell = $("#table").rows[m].cells[n];
-					if(Game.helper || Game.capturesHelper) 
-						cell.classList.add("helper_empty");
-					else
-						cell.classList.add("pre_valid");
+				    let n = parseInt(move.empty.slice(1,2));
+				    let cell = $("#table").rows[m].cells[n];
+				    if(Game.helper || Game.capturesHelper) 
+					    cell.classList.add("helper_empty");
+				    else
+					    cell.classList.add("pre_valid");
     			} 
     		}
-			if(final) {
-				for(let move of Game.path.sort) {
-					let i = parseInt(move.empty.slice(0,1));
-					let j = parseInt(move.empty.slice(1,2));
-					let cell1 = $("#table").rows[i].cells[j];
-					let clone = cell1.lastChild;
-					if(!cell1.lastChild) {
-						clone = Game.prop.cell.lastChild.cloneNode(true);
-						clone.style.opacity = "0";
-			        	cell1.appendChild(clone);
-					} 
-					
-					let m = parseInt(move.cell.slice(0,1));
-					let n = parseInt(move.cell.slice(1,2));
-					let cell2 = $("#table").rows[m].cells[n];
-					cell2.style.pointerEvents = "none";
-					
-					await select({cell: cell2, i: m, j: n}, true);
-					let track2 = await makePath({cell: cell1, piece: clone, i, j}, true);
-					track2.a = parseInt(move.capture.slice(0,1));
-					track2.b = parseInt(move.capture.slice(1,2));
-					Game.track.push([Game.prop, track2]);
-				}
-				// removing valid cell states
-				for(let move of Game.path.sort) {
-					let i = parseInt(move.empty.slice(0,1));
-					let j = parseInt(move.empty.slice(1,2));
-					let cell1 = $("#table").rows[i].cells[j];
-					cell1.classList.remove("valid");
-				} 
-				startMoving();
-				break;
-			} 
+		    if(final) {
+			    for(let move of Game.path.sort) {
+				    let i = parseInt(move.empty.slice(0,1));
+				    let j = parseInt(move.empty.slice(1,2));
+				    let cell1 = $("#table").rows[i].cells[j];
+				    let clone = cell1.lastChild;
+				    if(!cell1.lastChild) {
+					    clone = Game.prop.cell.lastChild.cloneNode(true);
+					    clone.style.opacity = "0";
+		            	cell1.appendChild(clone);
+				    } 
+				    
+				    let m = parseInt(move.cell.slice(0,1));
+				    let n = parseInt(move.cell.slice(1,2));
+				    let cell2 = $("#table").rows[m].cells[n];
+				    cell2.style.pointerEvents = "none";
+				    
+				    await this.select({cell: cell2, i: m, j: n}, true);
+				    let track2 = await this.makePath({cell: cell1, piece: clone, i, j}, true);
+				    track2.a = parseInt(move.capture.slice(0,1));
+				    track2.b = parseInt(move.capture.slice(1,2));
+				    Game.track.push([Game.prop, track2]);
+			    }
+			    // removing valid cell states
+			    for(let move of Game.path.sort) {
+				    let i = parseInt(move.empty.slice(0,1));
+				    let j = parseInt(move.empty.slice(1,2));
+				    let cell1 = $("#table").rows[i].cells[j];
+				    cell1.classList.remove("valid");
+			    } 
+			    Move.startMoving();
+			    break;
+		    } 
     	}
     	
     	if(validMove && Game.mode === "two-player-online" && (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") ) {
             Publish.send({channel: Lobby.CHANNEL, message: {title: "Moved", content: {i: prop.i, j: prop.j} } });
         }
     	return validMove;
-    }
+    } 
    
-   async function startMoving(n = 0) {
-   	Game.prop = Game.track[n][0];
-   	let prop = Game.track[n][1];
-   	prop.n = n;
-   	if(n == Game.track.length-1) {
-   		Game.path = {index: 0};
-   		prop.final = true;
-   	} 
-   	attachToScene(prop, true);
-   }
+    static startMoving = async function (n = 0) {
+   	 Game.prop = Game.track[n][0];
+   	 let prop = Game.track[n][1];
+   	 prop.n = n;
+   	 if(n == Game.track.length-1) {
+   		 Game.path = {index: 0};
+   		 prop.final = true;
+   	 } 
+   	 new Move({}).attachToScene(prop, true);
+    }
         
         
-    async function select (prop, capture = false) { //try {
+    select = async function (prop, capture = false) { //try {
     	//publish for selecting both ordinary and capture moves
         if(!capture && Game.mode === "two-player-online" && (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") ) {
             Publish.send({channel: Lobby.CHANNEL, message: {title: "Moved", content: {i: prop.i, j: prop.j} } });
         }
         
-        if(moving.length > 0) {
-            await DetachFromScene();
+        if(this.moving.length > 0) {
+            await Move.detachFromScene();
         } 
        
         if(!capture)
@@ -986,14 +1001,14 @@ const Move = async (prop) => {
 	        } 
         
         
-        scene.style.display = "table";
+        this.scene.style.display = "table";
         let piece = prop.cell.lastChild;
         let pos = new GetPosition(piece, $("#table"));
         let x1 = pos.left;
         let y1 = pos.top;
         let h1 = piece.offsetHeight; 
         let w1 = piece.offsetWidth; 
-        scene.style.display = "none";
+        this.scene.style.display = "none";
         Game.pieceSelected = true;
         Game.isComputer = prop.isComputer;
         Game.prop = {cell: prop.cell, x1, y1, h1, w1, i: prop.i, j: prop.j};
@@ -1003,12 +1018,12 @@ const Move = async (prop) => {
         //} catch (error) {Notify({action: "alert", header: "Error 0!", message: error});} 
     } 
     
-    function makePath (prop, capture = false) { //try {
+    makePath = function (prop, capture = false) { //try {
     	// publish for ordinary moves
     	if(!capture && Game.mode === "two-player-online" && (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") ) {
             Publish.send({channel: Lobby.CHANNEL, message: {title: "Moved", content: {i: prop.i, j: prop.j} } });
         } 
-        scene.style.display = "table";
+        this.scene.style.display = "table";
         if(!capture) {
             for(let cell of $$("#table .hint"))
                 cell.classList.remove("hint");
@@ -1023,20 +1038,20 @@ const Move = async (prop) => {
         let pos = new GetPosition(clone, $("#table"));
         let x2 = pos.left - Game.prop.x1;
         let y2 = pos.top - Game.prop.y1;
-        scene.style.display = "none";
+        this.scene.style.display = "none";
         if(!capture)
-            attachToScene({cell1: Game.prop.cell, cell2: prop.cell, x2, y2, i: prop.i, j: prop.j});
+            this.attachToScene({cell1: Game.prop.cell, cell2: prop.cell, x2, y2, i: prop.i, j: prop.j});
         else {
         	return {cell1: Game.prop.cell, cell2: prop.cell, x2, y2, i: prop.i, j: prop.j};
         } 
         //} catch (error) {Notify({action: "alert", header: "Error 1!", message: error});} 
     } 
     
-    function attachToScene (prop, capture = false) { //try {
+    attachToScene = function (prop, capture = false) { //try {
         let piece = Game.prop.cell.lastChild;
         Game.prop.cell.removeChild(piece);
-        scene.style.display = "table";
-        scene.appendChild(piece);
+        this.scene.style.display = "table";
+        this.scene.appendChild(piece);
         piece.classList.add("outer");
         piece.style.height = Game.prop.h1.toFixed(16) + "px";
         piece.style.width = Game.prop.w1.toFixed(16) + "px";
@@ -1044,11 +1059,11 @@ const Move = async (prop) => {
         piece.style.top = `${Game.prop.y1}px`;
         piece.style.left = `${Game.prop.x1}px`;
         piece.style.boxShadow = piece.className.includes("black")? `0 var(--shadow-width) 0 0 #1A1A1A`: `0 var(--shadow-width) 0 0 #999999`;
-        root.style.setProperty('--ept', prop.y2.toFixed(16) + "px");
-        root.style.setProperty('--epl', prop.x2.toFixed(16) + "px");
+        this.root.style.setProperty('--ept', prop.y2.toFixed(16) + "px");
+        this.root.style.setProperty('--epl', prop.x2.toFixed(16) + "px");
         let id = Game.state[Game.prop.i][Game.prop.j].substring(1,2);
-        let angle = parseInt(GetValue(root, "--angleZ" + id));
-        root.style.setProperty("--angleZP", angle + "deg");
+        let angle = parseInt(GetValue(this.root, "--angleZ" + id));
+        this.root.style.setProperty("--angleZP", angle + "deg");
         
         let mt = 0.4;
     	let increase = mt * 0.25;
@@ -1056,20 +1071,20 @@ const Move = async (prop) => {
     	for(let i = 1; i < no_of_cells; i++) {
     		mt += increase;
     	} 
-    	root.style.setProperty("--mt", mt + "s");
+    	this.root.style.setProperty("--mt", mt + "s");
         
        
         if(screen.orientation.type.toLowerCase().includes("landscape")) {
         	mt += mt * 0.25;
-        	root.style.setProperty("--mt", mt + "s");
+        	this.root.style.setProperty("--mt", mt + "s");
         } 
         
         prop.cell2.removeChild(prop.cell2.lastChild);
         
         other.prop = prop;
-        other.capture = capture;
+        //capture = capture;
         
-        piece.addEventListener('animationend', detachFromScene, false);
+        piece.setAttribute('onanimationend', `Move.detachFromScene(${capture})`);
         piece.classList.remove("move");
         void piece.offsetWidth;
         void piece.offsetHeight;
@@ -1078,8 +1093,10 @@ const Move = async (prop) => {
         //} catch (error) {Notify({action: "alert", header: "Error 2!", message: error});} 
     } 
     
-    async function detachFromScene () { 
+    static detachFromScene = async function (capture) { 
         let prop = other.prop;
+        let scene = $("#transmitter");
+        let root = document.documentElement;
         Game.pieceSelected = false;
         //try {
         if(Game.prop != null && prop != null) {
@@ -1095,7 +1112,7 @@ const Move = async (prop) => {
             scene.removeChild(piece);
             scene.style.display = "none";
             piece.classList.remove("move", "outer"); 
-            piece.removeEventListener("animationend", detachFromScene, false);
+            piece.removeAttribute("onanimationend");
             void piece.offsetWidth;
             void piece.offsetHeight;
            
@@ -1116,14 +1133,14 @@ const Move = async (prop) => {
             prop.piece = piece;
             
             // Updating moves made by the player
-            if(!other.capture || prop.final) {
+            if(!capture || prop.final) {
                 if(piece.className.includes(playerA.pieceColor.toLowerCase())) 
                 	playerA.moves++;
                 else
                 	playerB.moves++;
             } 
             
-            if((Game.version !== "russian" && prop.final || Game.version === "russian" && other.capture || Game.version === "pool" && other.capture || !other.capture) && !piece.className.includes("crown") && (prop.i === 0 && piece.className.includes(playerA.pieceColor.toLowerCase()) || prop.i === Game.boardSize - 1 && piece.className.includes(playerB.pieceColor.toLowerCase()))) {
+            if((Game.version !== "russian" && prop.final || Game.version === "russian" && capture || Game.version === "pool" && capture || !capture) && !piece.className.includes("crown") && (prop.i === 0 && piece.className.includes(playerA.pieceColor.toLowerCase()) || prop.i === Game.boardSize - 1 && piece.className.includes(playerB.pieceColor.toLowerCase()))) {
                 if(piece.className.includes("white")) {
                     piece.classList.add("crown_white");
                 } 
@@ -1143,12 +1160,12 @@ const Move = async (prop) => {
             
             // Updating Game state
             piece = Game.state[Game.prop.i][Game.prop.j];
-            if(!piece.includes("K") && ((Game.version !== "russian" && prop.final || Game.version === "russian" && other.capture || Game.version === "pool" && other.capture || !other.capture))) 
+            if(!piece.includes("K") && ((Game.version !== "russian" && prop.final || Game.version === "russian" && capture || Game.version === "pool" && capture || !capture))) 
                 piece = await (prop.i === 0 && piece.includes(playerA.pieceColor.slice(0,1)) || prop.i === Game.boardSize - 1 && piece.includes(playerB.pieceColor.slice(0,1)))? piece.replace("M", "K"): piece;
             Game.state[Game.prop.i][Game.prop.j] = "EC";
             Game.state[prop.i][prop.j] = piece;
             
-            if(!other.capture) {
+            if(!capture) {
                 // Changing turn
                 Game.whiteTurn = !Game.whiteTurn;
                 let id;
@@ -1156,7 +1173,7 @@ const Move = async (prop) => {
                 let initProp = Game.prop;
                 
                 id = id.replace(/[MK]/g, "");
-                let over = await isOver(id);
+                let over = await this.isOver(id);
                 if(over)
                     return;
                 else { // Game not over
@@ -1174,21 +1191,21 @@ const Move = async (prop) => {
                     if(Game.possibleCaptures.length) {
                     	if(!Game.mandatoryCapture) {
                     		Game.possibleMoves = await Iterate({id, state: Game.state, func: AssesMoves});
-                    		await Helper(Game.possibleMoves.concat(Game.possibleCaptures), JSON.parse(JSON.stringify(Game.state)));
-                    		await Helper(Game.possibleCaptures, JSON.parse(JSON.stringify(Game.state)));
+                    		await Helper(Game.possibleMoves.concat(Game.possibleCaptures), Copy(Game.state));
+                    		await Helper(Game.possibleCaptures, Copy(Game.state));
                     	}
                     	else
-                    		Helper(Game.possibleCaptures, JSON.parse(JSON.stringify(Game.state)));
+                    		Helper(Game.possibleCaptures, Copy(Game.state));
                     }
                     else if(Game.mode == "two-player-offline" || (Game.mode === "single-player" || Game.mode === "two-player-online") && Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") {
-                    	Helper(Game.possibleMoves, JSON.parse(JSON.stringify(Game.state)));
+                    	Helper(Game.possibleMoves, Copy(Game.state));
                     }
                     
                     if(Game.mode === "single-player" && (Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black") ) {
                         UpdatePiecesStatus("thinking...");
                         setTimeout( async () => { try {
                             let id = playerB.pieceColor.substring(0,1);
-                            let state = JSON.parse(JSON.stringify(Game.state));
+                            let state = Copy(Game.state);
                             let moves = Game.possibleCaptures;
                             if(Game.mandatoryCapture && moves.length == 0) {
                                 moves = Game.possibleMoves;
@@ -1205,7 +1222,7 @@ const Move = async (prop) => {
                     }
                     
                 } // End of else if isOver 
-            } // End of if other.capture
+            } // End of if capture
             else {
                 if(!prop.final) {
                     // Getting the table position to aid undo in the array
@@ -1220,12 +1237,14 @@ const Move = async (prop) => {
                         AudioPlayer.play("capture", 1);
                     }
                     
-                    setTimeout (_=> startMoving(prop.n+1), 1);
+                    this.startMoving(prop.n+1);
                 } 
                 else if(prop.final) {
                     //Enabling the undo buttons
                     $$(".controls")[1].style.pointerEvents = "auto";
+                    $$(".controls")[2].style.pointerEvents = "auto";
                     $$(".horiz_controls")[1].style.pointerEvents = "auto";
+                    $$(".horiz_controls")[2].style.pointerEvents = "auto";
                     
                     // Getting the table position to aid undo in the array
                     let i = prop.a;
@@ -1246,7 +1265,7 @@ const Move = async (prop) => {
                     
                     // Checking if Game is over
                     id = (piece.includes("W"))? "B":"W";
-                    let over = await isOver(id);
+                    let over = await this.isOver(id);
                     if(over)
                         return;
                     else {
@@ -1271,7 +1290,7 @@ const Move = async (prop) => {
                             captures.push([capturedPiece, i, j, id]);
                             
                             // adding fading animation effect to the captured piece
-                            capturedPiece.addEventListener("animationend", End, false);
+                            capturedPiece.setAttribute("onanimationend", "End(event)");
                             capturedPiece.classList.add("captured");
                         } 
                         
@@ -1292,21 +1311,21 @@ const Move = async (prop) => {
                         if(Game.possibleCaptures.length) {
                         	if(!Game.mandatoryCapture) {
                         		Game.possibleMoves = await Iterate({id, state: Game.state, func: AssesMoves});
-                        		await Helper(Game.possibleMoves.concat(Game.possibleCaptures), JSON.parse(JSON.stringify(Game.state)));
-                        		await Helper(Game.possibleCaptures, JSON.parse(JSON.stringify(Game.state)));
+                        		await Helper(Game.possibleMoves.concat(Game.possibleCaptures), Copy(Game.state));
+                        		await Helper(Game.possibleCaptures, Copy(Game.state));
                         	}
                         	else
-                        		Helper(Game.possibleCaptures, JSON.parse(JSON.stringify(Game.state)));
+                        		Helper(Game.possibleCaptures, Copy(Game.state));
                         }
                         else if(Game.mode == "two-player-offline" || (Game.mode === "single-player" || Game.mode === "two-player-online") && Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") {
-                        	Helper(Game.possibleMoves, JSON.parse(JSON.stringify(Game.state)));
+                        	Helper(Game.possibleMoves, Copy(Game.state));
                         }
                         
                         if(Game.mode === "single-player" && (Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black") ) {
                             UpdatePiecesStatus("thinking...");
                             setTimeout( async () => { try {
                                 let id = playerB.pieceColor.substring(0,1);
-                                let state = JSON.parse(JSON.stringify(Game.state));
+                                let state = Copy(Game.state);
                                 let moves = Game.possibleCaptures;
                                 if(Game.mandatoryCapture && moves.length == 0) {
                                     moves = Game.possibleMoves;
@@ -1318,18 +1337,18 @@ const Move = async (prop) => {
                                 let ai = new AI({state, moves, depth: Game.level});
                                 await ai.makeMove();
                                 ai = null;
-                               } catch (error) {alert("Capture Error\n" + error);} 
+                                } catch (error) {alert("Capture Error\n" + error);} 
                             }, 1);
                         }
                     } // end of else if isOver
                 } // end of if is prop.final
-            } // End of if other.capture
+            } // End of if capture
         } 
         return;
         //} catch (error) {Notify({action: "alert", header: "Error 3!", message: error});} 
     } 
     
-    async function isOver (id) {
+    static isOver = async function (id) {
         Game.possibleCaptures = await Iterate({id, state: Game.state, func: AssesCaptures});
         
         if(Game.possibleCaptures.length > 0) {
@@ -1356,7 +1375,7 @@ const Move = async (prop) => {
                 } 
                 else {
                     Game.count = 1;
-                    Game.baseState = JSON.parse(JSON.stringify(Game.state));
+                    Game.baseState = Copy(Game.state);
                 } 
                 Game.countMoves = playerA.moves;
             } 
@@ -1376,6 +1395,7 @@ const ValidateMove = async (prop) => {
       * If true is white's turn else black's turn
       * Will confirm possible captures and moves and game x1 and y1 to validate piece selections for move
       **/
+      
     if(!Game.over) {
     	let isEmpty = prop.cell.lastChild && prop.cell.lastChild.className.includes("captured") || prop.cell.children.length == 0;
         let valid = isEmpty && Game.pieceSelected || !isEmpty && (Game.mode === "two-player-offline" && (Game.whiteTurn && prop.cell.lastChild.className.includes("piece_white") || !Game.whiteTurn && prop.cell.lastChild.className.includes("piece_black")) || prop.isComputer && prop.cell.lastChild.className.includes(playerB.pieceColor.toLowerCase()) || Game.whiteTurn && prop.cell.lastChild.className.includes("piece_white") && playerA.pieceColor == "White" || !Game.whiteTurn && prop.cell.lastChild.className.includes("piece_black") && playerA.pieceColor == "Black");
@@ -1388,7 +1408,7 @@ const ValidateMove = async (prop) => {
                 for(let type of Game.possibleCaptures) {
                     if(type.cell == posId) {
                         prop.capture = true;
-                        Move(prop);
+                        new Move(prop) ;
                         if(other.helperPath.length > 0) { 
                             let indices = [], 
                                 startIndex = -1,
@@ -1407,7 +1427,7 @@ const ValidateMove = async (prop) => {
                                 } 
                             } 
                             lastIndex = (lastIndex === -1)? other.helperPath.length: lastIndex;
-                            other.capturePath = JSON.parse(JSON.stringify(other.helperPath.slice(startIndex, lastIndex)));
+                            other.capturePath = Copy(other.helperPath.slice(startIndex, lastIndex));
                             if(Game.helper || Game.capturesHelper) 
 	                            if(Game.mode == "two-player-offline" || (Game.mode == "single-player" || Game.mode == "two-player-online") && Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") {
 		                            for(let cell of other.capturePath) {
@@ -1438,7 +1458,7 @@ const ValidateMove = async (prop) => {
            else if(Game.possibleCaptures.length > 0 && isEmpty && Game.isComputer == prop.isComputer) {
            	prop.sorted = await SortCaptures(other.capturePath);
            	prop.captureMove = true;
-           	let validMove = await Move(prop);
+           	let validMove = await new Move(prop) ;
            	if(validMove) return;
            } 
             
@@ -1446,7 +1466,7 @@ const ValidateMove = async (prop) => {
                 Game.possibleMoves = await AssesMoves({id, i: prop.i, j: prop.j, state: Game.state});
                 if(Game.possibleMoves.length > 0) {
                 	prop.select = true;
-                    Move(prop);
+                    new Move(prop) ;
                     if(Game.helper && other.aiPath.length == 0) {
                         for(let move of Game.possibleMoves) {
                             let m = parseInt(move.empty.slice(0,1));
@@ -1461,7 +1481,7 @@ const ValidateMove = async (prop) => {
                 for(let type of Game.possibleMoves) {
                     if(type.empty == posId && type.cell == `${Game.prop.i}${Game.prop.j}`) {
                     	prop.movePiece = true;
-                        Move(prop);
+                        new Move(prop) ;
                         return;
                     } 
                 } 
@@ -1774,11 +1794,12 @@ const GameOver = async (isDraw = false) => { try {
     
     if(!isDraw || playerA.pieces === playerB.pieces && playerA.pieces === Game.boardSize / 2 * Game.rowNo)
     Game.over = true;
+    Game.isDraw = isDraw;
     
     async function GameOverOption (choice) {
         if(!other.pressed) {
             if(choice === "MENU") {
-                if(isDraw) {
+                if(Game.isDraw) {
                     Game.stats[Game.stats.length-1].gameStatus[0] = "DRAW";
                     Game.stats[Game.stats.length-1].gameStatus[1] = "DRAW";
                 } 
@@ -1821,10 +1842,10 @@ const GameOver = async (isDraw = false) => { try {
             else if(choice === "CONTINUE") {
                 Game.count = 1;
                 Game.countMoves = playerA.moves;
-                Game.baseState = JSON.parse(JSON.stringify(Game.state));
+                Game.baseState = Copy(Game.state);
                 if(Game.mode === "single-player" && (Game.whiteTurn && playerB.pieceColor.includes("W") || !Game.whiteTurn && playerB.pieceColor.includes("B")) ) {
                     let id = playerB.pieceColor.substring(0,1);
-                    let state = JSON.parse(JSON.stringify(Game.state));
+                    let state = Copy(Game.state);
                     let moves = await Iterate({id, state, func: AssesMoves});
                     let ai = new AI({state, moves, depth: Game.level});
                     await ai.makeMove(false);
@@ -2172,7 +2193,7 @@ const Restart = async (option) => {
                     setTimeout(async () => await Refresh(true), 200);
                 }
                 else {
-                   await Refresh(true);
+                   Refresh(true);
                 } 
                 Cancel();
             } 
@@ -2186,7 +2207,7 @@ const Restart = async (option) => {
     } 
 } 
 
-const Hint = async (elem, state=JSON.parse(JSON.stringify(Game.state))) => {
+const Hint = async (elem, state=Copy(Game.state)) => {
 	if(Game.thinking) {
 		Notify("Please wait for opponent's move");
 		return;
@@ -2364,7 +2385,7 @@ const Helper = async (moves, state, isMultJump = false) => {
         	other.helperPath.push({i, j, m, n, cell: move.cell, capture: move.capture, empty: move.empty, source: false});
         // Check if its a capture
         if(move.capture != undefined) {
-            let cloneState = JSON.parse(JSON.stringify(state));
+            let cloneState = Copy(state);
             let id = cloneState[i][j];
             let a = parseInt(move.capture.slice(0,1)), 
                 b = parseInt(move.capture.slice(1,2));
@@ -2625,13 +2646,15 @@ const Cancel = () => {
 } 
 
 const Confirm = async (option, callBack) => {
-    await callBack(option);
-    return;
+    callBack(option);
 } 
 
 
 const Notify = (data) => {
     if(typeof data === "object") {
+        other.Handler0 = null;
+        other.Handler1 = null;
+        other.Handler2 = null;
         let note_window = $("#notification-window"), 
             note_main = $("#note"), 
             note_image = $(".note_img"), 
@@ -2643,6 +2666,11 @@ const Notify = (data) => {
             
         note_head.innerHTML = data.header;
         note_body.innerHTML = data.message;
+        note_buttons[1].removeAttribute("onclick");
+        note_buttons[2].removeAttribute("onclick");
+        note_buttons[2].removeAttribute("onclick");
+        note_window.removeAttribute("onclick");
+        note_close_button.removeAttribute("onclick");
         if(data.action == "alert") {
             note_image.src = Icons.alertIcon;
             note_image.style.height = "60px";
@@ -2651,12 +2679,10 @@ const Notify = (data) => {
             note_buttons[1].style.display = "none";
             note_buttons[2].style.display = "inline-block";
             note_buttons[2].innerHTML = "OK";
-            note_buttons[2].addEventListener("click", Cancel, true);
-            note_window.addEventListener("click", Cancel, true);
-            note_close_button.addEventListener("click", Cancel, true);
+            note_buttons[2].setAttribute("onclick", "Cancel()");
+            note_window.setAttribute("onclick", "Cancel()");
+            note_close_button.setAttribute("onclick", "Cancel()");
             
-            note_buttons[1].removeEventListener("click", other.Handler1, true);
-            note_buttons[2].removeEventListener("click", other.Handler2, true);
             note_close_button.style.pointerEvents = "auto";
         }
         else if(data.action === "alert_special") {
@@ -2680,27 +2706,21 @@ const Notify = (data) => {
                 note_image.style.width = "80px";
                 note_image.src = data.icon;
             } 
-            other.Handler1 = () => {Confirm(note_buttons[1].innerHTML, data.onResponse);}
-            other.Handler2 = () => {Confirm(note_buttons[2].innerHTML, data.onResponse);}
+            
             note_buttons[0].style.display = "none";
             note_buttons[1].style.display = "inline-block";
             note_buttons[2].style.display = "inline-block";
             note_buttons[1].innerHTML = data.type.split("/")[0];
             note_buttons[2].innerHTML = data.type.split("/")[1];
-            note_buttons[1].addEventListener("click", other.Handler1, true);
-            note_buttons[2].addEventListener("click", other.Handler2, true);
-            note_close_button.addEventListener("click", other.Handler1, true);
+            const Handler1 = `Confirm("${note_buttons[1].innerHTML}", ${data.onResponse})`;
+            const Handler2 = `Confirm("${note_buttons[2].innerHTML}", ${data.onResponse})`;
+            note_buttons[1].setAttribute("onclick", Handler1);
+            note_buttons[2].setAttribute("onclick", Handler2);
+            note_close_button.setAttribute("onclick", Handler1);
             
-            note_buttons[2].removeEventListener("click", Cancel, true);
-            note_window.removeEventListener("click", Cancel, true);
             note_close_button.style.pointerEvents = "auto";
         }
         else if(data.action == "other") {
-            note_buttons[1].removeEventListener("click", other.Handler1, true);
-            note_buttons[2].removeEventListener("click", other.Handler2, true);
-            note_buttons[2].removeEventListener("click", Cancel, true);
-            note_window.removeEventListener("click", Cancel, true);
-            
             note_image.src = data.icon;
             if(data.iconType == "winner") {
                 note_image.style.width = "60px";
@@ -2710,19 +2730,20 @@ const Notify = (data) => {
                 note_image.style.width = "80px";
                 note_image.style.height = "60px";
             } 
-            other.Handler0 = () => {Confirm(note_buttons[0].innerHTML, data.onResponse);}
-            other.Handler1 = () => {Confirm(note_buttons[1].innerHTML, data.onResponse);}
-            other.Handler2 = () => {Confirm(note_buttons[2].innerHTML, data.onResponse);}
+            
             note_buttons[0].style.display = "inline-block";
             note_buttons[1].style.display = "inline-block";
             note_buttons[2].style.display = "inline-block";
             note_buttons[0].innerHTML = data.type.split("/")[0];
             note_buttons[1].innerHTML = data.type.split("/")[1];
             note_buttons[2].innerHTML = data.type.split("/")[2];
-            note_buttons[0].addEventListener("click", other.Handler0, true);
-            note_buttons[1].addEventListener("click", other.Handler1, true);
-            note_buttons[2].addEventListener("click", other.Handler2, true);
-            note_close_button.addEventListener("click", other.Handler0, true);
+            const Handler0 = `Confirm("${note_buttons[0].innerHTML}", ${data.onResponse})`;
+            const Handler1 = `Confirm("${note_buttons[1].innerHTML}", ${data.onResponse})`;
+            const Handler2 = `Confirm("${note_buttons[2].innerHTML}", ${data.onResponse})`;
+            note_buttons[0].setAttribute("onclick", Handler0);
+            note_buttons[1].setAttribute("onclick", Handler1);
+            note_buttons[2].setAttribute("onclick", Handler2);
+            note_close_button.setAttribute("onclick", Handler0);
             note_close_button.style.pointerEvents = "auto";
         }
         
@@ -2972,6 +2993,7 @@ const End = (event) => {
         popUpNote.style.display = "none";
     } 
     else if(event.animationName === "fade-out") { try {
+            event.target.removeAttribute("onanimationend");
             event.target.classList.remove("captured");
             event.target.parentNode.removeChild(event.target);
         } catch (error) {}
@@ -3385,14 +3407,14 @@ async function back (undo = false, isComp = false) {
 	                Game.possibleMoves = await Iterate({id, state: Game.state, func: AssesMoves});
 	                if(Game.possibleCaptures.length) {
 	                	if(!Game.mandatoryCapture) {
-	                		await Helper(Game.possibleMoves.concat(Game.possibleCaptures), JSON.parse(JSON.stringify(Game.state)));
-	                		await Helper(Game.possibleCaptures, JSON.parse(JSON.stringify(Game.state)));
+	                		await Helper(Game.possibleMoves.concat(Game.possibleCaptures), Copy(Game.state));
+	                		await Helper(Game.possibleCaptures, Copy(Game.state));
 	                	}
 	                	else
-	                		await Helper(Game.possibleCaptures, JSON.parse(JSON.stringify(Game.state)));
+	                		await Helper(Game.possibleCaptures, Copy(Game.state));
 	                }
 	                else if(Game.mode == "two-player-offline" || (Game.mode === "single-player" || Game.mode === "two-player-online") && Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") {
-	                	await Helper(Game.possibleMoves, JSON.parse(JSON.stringify(Game.state)));
+	                	await Helper(Game.possibleMoves, Copy(Game.state));
 	                }
                     await UpdatePiecesStatus();
 				}, 100);
