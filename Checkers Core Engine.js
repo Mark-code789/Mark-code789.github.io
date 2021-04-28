@@ -274,8 +274,8 @@ const AssesCaptures = async (prop) => { try {
 }
 
 const RemoveUnwantedCells = async (prop, isPath) => {
-    let captures = JSON.parse(JSON.stringify(prop.captures));
-    let state = JSON.parse(JSON.stringify(prop.state));
+    let captures = Copy(prop.captures);
+    let state = Copy(prop.state);
     let newCaps = [];
     let ref;
     
@@ -310,7 +310,7 @@ const RemoveUnwantedCells = async (prop, isPath) => {
             let n = parseInt(move.empty.slice(1,2));
             let crowned = false;
             
-            let cloneState = JSON.parse(JSON.stringify(state));
+            let cloneState = Copy(state);
             let id = cloneState[i][j];
             cloneState[i][j] = "EC";
             if(!id.includes("K") && (Game.version === "american" || Game.version === "kenyan" || Game.version === "russian" || Game.version === "pool") && (id.includes(playerA.pieceColor.slice(0,1)) && m === 0 || id.includes(playerB.pieceColor.slice(0,1)) && m === Game.boardSize - 1)) {
