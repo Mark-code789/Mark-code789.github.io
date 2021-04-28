@@ -5,12 +5,15 @@ class AI {
 	opp = playerA.pieceColor.slice(0,1);
 	MAX = 1000000;
 	MIN = -1000000;
-	timestamp = Date.now();      
 	
 	constructor (prop) {
-	    this.state = prop.state;
-	    this.depth = prop.depth;
-	    this.moves = prop.moves;
+	    this.state = Copy(prop.state);
+	    this.depth = prop.depth + 1;
+	    this.moves = Copy(prop.moves);
+	    
+		if(storage) {
+	        storage.setItem(Game.version + "Table", JSON.stringify(TranspositionTable.states));
+	    } 
     } 
     
     // Evaluation function 
@@ -24,49 +27,32 @@ class AI {
         for(let i = 0; i < Game.boardSize; i++) {
             for(let j = 0; j < Game.boardSize; j++) {
                 let piece = state[i][j];
-                if(piece.includes(this.ai)) {
-                    if(piece.includes("M")) {
-                        ai += 1; // value to piece
+                if(piece.includes(this.ai)) { 
+                    if(piece.includes("K")) { // threatening
+                        ai += 100; // value to piece
                     } 
-                    if(piece.includes("K")) {
-                        ai += 2; // value to piece
+                    if(piece.includes("M")) {
+                        ai += 75; // value to piece
                     } 
                 } 
                 else if(piece.includes(this.opp)) {
+                    if(piece.includes("K")) { // Becomes more threatening
+                        human += 100; // value to piece
+                    } 
                     if(piece.includes("M")) {
-                        human += 1; // value to piece
-                    } 
-                    if(piece.includes("K")) {
-                        human += 2; // value to piece
-                    } 
-                } 
-                piece = this.state[i][j];
-                if(piece.includes(this.ai)) {
-                    if(piece.includes("M")) {
-                        initAI += 1; // value to piece
-                    } 
-                    if(piece.includes("K")) {
-                        initAI += 2; // value to piece
-                    } 
-                } 
-                else if(piece.includes(this.opp)) {
-                    if(piece.includes("M")) {
-                        initHuman += 1; // value to piece
-                    } 
-                    if(piece.includes("K")) {
-                        initHuman += 2; // value to piece
-                    } 
+                        human += 75; // value to piece
+                    }
                 } 
             } 
         } 
         
-        let absoluteValue = initAI - initHuman;
         let currentValue = ai - human;
-        let relativeValue = currentValue - absoluteValue;
-        return Prms(relativeValue);
+        return Prms(currentValue);
     } 
     
     move = async (state, move) => { try {
+        state = Copy(state);
+        move = Copy(move);
         let i = parseInt(move.cell.slice(0,1)), 
             j = parseInt(move.cell.slice(1,2)),
             m = parseInt(move.empty.slice(0,1)),
@@ -105,7 +91,10 @@ class AI {
     } 
     
     correct = (state) => {
+        state = Copy(state);
         for(let i = 0; i < Game.boardSize; i++) {
+            if(!JSON.stringify(state[i]).includes("IP"))
+                continue;
             for(let j = 0; j < Game.boardSize; j++) {
                 if(state[i][j] === "IP") {
                     state[i][j] = "EC";
@@ -115,8 +104,14 @@ class AI {
         return Prms(state);
     } 
     
-    minimax = async (state, moves, depth, isMax, alpha, beta, currentPlayer) => { // currentPlayer : true = ai || false = opp
-        if(!moves.length || depth === -1) {
+    minimax = async (state, moves, depth, isMax, alpha, beta, currentPlayer) => { // currentPlayer : true = ai || false = opp 
+        if(moves.length) { 
+            let score = await TranspositionTable.getState(state, depth);
+            if(score) {
+                return {score};
+            } 
+        } 
+        if(!moves.length || depth === 0) {
         	let leafScore = !moves.length? (currentPlayer? 10: -10): 0;
         	let actualDepth = this.depth - depth;
         	let score = await this.evaluate(state);
@@ -126,61 +121,63 @@ class AI {
         } 
         else {
         	let best = isMax? this.MIN: this.MAX; // infinity
-        	let isFoundMove = false;
             let opp = isMax? this.opp: this.ai;
             let id = isMax? this.ai: this.opp;
-            if(moves.length > 1) { 
+            moves = await this.filter(moves, state);
+            /*if(moves.length > 1) { 
             	moves = await KillerMove.sort(moves);
-            } 
+            } */
             
             for(let i = 0; i < moves.length; i++) {
-                if(state[parseInt(moves[i].cell.slice(0,1))][parseInt(moves[i].cell.slice(1,2))].includes(id) &&
-				   state[parseInt(moves[i].empty.slice(0,1))][parseInt(moves[i].empty.slice(1,2))] === "EC") {
-                	let cloneState = JSON.parse(JSON.stringify(state));
-                	let move = moves[i];
-                	let value;
-                	let res = await this.move(cloneState, moves[i]); // make move
-	                    cloneState = res.state;
+            	let cloneState = Copy(state);
+            	let move = moves[i];
+            	let value;
+            	let res = await this.move(cloneState, moves[i]); // make move
+                    cloneState = res.state;
+				
+                if(res.continuousJump.length === 0) {
+                	cloneState = await this.correct(cloneState); // Removing the ip cells
+                    let moves2 = await Iterate({id: opp, state: cloneState, func: AssesCaptures});
+                    if(moves2.length > 0)
+                        moves2 = await RemoveUnwantedCells({captures: moves2, state: cloneState});
+                    if(Game.mandatoryCapture && moves2.length === 0) {
+                        moves2 = await Iterate({id: opp, state: cloneState, func: AssesMoves});
+                    }
+                    else if(!Game.mandatoryCapture) {
+	                    let moves3 = await Iterate({id: opp, state: cloneState, func: AssesMoves});
+	                    moves2 = moves2.concat(moves3);
+	                } 
 					
-                    if(res.continuousJump.length === 0) {
-                    	cloneState = await this.correct(cloneState); // Removing the ip cells
-	                    let moves2 = await Iterate({id: opp, state: cloneState, func: AssesCaptures});
-	                    if(moves2.length > 0)
-	                        moves2 = await RemoveUnwantedCells({captures: moves2, state: cloneState});
-	                    if(Game.mandatoryCapture && moves2.length === 0) {
-	                        moves2 = await Iterate({id: opp, state: cloneState, func: AssesMoves});
-	                    }
-	                    else if(!Game.mandatoryCapture) {
-		                    let moves3 = await Iterate({id: opp, state: cloneState, func: AssesMoves});
-		                    moves2 = moves2.concat(moves3);
-		                } 
-						
-	                    value = await this.minimax(cloneState, moves2, depth-1, !isMax, alpha, beta, isMax); // first branch
-					} 
-					else {
-						let moves2 = res.continuousJump;
-						
-						value = await this.minimax(cloneState, moves2, depth, isMax, alpha, beta, isMax);
-					} 
-					
-					if(isMax) {
-						best = Math.max(best, value);
-						alpha = Math.max(best, alpha); // adjust search window 
-					} 
-					else {
-						best = Math.min(best, value);
-						beta = Math.min(best, beta);
-					} 
-					
-					if(alpha >= beta) {
-						KillerMove.add(move, this.timestamp);
-						return Prms(alpha); // alpha cut-off
-					} 
+                    value = await this.minimax(cloneState, moves2, depth-1, !isMax, alpha, beta, isMax); // first branch
 				} 
 				else {
-					console.log(state[parseInt(moves[i].cell.slice(0,1))][parseInt(moves[i].cell.slice(1,2))], " == ", id);
+					let moves2 = res.continuousJump;
+					
+					value = await this.minimax(cloneState, moves2, depth, isMax, alpha, beta, isMax);
+				}
+				
+				if(typeof value != "object") {
+					TranspositionTable.add(cloneState, value, depth);
+			    } 
+			    else {
+				    value = value.score;
+				} 
+			    
+				if(isMax) {
+					best = Math.max(best, value);
+					alpha = Math.max(best, alpha); // adjust search window 
+				} 
+				else {
+					best = Math.min(best, value);
+					beta = Math.min(best, beta);
+				} 
+				
+				if(alpha >= beta) {
+					//KillerMove.add(move);
+					return Prms(alpha); // alpha cut-off
 				} 
             }
+            
             return Prms(best);
         } 
     } 
@@ -196,12 +193,12 @@ class AI {
         let count = 0;
         let sleep = new Sleep();
         
-        if(moves.length > 1 && this.depth > 0) { 
-        	if(window.Worker && (this.depth > 4 || Game.version == "international" || Game.version == "nigerian")) {
+        if(moves.length > 1 && this.depth > 1) { 
+        	if(window.Worker && (this.depth > 6 || Game.version == "international" || Game.version == "nigerian")) {
         		worker = new Worker("Checkers Web Worker.js");
         		worker.onmessage = message;
         		for(let i = 0; i < moves.length; i++) {
-		            let cloneState = JSON.parse(JSON.stringify(state));
+		            let cloneState = Copy(state);
 		            let move = moves[i];
 		            let res = await this.move(cloneState, move); // making move
 		            cloneState = res.state;
@@ -218,11 +215,11 @@ class AI {
 		                    let moves3 = await Iterate({id: opp, state: cloneState, func: AssesMoves});
 		                    moves2 = moves2.concat(moves3);
 		                } 
-			            worker.postMessage([this.state, move, cloneState, moves2, this.depth-1, !isMax, this.MIN, this.MAX, isMax]);
+			            worker.postMessage([this.state, this.depth, this.moves, move, cloneState, moves2, this.depth-1, !isMax, this.MIN, this.MAX, isMax, HashTable.ZobristTable]);
 					} 
 					else {
 						let moves2 = res.continuousJump;
-						worker.postMessage([this.state, move, cloneState, moves2, this.depth, isMax, this.MIN, this.MAX, isMax]);
+						worker.postMessage([this.state, this.depth, this.moves, move, cloneState, moves2, this.depth, isMax, this.MIN, this.MAX, isMax, HashTable.ZobristTable]);
 					}
 		        } 
         		await sleep.start();
@@ -231,12 +228,12 @@ class AI {
                 worker = null;
                 let random = Math.round(Math.random() * (bestPossibleMoves.length - 1));
 		        bestMove = bestPossibleMoves[random];
-		        return Prms(bestMove);
+		        return Copy(bestMove);
        	 } 
         	else {
         		for(let i = 0; i < moves.length; i++) {
-		            let cloneState = JSON.parse(JSON.stringify(state));
-		            let move = JSON.parse(JSON.stringify(moves[i]));
+		            let cloneState = Copy(state);
+		            let move = Copy(moves[i]);
 		            let res = await this.move(cloneState, move); // making move
 		            cloneState = res.state;
 		                
@@ -260,6 +257,8 @@ class AI {
 						let moves2 = res.continuousJump;
 						value = await this.minimax(cloneState, moves2, this.depth, isMax, this.MIN, this.MAX, isMax);
 					}
+					if(typeof value == "object") 
+					    value = value.score;
 					
 		            if(isMax && bestValue <= value) {
 		                if(bestValue < value) {
@@ -283,52 +282,61 @@ class AI {
 				
 		        let random = Math.round(Math.random() * (bestPossibleMoves.length - 1));
 		        bestMove = bestPossibleMoves[random];
-		        return Prms(bestMove);
+		        return Copy(bestMove);
 			} 
 		} 
-		else if(moves.length > 1 && this.depth == 0) {
+		else if(moves.length > 1 && this.depth == 1) {
 			let random = Math.round(Math.random() * (moves.length - 1));
 	        bestMove = moves[random];
-	        return Prms(bestMove);
+	        return Copy(bestMove);
 		} 
 		else {
-			return Prms(moves[0]);
+			return Copy(moves[0]);
 		} 
         
         async function message (e) {
-        	let value = e.data.value;
-        	let move = e.data.move;
-        	count++;
-        	// evaluating 
-            if(isMax && bestValue <= value) {
-                if(bestValue < value) {
-                    bestValue = value;
-                    bestPossibleMoves.splice(0, bestPossibleMoves.length, move);
+            if(e.data.title == "value") {
+            	let value = Copy(e.data.content.value);
+            	let move = Copy(e.data.content.move);
+                if(typeof value == "object") 
+		            value = value.score;
+            	count++;
+            	// evaluating 
+                if(isMax && bestValue <= value) {
+                    if(bestValue < value) {
+                        bestValue = value;
+                        bestPossibleMoves.splice(0, bestPossibleMoves.length, move);
+                    } 
+                    else if(bestValue === value) {
+                        bestPossibleMoves.push(move);
+                    } 
                 } 
-                else if(bestValue === value) {
-                    bestPossibleMoves.push(move);
+                else if(!isMax && bestValue >= value) {
+                	if(bestValue > value) {
+                		bestValue = value;
+                		bestPossibleMoves.splice(0, bestPossibleMoves.length, move);
+                	} 
+                	else if(bestValue === value) {
+                        bestPossibleMoves.push(move);
+                    } 
+                } 
+                
+                if(count == this.MAX || count == moves.length) {
+				    sleep.end();
                 } 
             } 
-            else if(!isMax && bestValue >= value) {
-            	if(bestValue > value) {
-            		bestValue = value;
-            		bestPossibleMoves.splice(0, bestPossibleMoves.length, move);
-            	} 
-            	else if(bestValue === value) {
-                    bestPossibleMoves.push(move);
-                } 
-            } 
-            
-            if(count == this.MAX || count == moves.length) {
-				sleep.end();
+            else {
+                console.log(e.data.content);
             } 
         } 
     } 
     
-    makeMove = async (returnable = false) => { try {
+    makeMove = async (returnable = false) => { //try {
     	Game.thinking = true;
-        let state = JSON.parse(JSON.stringify(this.state));
+        let state = Copy(this.state);
         let moves = this.moves;
+        moves = await this.filter(moves, state);
+        
         let bestMove = await this.findBestMove(state, moves);
         let i = parseInt(bestMove.cell.slice(0,1));
         let j = parseInt(bestMove.cell.slice(1,2));
@@ -338,7 +346,7 @@ class AI {
         other.aiPath.push({i, j, m, n});
         
         if(bestMove.capture != undefined) {
-            state = JSON.parse(JSON.stringify(this.state));
+            state = Copy(this.state);
             let id = state[i][j];
             let crowned = false;
             state[i][j] = "IP"; // INITIAL-POSITION
@@ -378,7 +386,6 @@ class AI {
             table.rows[cell.i].cells[cell.j].classList.add("valid");
             table.rows[cell.m].cells[cell.n].classList.add("valid");
         } 
-        
     	//return;
     	if($("#play-window").style.display == "grid") 
         await setTimeout( async () => {
@@ -394,8 +401,70 @@ class AI {
         this.moves = [];
         Game.thinking = false;
         return;
+        //} catch (error) {alert("Make move error\n" + error);}
+    } 
+    
+    filter = async (moves, state) => {
+        moves = await Copy(moves);
+        let filteredMoves = [];
+        let indexes = [];
+        await moves.forEach(async (move, index) => {
+            if(move.capture) {
+                filteredMoves.unshift(move);
+                indexes.unshift(index);
+                return;
+            } 
+            else {
+                let i = parseInt(move.cell.slice(0,1));
+                let j = parseInt(move.cell.slice(1,2));
+                let id = state[i][j];
+                let opp = id.includes("W")? "B": "W";
+                let r = id.includes(playerA.pieceColor.slice(0,1))? -1: 1;
+                let z = 3*r; // closeness;
+                let isRemovingMove = await this.check(state, id.slice(1,2), i, j, i+z, r);
+                if(isRemovingMove) {
+                    filteredMoves.push(move);
+                    indexes.unshift(index);
+                    return;
+                } 
+                
+                if(id.includes("K")) {
+                    r = -r;
+                    z = -z;
+                    isRemovingMove = await this.check(state, id.slice(1,2), i, j, i+z, r);
+                    if(isRemovingMove) {
+                        filteredMoves.push(move);
+                        indexes.unshift(index);
+                        return;
+                    } 
+                } 
+            } 
+        });
         
-        } catch (error) {alert("Make move error\n" + error);}
+        for(let index of indexes) 
+            moves.splice(index, 1);
+        filteredMoves = filteredMoves.concat(moves);
+        return Copy(filteredMoves);
+    } 
+    
+    check = (state, id, startX, startY, end, r) => {
+        let x = startX + r;
+        let y1 = startY - 1;
+        let y2 = startY + 1;
+        let row = null;
+        let opp = id == "W"? "B": "W";
+        
+        for(;x <= end; x+=r, y1-=1, y2+=1) {
+            row = state[x];
+            if(!row) 
+                break;
+            for(let y = y1; y <= y2; y++) {
+                if(row[y] && row[y].includes(opp)) {
+                    return Prms(true);
+                } 
+            } 
+        } 
+        return Prms(false);
     } 
 }
 
@@ -428,11 +497,11 @@ class HashTable {
 	} 
 	static initTable = () => {
 		this.ZobristTable = [];
-		for(let i = 0; i < Game.boardSize; i++) {
+		for(let i = 0; i < 10; i++) { // 10 maximum board size
 			this.ZobristTable.push([]);
-			for(let j = 0; j < Game.boardSize; j++) {
+			for(let j = 0; j < 10; j++) {
 				this.ZobristTable[i].push([]);
-				for(let k = 0; k < 8; k++) {
+				for(let k = 0; k < 10; k++) {
 					this.ZobristTable[i][j].push([]); 
 					this.ZobristTable[i][j][k] = this.random(2, Number.MAX_SAFE_INTEGER); // 2**31-1 => maximum integer of bitwise operation
 				} 
@@ -464,128 +533,145 @@ class HashTable {
 				} 
 			} 
 		} 
-		return Prms(hash);
+		return hash;
 	} 
 } 
 
-Array.prototype.getPosition = function (pst) {
-	let hash = HashTable.computeHash(pst);
-	let key = Number(hash % BigInt(this.length));
-	let value = this[key];
-	if(value && JSON.stringify(value.position) == JSON.stringify(pst)) return value;
-	else if(value) {
-		let pos = key+1;
-		for(;;pos++) {
-			value = this[pos];
-			if(value && JSON.stringify(value.position) == JSON.stringify(pst) || !value || pos == key) {
-				break;
-			} 
-			if(pos >= this.length - 1) 
-				pos = -1;
-		} 
-	} 
-	return value;
-}
-
-Array.prototype.addPosition = function (pst, value, depth, timestamp) {
-	let hash = HashTable.computeHash(pst);
-	let key = Number(hash % BigInt(this.length));
-	
-	if(!this[key]) {
-		this[key] = {position: pst, value, depth, timestamp};
-	} 
-	else if(JSON.stringify(this[key].position) != JSON.stringify(pst)) {
-		if(this[key].timestamp > timestamp)  {
-			this[key] = {position: pst, value, depth, timestamp};
-		} 
-		else {
-			let pos = key+1;
-			for(;;pos++) {
-				if(this[pos] && this[pos].timestamp > timestamp || !this[pos] && pos < this.length || pos == key) {
-					break;
-				} 
-				if(pos >= this.length - 1) 
-					pos = -1;
-			} 
-			if(pos == key)
-				alert("Table is full");
-			else 
-				this[pos] = {position: pst, value, depth, timestamp};
-		} 
-	} 
-	else {
-		if(this[key].value.score <= value.score || this[key].depth >= depth || this[key].timestamp > timestamp) 
-			this[key] = {position: pst, value, depth, timestamp};
-	} 
+class TranspositionTable {
+    static queue = [];
+    static american = new Array(1_597_957);
+    static kenyan = new Array(1_597_957);
+    static international = new Array(1_597_957);
+    static pool = new Array(1_597_957);
+    static russian = new Array(1_597_957);
+    static nigerian = new Array(1_597_957);
+    
+    static add = async (state, value, depth) => {
+        state = await Copy(state);
+        value = await Copy(value);
+        
+        await this.queue.push({state, value, depth});
+		if(this.queue.length == 1) 
+			this.addState();
+    } 
+    
+    static addState = async () => {
+        while(this.queue[0]) {
+            let obj = this.queue[0];
+                
+            let hash = await HashTable.computeHash(obj.state);
+	        let key = Number(hash % BigInt(this[Game.version].length));
+	        
+	        if(!this[Game.version][key]) {
+		        this[Game.version][key] = obj;
+	        } 
+	        else if(await JSON.stringify(this[Game.version][key].state) != await JSON.stringify(obj.state)) {
+		        let pos = key+1;
+		        for(;;pos++) {
+			        if(!this[Game.version][pos] && pos < this[Game.version].length || pos == key) {
+				        break;
+			        } 
+			        if(pos >= this[Game.version].length - 1) 
+				        pos = -1;
+		        } 
+		        if(pos == key)
+			        alert("Table is full");
+		        else 
+			        this[Game.version][pos] = obj;
+	        } 
+	        else {
+			    this[Game.version][key] = obj;
+	        } 
+	        this.queue.shift();
+        } 
+    } 
+    static getState = async (state, depth) => {
+        let hash = await HashTable.computeHash(state);
+	    let key = Number(hash % BigInt(this[Game.version].length));
+	    let obj = this[Game.version][key];
+	    
+	    if(obj && obj.depth >= depth && await JSON.stringify(obj.state) == await JSON.stringify(state))
+            return obj.value;
+	    else if(obj) {
+		    let pos = key+1;
+		    for(;;pos++) {
+			    obj = this[Game.version][pos];
+			    if(obj && obj.depth >= depth && await JSON.stringify(obj.state) == await JSON.stringify(state) || !obj || pos == key) {
+				    break;
+			    } 
+			    if(pos >= this[Game.version].length - 1) 
+				    pos = -1;
+		    } 
+		    if(pos == key) 
+		        obj = undefined;
+	    } 
+	    if(obj) 
+	        return obj.value;
+        else
+            return false;
+    } 
 } 
 
 class KillerMove {
 	static queue = [];
 	static moves = new Array(1_597_957);
-	static add = (move, timestamp) => {
-		move = JSON.parse(JSON.stringify(move));
-		this.queue.push({move, timestamp});
+	static add = async (move) => {
+		move = await Copy(move);
+		await this.queue.push(move);
 		if(this.queue.length == 1) 
 			this.addMove();
 	} 
 	static addMove = async () => {
 		while(this.queue[0]) {
-			let obj = this.queue[0];
-			let move = obj.move;
-			let timestamp = obj.timestamp;
+			let move = this.queue[0];
 			let hash = await HashTable.computeHash(move, false);
 			let key = Number(hash % BigInt(this.moves.length));
 			
 			if(!this.moves[key]) {
-				this.moves[key] = {move, timestamp};
+				this.moves[key] = move;
 			} 
-			else if(JSON.stringify(this.moves[key].move) != JSON.stringify(move)) {
-				if(this.moves[key].timestamp < timestamp) {
-					this.moves[key] = {move, timestamp};
-				} 
-				else {
-					let pos = key+1;
-					for(;;pos++) {
-						if(!this.moves[pos] && pos < this.moves.length || pos == key) {
-							break;
-						} 
-						if(pos >= this.moves.length - 1) {
-							pos = -1;
-						} 
+			else if(await JSON.stringify(this.moves[key]) != await JSON.stringify(move)) {
+				let pos = key+1;
+				for(;;pos++) {
+					if(!this.moves[pos] && pos < this.moves.length || pos == key) {
+						break;
 					} 
-					if(pos == key) 
-						alert("Table is full");
-					else
-						this.moves[pos] = {move, timestamp};
+					if(pos >= this.moves.length - 1) {
+						pos = -1;
+					} 
 				} 
+				if(pos == key) 
+					alert("Table is full");
+				else
+					this.moves[pos] = move;
 			} 
 			else {
-				if(this.moves[key].timestamp < timestamp) {
-					this.moves[key] = {move, timestamp};
-				} 
+				this.moves[key] = move;
 			} 
 			this.queue.shift();
 		} 
 	} 
 	static sort = async (moves) => {
+		moves = await Copy(moves);
+		let length = moves.length;
 		let km = [];
+		let indexes = [];
 		await moves.forEach(async (move, index) => {
 			let hash = await HashTable.computeHash(move, false);
 			let key = Number(hash % BigInt(this.moves.length));
 			let value = this.moves[key];
-			if(value && JSON.stringify(value.move) == JSON.stringify(move)) {
-				await km.push(move);
-				await moves.splice(index, 1);
-				return;
+			if(value && await JSON.stringify(value) == await JSON.stringify(move)) {
+				km.push(move);
+				indexes.unshift(index);
 			} 
 			else if(value) {
 				let pos = key+1;
 				for(;;pos++) {
 					value = this.moves[pos];
-					if(value && JSON.stringify(value.move) == JSON.stringify(move)) {
-						await km.push(move);
-						await moves.splice(index, 1);
-						return;
+					if(value && await JSON.stringify(value) == await JSON.stringify(move)) {
+						km.push(move);
+						indexes.unshift(index);
+						break;
 					} 
 					if(!value || pos == key) 
 						break;
@@ -594,7 +680,10 @@ class KillerMove {
 				} 
 			} 
 		});
-		return km.concat(moves);
+		for(let index of indexes) 
+		    moves.splice(index, 1);
+		moves = km.concat(moves);
+		return Copy(moves);
 	} 
 } 
 
