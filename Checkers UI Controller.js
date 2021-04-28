@@ -214,7 +214,7 @@ async function LoadingDone () {
     if(!storage || !JSON.parse(storage.getItem("NotifiedUpdateV4.0"))) {
         Notify({action: "alert",
                 header: "What's New! Version 4.0", 
-                message: "<ul><li>Fixed bugs.</li><li>Improved internal operation.</li></ul><span>Note:</span>The App will restart everything to for changes to take effect.<br><br>If you experience any errors kindly contact me using the contact option in the settings window."});
+                message: "<ul><li>Fixed bugs.</li><li>Improved internal operation.</li></ul><span>Note:</span>The App will refresh everything including stored cache for changes to take effect.<br><br>If you experience any errors kindly contact me using the contact option in the settings window."});
         if(storage) {
             storage.clear();
             storage.setItem("NotifiedUpdateV4.0", "true");
