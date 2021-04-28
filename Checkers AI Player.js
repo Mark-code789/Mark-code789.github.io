@@ -579,7 +579,7 @@ class TranspositionTable {
 		        else 
 			        this[Game.version][pos] = obj;
 	        } 
-	        else {
+	        else if(this[Game.version][key].depth <= obj.depth) {
 			    this[Game.version][key] = obj;
 	        } 
 	        this.queue.shift();
@@ -590,13 +590,13 @@ class TranspositionTable {
 	    let key = Number(hash % BigInt(this[Game.version].length));
 	    let obj = this[Game.version][key];
 	    
-	    if(obj && obj.depth >= depth && await JSON.stringify(obj.state) == await JSON.stringify(state))
+	    if(obj && obj.depth <= depth && await JSON.stringify(obj.state) == await JSON.stringify(state))
             return obj.value;
 	    else if(obj) {
 		    let pos = key+1;
 		    for(;;pos++) {
 			    obj = this[Game.version][pos];
-			    if(obj && obj.depth >= depth && await JSON.stringify(obj.state) == await JSON.stringify(state) || !obj || pos == key) {
+			    if(obj && obj.depth <= depth && await JSON.stringify(obj.state) == await JSON.stringify(state) || !obj || pos == key) {
 				    break;
 			    } 
 			    if(pos >= this[Game.version].length - 1) 
