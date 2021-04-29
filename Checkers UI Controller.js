@@ -211,13 +211,13 @@ async function LoadingDone () {
     let btn = null;
     let p = null;
    
-    if(!storage || !JSON.parse(storage.getItem("NotifiedUpdateV5.0"))) {
+    if(!storage || !JSON.parse(storage.getItem("NotifiedUpdateV6.0"))) {
         Notify({action: "alert",
-                header: "What's New! Version 5.0", 
+                header: "What's New! Version 6.0", 
                 message: "<ul><li>Fixed bugs.</li><li>Improved internal operation.</li></ul><span>Note:</span>The App will refresh everything including stored cache for changes to take effect.<br><br>If you experience any errors kindly contact me using the contact option in the settings window."});
         if(storage) {
             storage.clear();
-            storage.setItem("NotifiedUpdateV5.0", "true");
+            storage.setItem("NotifiedUpdateV6.0", "true");
         } 
     }
     
