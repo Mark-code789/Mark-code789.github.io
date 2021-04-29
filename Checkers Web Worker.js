@@ -14,8 +14,7 @@ onmessage = async (e) => { try {
 	let alpha = e.data[8];
 	let beta = e.data[9];
 	let currentPlayer = e.data[10];
-	let currentDepth = e.data[11];
-	HashTable.ZobristTable = e.data[12];
+	HashTable.ZobristTable = e.data[11];
 	let ai = new AI({state, depth: level, moves: mainMoves});
 	let value = await ai.minimax(cloneState, moves, depth, isMax, alpha, beta, currentPlayer);
 	postMessage({title: "value", content: {move, value}});
