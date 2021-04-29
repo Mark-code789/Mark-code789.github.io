@@ -1968,6 +1968,7 @@ article:not(.install) {
 
 .cell {
     display: table-cell;
+    position: relative;
     padding: 0;
     margin: 0;
     border: none;
