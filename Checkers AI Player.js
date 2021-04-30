@@ -105,14 +105,8 @@ class AI {
     } 
     
     minimax = async (state, moves, depth, isMax, alpha, beta, currentPlayer) => { // currentPlayer : true = ai || false = opp 
-        if(moves.length) { 
-            let score = await TranspositionTable.getState(state, depth);
-            if(score) {
-                return {score};
-            } 
-        } 
         if(!moves.length || depth === 0) {
-        	let leafScore = !moves.length? (currentPlayer? 10: -10): 0;
+        	let leafScore = !moves.length? (currentPlayer? 100: -100): 0;
         	let actualDepth = this.depth - depth;
         	let score = await this.evaluate(state);
         	score = score + leafScore;
@@ -124,9 +118,6 @@ class AI {
             let opp = isMax? this.opp: this.ai;
             let id = isMax? this.ai: this.opp;
             moves = await this.filter(moves, state);
-            /*if(moves.length > 1) { 
-            	moves = await KillerMove.sort(moves);
-            } */
             
             for(let i = 0; i < moves.length; i++) {
             	let cloneState = Copy(state);
@@ -155,13 +146,6 @@ class AI {
 					
 					value = await this.minimax(cloneState, moves2, depth, isMax, alpha, beta, isMax);
 				}
-				
-				if(typeof value != "object") {
-					TranspositionTable.add(cloneState, value, depth);
-			    } 
-			    else {
-				    value = value.score;
-				} 
 			    
 				if(isMax) {
 					best = Math.max(best, value);
@@ -173,7 +157,6 @@ class AI {
 				} 
 				
 				if(alpha >= beta) {
-					//KillerMove.add(move);
 					return Prms(alpha); // alpha cut-off
 				} 
             }
@@ -215,11 +198,11 @@ class AI {
 		                    let moves3 = await Iterate({id: opp, state: cloneState, func: AssesMoves});
 		                    moves2 = moves2.concat(moves3);
 		                } 
-			            worker.postMessage([this.state, this.depth, this.moves, move, cloneState, moves2, this.depth-1, !isMax, this.MIN, this.MAX, isMax, HashTable.ZobristTable]);
+			            worker.postMessage([this.depth, move, cloneState, moves2, this.depth-1, !isMax, this.MIN, this.MAX, isMax]);
 					} 
 					else {
 						let moves2 = res.continuousJump;
-						worker.postMessage([this.state, this.depth, this.moves, move, cloneState, moves2, this.depth, isMax, this.MIN, this.MAX, isMax, HashTable.ZobristTable]);
+						worker.postMessage([this.depth, move, cloneState, moves2, this.depth, isMax, this.MIN, this.MAX, isMax]);
 					}
 		        } 
         		await sleep.start();
@@ -257,8 +240,6 @@ class AI {
 						let moves2 = res.continuousJump;
 						value = await this.minimax(cloneState, moves2, this.depth, isMax, this.MIN, this.MAX, isMax);
 					}
-					if(typeof value == "object") 
-					    value = value.score;
 					
 		            if(isMax && bestValue <= value) {
 		                if(bestValue < value) {
@@ -298,8 +279,6 @@ class AI {
             if(e.data.title == "value") {
             	let value = Copy(e.data.content.value);
             	let move = Copy(e.data.content.move);
-                if(typeof value == "object") 
-		            value = value.score;
             	count++;
             	// evaluating 
                 if(isMax && bestValue <= value) {
@@ -326,7 +305,7 @@ class AI {
                 } 
             } 
             else {
-                console.log(e.data.content);
+                alert(e.data.content);
             } 
         } 
     } 
@@ -579,7 +558,7 @@ class TranspositionTable {
 		        else 
 			        this[Game.version][pos] = obj;
 	        } 
-	        else {
+	        else if(this[Game.version][key] && this[Game.version][key].depth <= obj.depth) {
 			    this[Game.version][key] = obj;
 	        } 
 	        this.queue.shift();
@@ -590,13 +569,13 @@ class TranspositionTable {
 	    let key = Number(hash % BigInt(this[Game.version].length));
 	    let obj = this[Game.version][key];
 	    
-	    if(obj && obj.depth >= depth && await JSON.stringify(obj.state) == await JSON.stringify(state))
+	    if(obj && obj.depth >= depth-1 && await JSON.stringify(obj.state) == await JSON.stringify(state))
             return obj.value;
 	    else if(obj) {
 		    let pos = key+1;
 		    for(;;pos++) {
 			    obj = this[Game.version][pos];
-			    if(obj && obj.depth >= depth && await JSON.stringify(obj.state) == await JSON.stringify(state) || !obj || pos == key) {
+			    if(obj && obj.depth >= depth-1 && await JSON.stringify(obj.state) == await JSON.stringify(state) || !obj || pos == key) {
 				    break;
 			    } 
 			    if(pos >= this[Game.version].length - 1) 
