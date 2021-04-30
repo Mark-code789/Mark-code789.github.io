@@ -1663,7 +1663,8 @@ const GameOver = async (isDraw = false) => { try {
             }
             let level = Game.level;
             //Unlock the next level
-            await Level(false);
+            if(level < Game.levels.length-1)
+                await Level(false);
             Notify({action: (level < Game.levels.length-1)? "other": "confirm", 
                     header: "YOU WIN!", 
                     message: "Congratulations!",
