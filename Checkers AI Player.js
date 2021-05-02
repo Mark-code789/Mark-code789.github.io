@@ -310,7 +310,7 @@ class AI {
         } 
     } 
     
-    makeMove = async (returnable = false) => { //try {
+    makeMove = async (returnable = false) => { try {
     	Game.thinking = true;
         let state = Copy(this.state);
         let moves = this.moves;
@@ -380,7 +380,7 @@ class AI {
         this.moves = [];
         Game.thinking = false;
         return;
-        //} catch (error) {alert("Make move error\n" + error);}
+        } catch (error) {alert("Make move error\n" + error);}
     } 
     
     filter = async (moves, state) => {
