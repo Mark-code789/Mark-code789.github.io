@@ -106,7 +106,7 @@ class AI {
     
     minimax = async (state, moves, depth, isMax, alpha, beta, currentPlayer) => { // currentPlayer : true = ai || false = opp 
         if(!moves.length || depth === 0) {
-        	let leafScore = !moves.length? (currentPlayer? 100: -100): 0;
+        	let leafScore = !moves.length? (currentPlayer? 1000: -1000): 0;
         	let actualDepth = this.depth - depth;
         	let score = await this.evaluate(state);
         	score = score + leafScore;
