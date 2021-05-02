@@ -385,7 +385,7 @@ class AI {
     
     filter = async (moves, state) => {
         moves = await Copy(moves);
-        let filteredMoves = [];
+        let filteredMoves = new Array(moves.length);
         let indexes = [];
         await moves.forEach(async (move, index) => {
             if(move.capture) {
@@ -399,23 +399,19 @@ class AI {
                 let id = state[i][j];
                 let opp = id.includes("W")? "B": "W";
                 let r = id.includes(playerA.pieceColor.slice(0,1))? -1: 1;
-                let z = 3*r; // closeness;
-                let isRemovingMove = await this.check(state, id.slice(1,2), i, j, i+z, r);
-                if(isRemovingMove) {
-                    filteredMoves.push(move);
-                    indexes.unshift(index);
-                    return;
-                } 
+                let z = filteredMoves.length; // closeness;
+                let distance = await this.check(state, id.slice(1,2), i, j, z, r);
+                
+                filteredMoves.splice(distance, 0, move);
+                indexes.unshift(index);
+                return;
                 
                 if(id.includes("K")) {
                     r = -r;
-                    z = -z;
-                    isRemovingMove = await this.check(state, id.slice(1,2), i, j, i+z, r);
-                    if(isRemovingMove) {
-                        filteredMoves.push(move);
-                        indexes.unshift(index);
-                        return;
-                    } 
+                    distance = await this.check(state, id.slice(1,2), i, j, z, r);
+                    filteredMoves.splice(distance, 0, move);
+                    indexes.unshift(index);
+                    return;
                 } 
             } 
         });
@@ -423,6 +419,7 @@ class AI {
         for(let index of indexes) 
             moves.splice(index, 1);
         filteredMoves = filteredMoves.concat(moves);
+        filteredMoves = JSON.parse(JSON.stringify(filteredMoves).replaceAll(/null,|,null/g, ""));
         return Copy(filteredMoves);
     } 
     
@@ -433,17 +430,17 @@ class AI {
         let row = null;
         let opp = id == "W"? "B": "W";
         
-        for(;x <= end; x+=r, y1-=1, y2+=1) {
+        for(;;x+=r, y1-=1, y2+=1) {
             row = state[x];
             if(!row) 
                 break;
             for(let y = y1; y <= y2; y++) {
                 if(row[y] && row[y].includes(opp)) {
-                    return Prms(true);
+                    return Prms(Math.abs(x - startX));
                 } 
             } 
         } 
-        return Prms(false);
+        return Prms(end);
     } 
 }
 
