@@ -3290,12 +3290,10 @@ async function back (undo = false, isComp = false) {
 	                if(btn.innerHTML == "HORIZ." && screen.orientation.type.toLowerCase().includes("portrait")) {
 	                    await orientationLocking(document.documentElement, "landscape-primary"); 
 	                    other.orientation = "landscape-primary";
-	                    break;
 	                } 
 	                else if(btn.innerHTML == "VERT." && screen.orientation.type.toLowerCase().includes("landscape")) {
 	                    await orientationLocking(document.documentElement, "portrait-primary");
 	                    other.orientation = "portrait-primary";
-	                    break;
 	                } 
 					AdjustScreen(other.orientation);
 	            } 
