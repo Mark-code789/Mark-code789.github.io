@@ -3013,11 +3013,11 @@ const AdjustScreen = (orientation, exitFullscreen = false) => { try {
 	            document.documentElement.style.setProperty("--border-top",  `${other.notch.top}px` );
 	    } 
 	    else if(orientation.includes("landscape")) {
-	        document.documentElement.style.setProperty("--border-top", "0");
+	        document.documentElement.style.setProperty("--border-top", "0px");
 	    } 
     }
     else {
-    	document.documentElement.style.setProperty("--border-top", "0");
+    	document.documentElement.style.setProperty("--border-top", "0px");
     } 
     } catch (error) {alert (error)}
 } 
