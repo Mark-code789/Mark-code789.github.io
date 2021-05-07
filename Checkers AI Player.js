@@ -107,7 +107,7 @@ class AI {
     minimax = async (state, moves, depth, isMax, alpha, beta, currentPlayer) => { // currentPlayer : true = ai || false = opp 
         if(!moves.length || depth === 0) {
         	let leafScore = !moves.length? (currentPlayer? 1000: -1000): 0;
-        	let actualDepth = this.depth - depth;
+        	let actualDepth = (this.depth - depth) + 100;
         	let score = await this.evaluate(state);
         	score = score + leafScore;
             score += (currentPlayer? -actualDepth: actualDepth);
@@ -350,7 +350,10 @@ class AI {
                 return;
             } 
         } 
-        if(returnable) return;
+        if(returnable) {
+            Game.thinking = false;
+            return;
+        } 
         let table = $("#table");
 		let preSelectedCells = $$("#table .valid, #table .pre_valid, #table .hint, .helper_empty, .helper_filled");
         for(let cell of preSelectedCells) { 
