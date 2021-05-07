@@ -209,6 +209,16 @@ async function LoadingDone () {
     other.level = $("#nav .default");
     //check if has notch
     other.notch = await HasNotch();
+   
+    if(!storage || !JSON.parse(storage.getItem("NotifiedUpdateV5.1"))) {
+        Notify({action: "alert",
+                header: "What's New! Version 5.1", 
+                message: "<ul><li>Fixed bugs.</li><li>Improved internal operation.</li></ul><span>Note</span>The app will refresh everything including stored cache for changes to take effect.<br><br>If you experience any errors kindly contact me using the contact option in the settings window."});
+        if(storage) {
+            storage.clear();
+            storage.setItem("NotifiedUpdateV5.1", "true");
+        } 
+    }
     
     let btns = $$("#main-window #levels #nav div");
     let btn = null;
@@ -275,14 +285,6 @@ async function LoadingDone () {
                 TranspositionTable[table] = await Copy(item);
             } 
         } catch (error) {}
-    }
-   
-    if(!storage || !JSON.parse(storage.getItem("NotifiedUpdateV4.0"))) {
-        Notify({action: "alert",
-                header: "What's New! Version 4.0", 
-                message: "<ul><li>Fixed bugs.</li><li>Improved internal operation.</li></ul>If you experience any errors kindly contact me using the contact option in the settings window."});
-        if(storage)
-            storage.setItem("NotifiedUpdate", "true");
     }
     
     if(deferredEvent)
