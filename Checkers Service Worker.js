@@ -27,6 +27,7 @@ const appShellFiles = [
     "loser.png", 
     "draw.png",
     "load.png",
+    "dice roll.png",
     "lock.png", 
     "star.png", 
     "click.mp3",
