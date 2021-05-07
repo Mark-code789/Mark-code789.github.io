@@ -22,7 +22,8 @@
     --star: url("star.png");
     --satc: constant(safe-area-inset-top, 0);
     --sat: env(safe-area-inset-top, 0);
-    --mt: 0.4s; /*moving time*/
+    --mt: 0.35s; /*moving time*/
+    --atf: ease-in-out; /*animation-timing-function*/
     --ept: 50%;
     --epl: 50%;
     --angleX: 33deg;
@@ -38,7 +39,7 @@
     --txtSize: 40px;
     --M: 5px;
 } 
-article:not(.install) {
+article {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -1491,6 +1492,7 @@ article:not(.install) {
 /*notification window*/
 #notification-window {
     position: absolute;
+    padding-top: 5%;
     display: none;
     align-items: center;
     justify-content: center;
@@ -1509,8 +1511,8 @@ article:not(.install) {
     grid-template-columns: 75px auto;
     grid-template-rows: 15px auto auto auto;
     grid-row-gap: 5px;
-    align-content: center;
-    justify-content: space-around;
+    align-content: start;
+    justify-content: start;
 } 
 
 #notification-window #note .note_header {
@@ -1606,6 +1608,15 @@ article:not(.install) {
     color: #0ff;
     text-decoration: underline;
     font-style: italic;
+} 
+
+.fade_note {
+    animation: fade-note 0.6s ease 0s 1 normal forwards;
+} 
+
+@keyframes fade-note {
+    0% {opacity: 1;}
+    100% {opacity: 0;}
 } 
 
 
@@ -1997,6 +2008,7 @@ article:not(.install) {
     background-size: cover;
     background-clip: padding-box, border-box;
     transform: rotateZ(var(--angleZB));
+    opacity: 1;
 } 
 
 .crown_black {
@@ -2015,6 +2027,7 @@ article:not(.install) {
     background-size: cover;
     background-clip: padding-box, border-box;
     transform: rotateZ(var(--angleZW));
+    opacity: 1;
 } 
 
 .crown_white {
@@ -2047,7 +2060,7 @@ article:not(.install) {
 
 
 .move {
-    animation: pos var(--mt) ease-in-out 0s 1 normal forwards;
+    animation: pos var(--mt) var(--atf) 0s 1 normal forwards;
 }
 
 @keyframes pos {
