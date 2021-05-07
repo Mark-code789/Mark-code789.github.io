@@ -2,7 +2,7 @@
 
 const Iterate = async (prop) => {
     let func = prop.func, 
-        id = prop.id, 
+        id = prop.id.slice(-1), 
         state = prop.state,
         returnObj = [];
     
@@ -10,7 +10,7 @@ const Iterate = async (prop) => {
         for(let j = 0; j < Game.boardSize; j++) {
             let piece = state[i][j];
             if(piece.includes(id)) {
-                let movesObj = await func({id: piece, i, j, state});
+                let movesObj = await func({i, j, state});
                 
                 for(let moveObj of movesObj) {
                     returnObj.push(moveObj);
@@ -23,91 +23,80 @@ const Iterate = async (prop) => {
 
 const AssesMoves = async (prop) => { try {
     //concept based on Assess Captures function 
-    let id = prop.id,
-        i = prop.i,
+    let i = prop.i,
         j = prop.j,
         state = prop.state,
+        id = state[i][j], 
         m = [], 
         moves = [];
     let r = id.includes(playerA.pieceColor.slice(0,1))? -1: 1;
     
     if(Game.version === "american" || Game.version === "kenyan") {
-        m = await getMoves(i, j, i+r, j-1, r, -1);
+        let isKing = id.includes("K");
+        m = await getMoves(i, j, i+r, i-r, r, isKing);
         for(let cell of m) {
             moves.push({cell: `${i}${j}`, empty: `${cell.x}${cell.y}`});
-        } 
-        m = await getMoves(i, j, i+r, j+1, r, 1);
-        for(let cell of m) {
-            moves.push({cell: `${i}${j}`, empty: `${cell.x}${cell.y}`});
-        } 
-        
-        if(id.includes('K')) {
-            r = 0-r;
-            m = await getMoves(i, j, i+r, j-1, r, -1);
-            for(let cell of m) {
-                moves.push({cell: `${i}${j}`, empty: `${cell.x}${cell.y}`});
-            } 
-            m = await getMoves(i, j, i+r, j+1, r, 1);
-            for(let cell of m) {
-                moves.push({cell: `${i}${j}`, empty: `${cell.x}${cell.y}`});
-            } 
         } 
     } 
     else if(Game.version === "international" || Game.version === "nigerian" || Game.version === "russian" || Game.version === "pool") {
         if(id.includes('M')) {
-            m = await getMoves(i, j, i+r, j-1, r, -1);
-            for(let cell of m) {
-                moves.push({cell: `${i}${j}`, empty: `${cell.x}${cell.y}`});
-            } 
-            m = await getMoves(i, j, i+r, j+1, r, 1);
+            m = await getMoves(i, j, i+r, i-r, r, false);
             for(let cell of m) {
                 moves.push({cell: `${i}${j}`, empty: `${cell.x}${cell.y}`});
             } 
         } 
         else if(id.includes('K')) {
-            m = await getMoves(i, j, Game.boardSize, Game.boardSize, r, -1);
-            for(let cell of m) {
-                moves.push({cell: `${i}${j}`, empty: `${cell.x}${cell.y}`});
-            } 
-            m = await getMoves(i, j, Game.boardSize, Game.boardSize, r, 1);
-            for(let cell of m) {
-                moves.push({cell: `${i}${j}`, empty: `${cell.x}${cell.y}`});
-            } 
-            
-            // opposite direction
-            r = 0-r;
-            m = await getMoves(i, j, Game.boardSize, Game.boardSize, r, -1);
-            for(let cell of m) {
-                moves.push({cell: `${i}${j}`, empty: `${cell.x}${cell.y}`});
-            } 
-            m = await getMoves(i, j, Game.boardSize, Game.boardSize, r, 1);
+            m = await getMoves(i, j, Math.MAX_SAFE_NUMBER, Math.MAX_SAFE_NUMBER, r, true);
             for(let cell of m) {
                 moves.push({cell: `${i}${j}`, empty: `${cell.x}${cell.y}`});
             } 
         } 
     } 
     
-    function getMoves (startX, startY, endX, endY, r, c) {
-        let x = startX + r;
-        let y = startY + c;
-        let row = null;
+    function getMoves (startX, startY, endX1, endX2, r, isKing) {
+        let x1 = startX + r;
+        let x2 = startX - r;
+        let y1 = startY + 1;
+        let y2 = startY - 1;
+        let obstacle1A = false;
+        let obstacle1B = false;
+        let obstacle2A = false;
+        let obstacle2B = false;
         let m = [];
-        for(;; x+=r, y+=c) {
-            row = state[x];
+        for(;; x1+=r, x2-=r, y1+=1, y2-=1) {
+            let row1 = state[x1];
+            let row2 = state[x2];
+            let obstacle1A1 = row1 != undefined && row1[y1] != "EC";
+            let obstacle1A2 = row1 != undefined && row1[y2] != "EC";
+            let obstacle2A1 = row2 != undefined && row2[y1] != "EC";
+            let obstacle2A2 = row2 != undefined && row2[y2] != "EC";
             
-            if(row != undefined) {
-                if(row[y] === undefined || row[y] != "EC") {
-                    break;
-                } 
-                else if(row[y] === "EC") {
-                    m.push({x, y});
-                } 
-                
-                if(x === endX || y === endY) {
-                    break;
-                } 
+            if(obstacle1A == false && obstacle1A1)
+                obstacle1A = true;
+            if(obstacle1B == false && obstacle1A2)
+                obstacle1B = true;
+            if(obstacle2A == false && obstacle2A1)
+                obstacle2A = true;
+            if(obstacle2B == false && obstacle2A2)
+                obstacle2B = true;
+            
+            if(row1 == undefined && row2 == undefined || obstacle1A && obstacle1B && obstacle2A && obstacle2B) {
+                break;
             } 
-            else {
+            if(!obstacle1A && row1 != undefined && row1[y1] == "EC") {
+                m.push({x: x1, y: y1});
+            } 
+            if(!obstacle1B && row1 != undefined && row1[y2] == "EC") {
+                m.push({x: x1, y: y2});
+            } 
+            if(!obstacle2A && isKing && row2 != undefined && row2[y1] == "EC") {
+                m.push({x: x2, y: y1});
+            } 
+            if(!obstacle2B && isKing && row2 != undefined && row2[y2] == "EC") {
+                m.push({x: x2, y: y2});
+            } 
+            
+            if(x1 == endX1 && x2 == endX2) {
                 break;
             } 
         } 
@@ -119,74 +108,32 @@ const AssesMoves = async (prop) => { try {
 } 
 
 const AssesCaptures = async (prop) => { try {
-    let id = prop.id, // id to mark the current piece type
-        op = (id.includes("W"))? "B": "W", // op for an opponent
-        you = id.replace(/[KM]/g, ""), // you
-        i = prop.i, // i for row
+    let i = prop.i, // i for row
         j = prop.j, // j for column
         state = prop.state, // state of the game to examine
+        id = state[i][j], 
+        op = (id.includes("W"))? "B": "W", // op for an opponent
+        you = id.replace(/[KM]/g, ""), // you
         m = [], // to store current moves
         captures = []; // array to store found captures
     let r = id.includes(playerA.pieceColor.slice(0,1))? -1: 1;
         
     if(Game.version === "american") {
-        m = await getCaptures(i, j, i+r, j-1, 1, 1, r, -1);
+        let reverse = id.includes("K");
+        m = await getCaptures(i, j, i+r, "one", r, reverse);
         for(let cell of m) {
             captures.push({cell: `${i}${j}`, capture: `${cell.x1}${cell.y1}`, empty: `${cell.x2}${cell.y2}`});
-        } 
-        m = await getCaptures(i, j, i+r, j+1, 1, 1, r, 1);
-        for(let cell of m) {
-            captures.push({cell: `${i}${j}`, capture: `${cell.x1}${cell.y1}`, empty: `${cell.x2}${cell.y2}`});
-        } 
-        
-        if(id.includes('K')) {
-            r = 0-r;
-            m = await getCaptures(i, j, i+r, j-1, 1, 1, r, -1);
-            for(let cell of m) {
-                captures.push({cell: `${i}${j}`, capture: `${cell.x1}${cell.y1}`, empty: `${cell.x2}${cell.y2}`});
-            } 
-            m = await getCaptures(i, j, i+r, j+1, 1, 1, r, 1);
-            for(let cell of m) {
-                captures.push({cell: `${i}${j}`, capture: `${cell.x1}${cell.y1}`, empty: `${cell.x2}${cell.y2}`});
-            } 
         } 
     } 
     else if(Game.version === "kenyan") {
         if(id.includes('M')) {
-            m = await getCaptures(i, j, i+r, j-1, 1, 1, r, -1);
-            for(let cell of m) {
-                captures.push({cell: `${i}${j}`, capture: `${cell.x1}${cell.y1}`, empty: `${cell.x2}${cell.y2}`});
-            } 
-            m = await getCaptures(i, j, i+r, j+1, 1, 1, r, 1);
-            for(let cell of m) {
-                captures.push({cell: `${i}${j}`, capture: `${cell.x1}${cell.y1}`, empty: `${cell.x2}${cell.y2}`});
-            } 
-            r = 0-r;
-            m = await getCaptures(i, j, i+r, j-1, 1, 1, r, -1);
-            for(let cell of m) {
-                captures.push({cell: `${i}${j}`, capture: `${cell.x1}${cell.y1}`, empty: `${cell.x2}${cell.y2}`});
-            } 
-            m = await getCaptures(i, j, i+r, j+1, 1, 1, r, 1);
+            m = await getCaptures(i, j, i+r, "one", r, true);
             for(let cell of m) {
                 captures.push({cell: `${i}${j}`, capture: `${cell.x1}${cell.y1}`, empty: `${cell.x2}${cell.y2}`});
             } 
         } 
-        else if('K') {
-            m = await getCaptures(i, j, Game.boardSize, Game.boardSize, 1, 1, r, -1);
-            for(let cell of m) {
-                captures.push({cell: `${i}${j}`, capture: `${cell.x1}${cell.y1}`, empty: `${cell.x2}${cell.y2}`});
-            } 
-            m = await getCaptures(i, j, Game.boardSize, Game.boardSize, 1, 1, r, 1);
-            for(let cell of m) {
-                captures.push({cell: `${i}${j}`, capture: `${cell.x1}${cell.y1}`, empty: `${cell.x2}${cell.y2}`});
-            } 
-            
-            r = 0-r;
-            m = await getCaptures(i, j, Game.boardSize, Game.boardSize, 1, 1, r, -1);
-            for(let cell of m) {
-                captures.push({cell: `${i}${j}`, capture: `${cell.x1}${cell.y1}`, empty: `${cell.x2}${cell.y2}`});
-            } 
-            m = await getCaptures(i, j, Game.boardSize, Game.boardSize, 1, 1, r, 1);
+        else if(id.includes('K')) {
+            m = await getCaptures(i, j, Math.MAX_SAFE_NUMBER, "one", r, true);
             for(let cell of m) {
                 captures.push({cell: `${i}${j}`, capture: `${cell.x1}${cell.y1}`, empty: `${cell.x2}${cell.y2}`});
             } 
@@ -194,75 +141,126 @@ const AssesCaptures = async (prop) => { try {
     } 
     else if(Game.version === "international" || Game.version === "nigerian" || Game.version === "russian" || Game.version === "pool") {
         if(id.includes('M')) {
-            m = await getCaptures(i, j, i+r, j-1, 1, 1, r, -1);
-            for(let cell of m) {
-                captures.push({cell: `${i}${j}`, capture: `${cell.x1}${cell.y1}`, empty: `${cell.x2}${cell.y2}`});
-            } 
-            m = await getCaptures(i, j, i+r, j+1, 1, 1, r, 1);
-            for(let cell of m) {
-                captures.push({cell: `${i}${j}`, capture: `${cell.x1}${cell.y1}`, empty: `${cell.x2}${cell.y2}`});
-            } 
-            
-            r = 0-r;
-            m = await getCaptures(i, j, i+r, j-1, 1, 1, r, -1);
-            for(let cell of m) {
-                captures.push({cell: `${i}${j}`, capture: `${cell.x1}${cell.y1}`, empty: `${cell.x2}${cell.y2}`});
-            } 
-            m = await getCaptures(i, j, i+r, j+1, 1, 1, r, 1);
+            m = await getCaptures(i, j, i+r, "one", r, true);
             for(let cell of m) {
                 captures.push({cell: `${i}${j}`, capture: `${cell.x1}${cell.y1}`, empty: `${cell.x2}${cell.y2}`});
             } 
         } 
         else if(id.includes('K')) {
-            m = await getCaptures(i, j, Game.boardSize, Game.boardSize, 0, 0, r, -1);
-            for(let cell of m) {
-                captures.push({cell: `${i}${j}`, capture: `${cell.x1}${cell.y1}`, empty: `${cell.x2}${cell.y2}`});
-            } 
-            m = await getCaptures(i, j, Game.boardSize, Game.boardSize, 0, 0, r, 1);
-            for(let cell of m) {
-                captures.push({cell: `${i}${j}`, capture: `${cell.x1}${cell.y1}`, empty: `${cell.x2}${cell.y2}`});
-            } 
-            
-            r = 0-r;
-            m = await getCaptures(i, j, Game.boardSize, Game.boardSize, 0, 0, r, -1);
-            for(let cell of m) {
-                captures.push({cell: `${i}${j}`, capture: `${cell.x1}${cell.y1}`, empty: `${cell.x2}${cell.y2}`});
-            } 
-            m = await getCaptures(i, j, Game.boardSize, Game.boardSize, 0, 0, r, 1);
+            m = await getCaptures(i, j, Math.MAX_SAFE_NUMBER, "no_limit", r, true);
             for(let cell of m) {
                 captures.push({cell: `${i}${j}`, capture: `${cell.x1}${cell.y1}`, empty: `${cell.x2}${cell.y2}`});
             } 
         } 
     } 
     
-    function getCaptures (startX, startY, endX1, endY1, endX2, endY2, r, c) {
-        let x = startX + r;
-        let y = startY + c;
-        let row = null;
-        let enemy = null;
+    function getCaptures (startX, startY, end1, end2, r, reverse) {
+        let x1 = startX + r;
+        let x2 = startX - r;
+        let y1 = startY + 1;
+        let y2 = startY - 1;
+        let end1A = null;
+        let end1B = null;
+        let end2A = null;
+        let end2B = null;
+        let enemy1A = null;
+        let enemy1B = null;
+        let enemy2A = null;
+        let enemy2B = null;
+        let obstacle1A = false;
+        let obstacle1B = false;
+        let obstacle2A = false;
+        let obstacle2B = false;
         let m = [];
-        for(;; x+=r, y+=c) {
-            row = state[x];
+        for(;; x1+=r, x2-=r, y1+=1, y2-=1) {
+            let row1 = state[x1];
+            let row2 = state[x2];
+            let obstacle1A1 = row1 != undefined && row1[y1] == "IP";
+            let obstacle1A2 = row1 != undefined && row1[y2] == "IP";
+            let obstacle1B1 = row1 != undefined && row1[y1] != "EC" && enemy1A != null;
+            let obstacle1B2 = row1 != undefined && row1[y2] != "EC" && enemy1B != null;
+            let obstacle1C1 = row1 != undefined && row1[y1] != undefined && row1[y1].includes(you);// && !enemy1A;
+            let obstacle1C2 = row1 != undefined && row1[y2] != undefined && row1[y2].includes(you);// && !enemy1B;
             
-            if(row != undefined) {
-                if(row[y] === undefined || row[y] == "IP" || row[y] !== "EC" && enemy || row[y].includes(you) && !enemy) {
-                    break;
-                } 
-                if(!enemy && row[y].includes(op)) {
-                    enemy = {x, y};
-                    if(endX2 === 1 && endY2 === 1) {
-                        endX2 = x+r;
-                        endY2 = y+c;
-                    } 
-                } 
-                if(enemy && row[y] === "EC") {
-                    m.push({x1: enemy.x, y1: enemy.y, x2: x, y2: y});
-                } 
-                if(!enemy && (x === endX1 || y === endY1) || enemy && (x === endX2 || y === endY2)) {
-                    break;
+            let obstacle2A1 = row2 != undefined && row2[y1] == "IP";
+            let obstacle2A2 = row2 != undefined && row2[y2] == "IP";
+            let obstacle2B1 = row2 != undefined && row2[y1] != "EC" && enemy2A != null;
+            let obstacle2B2 = row2 != undefined && row2[y2] != "EC" && enemy2B != null;
+            let obstacle2C1 = row2 != undefined && row2[y1] != undefined && row2[y1].includes(you);// && !enemy2A;
+            let obstacle2C2 = row2 != undefined && row2[y2] != undefined && row2[y2].includes(you);// && !enemy2B;
+            
+            if(obstacle1A == false && (obstacle1A1 || obstacle1B1 || obstacle1C1)) 
+                obstacle1A = true;
+            if(obstacle1B == false && (obstacle1A2 || obstacle1B2 || obstacle1C2)) 
+                obstacle1B = true;
+            if(obstacle2A == false && (obstacle2A1 || obstacle2B1 || obstacle2C1)) 
+                obstacle2A = true;
+            if(obstacle2B == false && (obstacle2A2 || obstacle2B2 || obstacle2C2)) 
+                obstacle2B = true;
+                
+            if(row1 == undefined && row2 == undefined || !reverse && obstacle1A && obstacle1B || reverse && obstacle1A && obstacle1B && obstacle2A && obstacle2B) {
+                break;
+            } 
+            
+            if(!obstacle1A && (end1 == startX+r && Math.abs(startX - x1) == 1 || end1 != startX+r) && !enemy1A && row1 != undefined && row1[y1] != undefined && row1[y1].includes(op)) {
+                enemy1A = {x: x1, y: y1};
+                if(end2 == "one") {
+                    end1A = x1+r;
                 } 
             } 
-            else {
+                
+            if(!obstacle1B && (end1 == startX+r && Math.abs(startX - x1) == 1 || end1 != startX+r) && !enemy1B && row1 != undefined && row1[y2] != undefined && row1[y2].includes(op)) {
+                enemy1B = {x: x1, y: y2};
+                if(end2 == "one") {
+                    end1B = x1+r;
+                } 
+            } 
+                
+            if(reverse && !obstacle2A && (end1 == startX+r && Math.abs(startX - x1) == 1 || end1 != startX+r) && !enemy2A && row2 != undefined && row2[y1] != undefined && row2[y1].includes(op)) {
+                enemy2A = {x: x2, y: y1};
+                if(end2 == "one") {
+                    end2A = x2-r;
+                } 
+            } 
+                
+            if(reverse && !obstacle2B && (end1 == startX+r && Math.abs(startX - x1) == 1 || end1 != startX+r) && !enemy2B && row2 != undefined && row2[y2] != undefined && row2[y2].includes(op)) {
+                enemy2B = {x: x2, y: y2};
+                if(end2 == "one") {
+                    end2B = x2-r;
+                } 
+            } 
+            
+            if(!obstacle1A && enemy1A && (end2 == "one" && Math.abs(enemy1A.x - x1) == 1 || end2 == "no_limit") && row1 != undefined && row1[y1] == "EC") {
+                m.push({x1: enemy1A.x, y1: enemy1A.y, x2: x1, y2: y1});
+            } 
+            else if(end2 == "one" && (enemy1A && Math.abs(enemy1A.x - x1) >= 1 || !enemy1A && end1 == startX+r)) {
+                end1A = x1;
+            } 
+                
+                
+            if(!obstacle1B && enemy1B && (end2 == "one" && Math.abs(enemy1B.x - x1) == 1 || end2 == "no_limit") && row1 != undefined && row1[y2] == "EC") {
+                m.push({x1: enemy1B.x, y1: enemy1B.y, x2: x1, y2: y2});
+            } 
+            else if(end2 == "one" && (enemy1B && Math.abs(enemy1B.x - x1) >= 1 || !enemy1B && end1 == startX+r)) {
+                end1B = x1;
+            } 
+                
+            if(!obstacle2A && enemy2A && (end2 == "one" && Math.abs(enemy2A.x - x2) == 1 || end2 == "no_limit") && row2 != undefined && row2[y1] == "EC") {
+                m.push({x1: enemy2A.x, y1: enemy2A.y, x2: x2, y2: y1});
+            } 
+            else if(end2 == "one" && (enemy2A && Math.abs(enemy2A.x - x2) >= 1 || !enemy2A && end1 == startX+r)) {
+                end2A = x2;
+            } 
+                
+                
+            if(!obstacle2B && enemy2B && (end2 == "one" && Math.abs(enemy2B.x - x2) == 1 || end2 == "no_limit") && row2 != undefined && row2[y2] == "EC") {
+                m.push({x1: enemy2B.x, y1: enemy2B.y, x2: x2, y2: y2});
+            } 
+            else if(end2 == "one" && (enemy2B && Math.abs(enemy2B.x - x2) >= 1 || !enemy2B && end1 == startX+r)) {
+                end2B = x2;
+            } 
+            
+            if(end1A == x1 && end1B == x1 && end2A == x2 && end2B == x2) {
                 break;
             } 
         } 
