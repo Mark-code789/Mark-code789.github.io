@@ -7,7 +7,8 @@ const Icons = {
     winnerIcon: "", 
     loserIcon: "", 
     drawIcon: "",
-    loadIcon: ""
+    loadIcon: "",
+    diceIcon: "" 
 }
 // object to store the most needed audio 
 const Sound = { 
@@ -54,6 +55,7 @@ let srcs = ["american flag.jpeg",
             "loser.png", 
             "draw.png",
             "load.png",
+            "dice roll.png",
             "lock.png", 
             "star.png"];
 // audio srcs 
@@ -92,7 +94,8 @@ let imageProps = ["--english-flag",
                     Object.keys(Icons)[2],
                     Object.keys(Icons)[3], 
                     Object.keys(Icons)[4],
-                    Object.keys(Icons)[5]
+                    Object.keys(Icons)[5],
+                    Object.keys(Icons)[6]
                     ];
 // use recursive function to load the images in srcs and updating the progress bar
 let i, bar, label, width;
@@ -210,16 +213,6 @@ async function LoadingDone () {
     let btns = $$("#main-window #levels #nav div");
     let btn = null;
     let p = null;
-   
-    if(!storage || !JSON.parse(storage.getItem("NotifiedUpdateV5.1"))) {
-        Notify({action: "alert",
-                header: "What's New! Version 5.1", 
-                message: "<ul><li>Fixed bugs.</li><li>Improved internal operation.</li></ul><span>Note:</span>The App will refresh everything including stored cache for changes to take effect.<br><br>If you experience any errors kindly contact me using the contact option in the settings window."});
-        if(storage) {
-            storage.clear();
-            storage.setItem("NotifiedUpdateV5.1", "true");
-        } 
-    }
     
     if(storage === null || storage.getItem("versions") === null) {
         for(btn of btns) {
@@ -283,6 +276,14 @@ async function LoadingDone () {
             } 
         } catch (error) {}
     }
+   
+    if(!storage || !JSON.parse(storage.getItem("NotifiedUpdateV4.0"))) {
+        Notify({action: "alert",
+                header: "What's New! Version 4.0", 
+                message: "<ul><li>Fixed bugs.</li><li>Improved internal operation.</li></ul>If you experience any errors kindly contact me using the contact option in the settings window."});
+        if(storage)
+            storage.setItem("NotifiedUpdate", "true");
+    }
     
     if(deferredEvent)
         $(".install").classList.add("show_install_prompt");
@@ -290,6 +291,17 @@ async function LoadingDone () {
     window.addEventListener("orientationchange", () => {
         setTimeout(() => {play(true);}, 300);
     });
+    /*await Refresh();
+    Game.version = "american";
+    Game.possibleMoves = await AssesCaptures({id: "KB", i: 3, j: 0, state: Game.state, func: AssesCaptures});
+    console.log("American: ", Game.possibleMoves);
+    Game.version = "kenyan";
+    Game.possibleMoves = await AssesCaptures({id: "KB", i: 3, j: 0, state: Game.state, func: AssesCaptures});
+    console.log("Kenyan: ", Game.possibleMoves);
+    Game.version = "pool";
+    Game.possibleMoves = await AssesCaptures({id: "KB", i: 3, j: 0, state: Game.state, func: AssesCaptures});
+    console.log("Pool: ", Game.possibleMoves);*/
+    
     
     UpdateOnlineStatus();
     window.addEventListener("online", UpdateOnlineStatus, false);
@@ -527,14 +539,14 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
    
     // reset all the game states and players states 
     BackState.moves = [];
-    Game.state = /*[["NA", "EC", "NA", "IP", "NA", "MB", "NA", "MB"],
+    Game.state = /*[["NA", "EC", "NA", "EC", "NA", "EC", "NA", "EC"],
 				  ["EC", "NA", "EC", "NA", "EC", "NA", "MB", "NA"],
-				  ["NA", "EC", "NA", "EC", "NA", "EC", "NA", "MB"],
-				  ["EC", "NA", "EC", "NA", "EC", "NA", "EC", "NA"],
-				  ["NA", "EC", "NA", "EC", "NA", "MW", "NA", "MW"],
-				  ["EC", "NA", "EC", "NA", "EC", "NA", "EC", "NA"],
-				  ["NA", "EC", "NA", "IP", "NA", "EC", "NA", "EC"],
-				  ["EC", "NA", "EC", "NA", "MW", "NA", "EC", "NA"]];*/[];
+				  ["NA", "EC", "NA", "EC", "NA", "EC", "NA", "EC"],
+				  ["KB", "NA", "MW", "NA", "MB", "NA", "EC", "NA"],
+				  ["NA", "EC", "NA", "KW", "NA", "EC", "NA", "EC"],
+				  ["EC", "NA", "MW", "NA", "MW", "NA", "EC", "NA"],
+				  ["NA", "EC", "NA", "EC", "NA", "EC", "NA", "EC"],
+				  ["EC", "NA", "EC", "NA", "EC", "NA", "EC", "NA"]];*/[];
     Game.track = [];
     Game.possibleCaptures = [];
     Game.possibleMoves = [];
@@ -588,14 +600,28 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
         await UpdatePiecesStatus();
         Game.baseState = Copy(Game.state);
         if(Game.mode === "single-player") {
-            //Notify("AMERICAN CHECKERS<br/>---------------------------------------<br/>" + Game.levels[Game.level-1].level);
+            if(screen.orientation.type.toLowerCase().includes("landscape")) {
+                let versions = ["american", "kenyan", "international", "pool", "russian", "nigerian"];
+                Notify({action: "pop-up-alert",
+                        header: Game.version.toUpperCase() + " CHECKERS<br>" + Game.levels[Game.level].level.toUpperCase(), 
+                        icon: srcs[versions.indexOf(Game.version)]});
+            } 
             if(Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black") {
                 setTimeout(_ => aiStart(), 100);
             }
             else if(Game.helper) {
                 let id = playerA.pieceColor.slice(0,1);
-                Game.possibleMoves = await Iterate({id, state: Game.state, func: AssesMoves});
-                await Helper(Game.possibleMoves, Copy(Game.state));
+                Game.possibleCaptures = await Iterate({id, state: Game.state, func: AssesCaptures});
+                let moves = Game.possibleCaptures;
+                if(Game.mandatoryCapture && Game.possibleCaptures.length == 0) {
+                    Game.possibleMoves = await Iterate({id, state: Game.state, func: AssesMoves});
+                    moves = Game.possibleMoves;
+                }
+                else if(!Game.mandatoryCapture) {
+                    Game.possibleMoves = await Iterate({id, state: Game.state, func: AssesMoves});
+                    moves = moves.concat(Game.possibleMoves);
+                } 
+                await Helper(moves, Copy(Game.state));
             } 
         }
         else if(Game.helper && Game.mode === "two-player-offline") {
@@ -612,13 +638,15 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
         if(Game.rollDice) {
             if(Game.mode === "single-player") {
                 if(res) 
-                Notify({action: "alert", 
-                        header: "Congrats!", 
-                        message: "You've won dice roll. Make the first move"});
+                Notify({action: "pop-up-alert", 
+                        header: "YOU WIN!<br>PLAY FIRST.", 
+                        icon: Icons.diceIcon, 
+                        iconType: "dice"});
                 else if(!res) 
-                Notify({action: "alert", 
-                        header: "Oops!", 
-                        message: "You've lost dice roll. wait for your opponent to start."});
+                Notify({action: "pop-up-alert", 
+                        header: "YOU LOSE!<br>OPPONENT FIRST.", 
+                        icon: Icons.diceIcon, 
+                        iconType: "dice"});
             } 
             else {
                 let name;
@@ -646,14 +674,19 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
         } 
         let state = Game.state;
     	let id = playerB.pieceColor.substring(0,1);
-        let moves = await Iterate({id, state, func: AssesCaptures});
-        if(Game.mandatoryCapture && moves.length == 0) {
-            moves = await Iterate({id, state, func: AssesMoves});
+        Game.possibleCaptures = await Iterate({id, state, func: AssesCaptures});
+        let moves = Game.possibleCaptures;
+        
+        if(Game.mandatoryCapture && Game.possibleCaptures.length == 0) {
+            Game.possibleMoves = await Iterate({id, state, func: AssesMoves});
+            moves = Game.possibleMoves;
         }
-        else {
-            let moves2 = await Iterate({id, state, func: AssesMoves});
-            moves = moves.concat(moves2);
-        }
+        else if(!Game.mandatoryCapture) {
+            Game.possibleMoves = await Iterate({id, state, func: AssesMoves});
+            moves = moves.concat(Game.possibleMoves);
+        } 
+        
+        await Helper(moves, Copy(Game.state));
         let chosen = (Math.random()*(moves.length - 1)).toFixed(0);
         let bestMove = moves[chosen];
         let i = parseInt(bestMove.cell.slice(0,1));
@@ -1067,7 +1100,7 @@ class Move {
         let angle = parseInt(GetValue(this.root, "--angleZ" + id));
         this.root.style.setProperty("--angleZP", angle + "deg");
         
-        let mt = 0.4;
+        let mt = 0.35;
     	let increase = mt * 0.25;
     	let no_of_cells = Math.abs(Game.prop.i - prop.i);
     	for(let i = 1; i < no_of_cells; i++) {
@@ -1142,7 +1175,7 @@ class Move {
                 	playerB.moves++;
             } 
             
-            if((Game.version !== "russian" && prop.final || Game.version === "russian" && capture || Game.version === "pool" && capture || !capture) && !piece.className.includes("crown") && (prop.i === 0 && piece.className.includes(playerA.pieceColor.toLowerCase()) || prop.i === Game.boardSize - 1 && piece.className.includes(playerB.pieceColor.toLowerCase()))) {
+            if((Game.version !== "russian" && prop.final || Game.version === "russian" && capture || !capture) && !piece.className.includes("crown") && (prop.i === 0 && piece.className.includes(playerA.pieceColor.toLowerCase()) || prop.i === Game.boardSize - 1 && piece.className.includes(playerB.pieceColor.toLowerCase()))) {
                 if(piece.className.includes("white")) {
                     piece.classList.add("crown_white");
                 } 
@@ -1162,7 +1195,7 @@ class Move {
             
             // Updating Game state
             piece = Game.state[Game.prop.i][Game.prop.j];
-            if(!piece.includes("K") && ((Game.version !== "russian" && prop.final || Game.version === "russian" && capture || Game.version === "pool" && capture || !capture))) 
+            if(!piece.includes("K") && ((Game.version !== "russian" && prop.final || Game.version === "russian" && capture || !capture))) 
                 piece = await (prop.i === 0 && piece.includes(playerA.pieceColor.slice(0,1)) || prop.i === Game.boardSize - 1 && piece.includes(playerB.pieceColor.slice(0,1)))? piece.replace("M", "K"): piece;
             Game.state[Game.prop.i][Game.prop.j] = "EC";
             Game.state[prop.i][prop.j] = piece;
@@ -2223,7 +2256,10 @@ const Hint = async (elem, state=Copy(Game.state)) => {
 				Game.validForHint = false;
 				$("#play-window .footer_section p label:last-of-type").style.backgroundImage = "var(--hint)";
 				UpdatePiecesStatus();
-		    } 
+		    }
+		    else if(Game.mode === "two-player-online") {
+			    Publish.send({channel: Lobby.CHANNEL, message: {title: "Hint"}});
+			} 
 	        elem.style.backgroundSize = "25px 25px";
 	        elem.style.backgroundImage = `url('${Icons.loadIcon}')`;
 			elem.style.pointerEvents = "none";
@@ -2258,8 +2294,8 @@ const Hint = async (elem, state=Copy(Game.state)) => {
             moves = await Iterate({id, state, func: AssesMoves});
         else
         	moves = await RemoveUnwantedCells({captures: moves, state});
-        
-        let ai = new AI({state, moves, depth: (Game.level < 4? 4: Game.level)});
+        let level = Game.mode != "single-player"? 5: Game.level;
+        let ai = new AI({state, moves, depth: (level < 4? 4: level)});
         await ai.makeMove(true);
        
         let cell = other.aiPath[0];
@@ -2403,6 +2439,7 @@ const Helper = async (moves, state, isMultJump = false) => {
             	id = crowned && (Game.version === "kenyan" || Game.version === "international" || Game.version === "nigerian")? id.replace("K", "M"): id;
             	cloneState[m][n] = id;
             	moves2 = await AssesCaptures({id, i: m, j: n, state: cloneState});
+                
 				if(moves2.length > 0) {
 	            	moves2 = await RemoveUnwantedCells({captures: moves2, state: cloneState});
 					await Helper(moves2, cloneState, true);
@@ -2645,7 +2682,11 @@ const Settings = (elem) => {
 } 
 
 const Cancel = () => {
-    $("#notification-window").style.display = "none";
+    let note_window = $("#notification-window");
+    note_window.classList.remove("fade_note");
+    void note_window.offsetWidth;
+    note_window.setAttribute("onanimationend", "End(event)");
+    note_window.classList.add("fade_note");
 } 
 
 const Confirm = async (option, callBack) => {
@@ -2666,14 +2707,28 @@ const Notify = (data) => {
             note_footer = $(".note_footer"), 
             note_buttons = note_footer.children,
             note_close_button = $("#note .close_btn");
-            
-        note_head.innerHTML = data.header;
-        note_body.innerHTML = data.message;
+         
+        note_window.classList.remove("fade_note");
+        note_window.style.justifyContent = "center";
+        note_main.style.gridTemplateRows = "15px auto auto auto";
+        note_main.style.gridTemplateColumns = "75px auto";
+        note_main.style.gridRowGap = "5px";
+        note_main.style.padding = "10px";
+        note_image.style.padding = "10px";
+        note_image.style.gridArea = "1 / 1 / 3 / 2";
+        note_head.style.textAlign = "left";
+        note_head.style.fontWeight = "700";
+        note_head.style.alignItems = "center";
+        note_head.style.gridArea = "2 / 2 / 3 / 3";
+        note_body.style.display = "block";
+        note_head.innerHTML = data.header || "";
+        note_body.innerHTML = data.message || "";
         note_buttons[1].removeAttribute("onclick");
         note_buttons[2].removeAttribute("onclick");
         note_buttons[2].removeAttribute("onclick");
         note_window.removeAttribute("onclick");
         note_close_button.removeAttribute("onclick");
+        note_close_button.style.display = "block";
         if(data.action == "alert") {
             note_image.src = Icons.alertIcon;
             note_image.style.height = "60px";
@@ -2688,6 +2743,29 @@ const Notify = (data) => {
             
             note_close_button.style.pointerEvents = "auto";
         }
+        else if(data.action === "pop-up-alert") {
+            note_window.style.justifyContent = "flex-start";
+            note_main.style.gridTemplateColumns = data.iconType == "dice"? "60px auto": "100px auto";
+            note_main.style.gridTemplateRows = "auto";
+            note_main.style.padding = "5px";
+            note_main.style.gridRowGap = "0px";
+            note_image.style.padding = "0px 10px 0px 0px";
+            note_image.style.gridArea = "1 / 1 / 2 / 2";
+           
+            note_close_button.style.display = "none";
+            note_head.style.textAlign = "center";
+            note_head.style.fontWeight = "400";
+            note_head.style.alignItems = "center";
+            note_head.style.gridArea = "1 / 2 / 2 / 3";
+            note_body.style.display = "none";
+            note_image.src = data.icon;
+            note_image.style.height = "60px";
+            note_image.style.width = data.iconType == "dice"? "60px": "100px";
+            note_buttons[0].style.display = "none";
+            note_buttons[1].style.display = "none";
+            note_buttons[2].style.display = "none";
+            setTimeout(Cancel, 1000);
+        } 
         else if(data.action === "alert_special") {
             note_image.src = Icons.loadIcon;
             note_image.style.height = "60px";
@@ -3000,6 +3078,11 @@ const End = (event) => {
             event.target.classList.remove("captured");
             event.target.parentNode.removeChild(event.target);
         } catch (error) {}
+    }
+    else if(event.animationName === "fade-note") {
+        event.target.removeAttribute("onanimationend");
+        event.target.style.display = "none";
+        event.target.classList.remove("fade_note");
     } 
 } 
 
@@ -3013,11 +3096,11 @@ const AdjustScreen = (orientation, exitFullscreen = false) => { try {
 	            document.documentElement.style.setProperty("--border-top",  `${other.notch.top}px` );
 	    } 
 	    else if(orientation.includes("landscape")) {
-	        document.documentElement.style.setProperty("--border-top", "0px");
+	        document.documentElement.style.setProperty("--border-top", "0");
 	    } 
     }
     else {
-    	document.documentElement.style.setProperty("--border-top", "0px");
+    	document.documentElement.style.setProperty("--border-top", "0");
     } 
     } catch (error) {alert (error)}
 } 
@@ -3215,7 +3298,7 @@ const Fullscreen = async (value, isEvent = false) => { try {
 	if(value && !isEvent) {
 		if(enterFullscreen && !isFullScreen()) {
 			$("#item1").style.display = "grid";
-    		await enterFullscreen.call(elem, {navigationUI: 'hide'});
+    		await enterFullscreen.call(elem);
     		await orientationLocking(document.documentElement, other.orientation);
     		Clicked($("#fs-on"), $("#fs-on").parentNode);
     		if(screen.orientation.type.toLowerCase().includes("portrait")) 
@@ -3290,10 +3373,12 @@ async function back (undo = false, isComp = false) {
 	                if(btn.innerHTML == "HORIZ." && screen.orientation.type.toLowerCase().includes("portrait")) {
 	                    await orientationLocking(document.documentElement, "landscape-primary"); 
 	                    other.orientation = "landscape-primary";
+	                    break;
 	                } 
 	                else if(btn.innerHTML == "VERT." && screen.orientation.type.toLowerCase().includes("landscape")) {
 	                    await orientationLocking(document.documentElement, "portrait-primary");
 	                    other.orientation = "portrait-primary";
+	                    break;
 	                } 
 					AdjustScreen(other.orientation);
 	            } 
