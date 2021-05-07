@@ -291,16 +291,6 @@ async function LoadingDone () {
     window.addEventListener("orientationchange", () => {
         setTimeout(() => {play(true);}, 300);
     });
-    /*await Refresh();
-    Game.version = "american";
-    Game.possibleMoves = await AssesCaptures({id: "KB", i: 3, j: 0, state: Game.state, func: AssesCaptures});
-    console.log("American: ", Game.possibleMoves);
-    Game.version = "kenyan";
-    Game.possibleMoves = await AssesCaptures({id: "KB", i: 3, j: 0, state: Game.state, func: AssesCaptures});
-    console.log("Kenyan: ", Game.possibleMoves);
-    Game.version = "pool";
-    Game.possibleMoves = await AssesCaptures({id: "KB", i: 3, j: 0, state: Game.state, func: AssesCaptures});
-    console.log("Pool: ", Game.possibleMoves);*/
     
     
     UpdateOnlineStatus();
