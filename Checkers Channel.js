@@ -298,6 +298,9 @@ const ChannelFunction = () => {
                             	Notify(playerB.name + " undid the move");
                                 back(true, true);
                             } 
+                            else if(msg.message.title === "hint") {
+                                Notify(playerB.name + " has use hint");
+                            } 
                             else if(msg.message.title === "ExitedGame") {
                                 Notify(msg.message.content + " exited the game.");
                                 back();
