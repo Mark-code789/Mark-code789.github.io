@@ -11,10 +11,12 @@ const ChannelFunction = () => {
     let name = $("#online #playerA-name").value.trim();
     let channel = $("#online #channel-name").value;
     if(channel === "") {
-    	Notify("You have not provided <b><em>Channel name</em></b>. Please do so and submit again.");
+        $("#online #channel-name").focus();
+    	Notify("Please fill out channel name.");
     } 
 	else if(name === "") {
-        Notify("You have not provided <b><em>your name</em></b>. Please do so and submit again.");
+		$("#online #playerA-name").focus();
+        Notify("Please fill out your name.");
     } 
     else {
         channel = channel.replace("\"", "");
