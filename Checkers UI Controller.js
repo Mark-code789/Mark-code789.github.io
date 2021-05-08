@@ -3122,7 +3122,7 @@ const Home = async () => {
 
 async function play (isAutoRotate = false, accepted = false) {
     if(isAutoRotate && other.fullscreen) {
-        AdjustScreen(other.orientation);
+        AdjustScreen(screen.orientation.type.toLowerCase());
     } 
     if(Lobby != undefined && Lobby.isConnected && Game.mode === "two-player-online" || Game.mode === "single-player") {
         if(GetValue($("#play-window"), "display") == "none" && !isAutoRotate || accepted) {
