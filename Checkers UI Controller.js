@@ -3337,7 +3337,7 @@ const Fullscreen = async (value, isEvent = false) => { try {
 		    $("#item1").style.display = "none";
 		Notify({action: "alert",
 				header: "Fullscreen Error",
-				message: "Your browser doesn't support Fullscreen functionality.\n" + error});
+				message: "Your browser doesn't support Fullscreen functionality.\n"});
 	}
 } 
 
