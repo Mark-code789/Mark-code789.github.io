@@ -3300,7 +3300,7 @@ const Fullscreen = async (value, isEvent = false) => { try {
     		await enterFullscreen.call(elem, {navigationUI: "hide"});
     		
     		Clicked($("#fs-on"), $("#fs-on").parentNode);
-    		
+    		AdjustScreen(screen.orientation.type.toLowerCase());
 			other.fullscreen = value;
 			
 			let res = await orientationLocking(document.documentElement, other.orientation);
