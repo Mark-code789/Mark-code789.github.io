@@ -3330,18 +3330,7 @@ const Fullscreen = async (value, isEvent = false) => {
 		    btns[1].style.background = other.default;
 		    other.fullscreen = false;
 		} 
-        else if(isEvent && isFullScreen()) {
-            let btns = $$("#item0 button");
-		    btns[0].style.background = other.default;
-		    btns[1].style.background = other.background;
-		    other.fullscreen = true;
-		    other.orientation = screen.orientation.type.toLowerCase();
-		    AdjustScreen(screen.orientation.type.toLowerCase());
-		    let res = await orientationLocking(document.documentElement, other.orientation);
-            if(!res) {
-                $("#item1").style.display = "none";
-            } 
-        } 
+
 	} catch (error) {
 		if(!other.fullscreen)
 		    $("#item1").style.display = "none";
