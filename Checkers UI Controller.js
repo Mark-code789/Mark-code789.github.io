@@ -2163,10 +2163,14 @@ const Submit = (event) => {
             Notify("Names submitted successfully!");
         } 
         else {
-        	if(playerA_name == "") 
-            	Notify("You have not provided any name for <b><em>Player 1</em></b> please do so and submit again.");
-            else if(playerB_name == "")
-            	Notify("You have not provided any name for <b><em>Player 2</em></b> please do so and submit again.");
+        	if(playerA_name == "") {
+                $("#offline #playerA #playerA-name").focus();
+            	Notify("Please fill out player 1 name.");
+            } 
+            else if(playerB_name == "") {
+                $("#offline #playerB #playerB-name").focus();
+            	Notify("Please fill out player 2 name.");
+            } 
         } 
     } 
 } 
