@@ -3283,63 +3283,65 @@ async function play (isAutoRotate = false, accepted = false) {
     } 
 }
 
-const Fullscreen = async (value, isEvent = false) => { try {
-	let isFullScreen = () => {
-        if(document.fullscreenElement !== undefined) return document.fullscreenElement;
-        if(document.webkitFullscreenElement !== undefined) return document.webkitFullscreenElement;
-        if(document.mozFullscreenElement !== undefined) return document.mozFullscreenElement;
-        if(document.msFullscreenElement !== undefined) return document.msFullscreenElement;
-    }
-    let elem = document.documentElement;
-    let enterFullscreen = elem.requestFullscreen || elem.webkitRequestFullscreen || elem.mozRequestFullscreen || elem.msRequestFullscreen;
-    let exitFullscreen = document.exitFullscreen || document.webkitExitFullscreen || document.mozExitFullscreen || document.msExitFullscreen;
-    
-	if(value && !isEvent) {
-		if(enterFullscreen && !isFullScreen()) {
-			$("#item1").style.display = "grid";
-    		await enterFullscreen.call(elem, {navigationUI: "hide"});
-    		
-    		Clicked($("#fs-on"), $("#fs-on").parentNode);
-    		AdjustScreen(screen.orientation.type.toLowerCase());
-			other.fullscreen = value;
-			
-			let res = await orientationLocking(document.documentElement, other.orientation);
+const Fullscreen = async (value, isEvent = false) => { 
+    try {
+	    let isFullScreen = () => {
+            if(document.fullscreenElement !== undefined) return document.fullscreenElement;
+            if(document.webkitFullscreenElement !== undefined) return document.webkitFullscreenElement;
+            if(document.mozFullscreenElement !== undefined) return document.mozFullscreenElement;
+            if(document.msFullscreenElement !== undefined) return document.msFullscreenElement;
+        }
+        let elem = document.documentElement;
+        let enterFullscreen = elem.requestFullscreen || elem.webkitRequestFullscreen || elem.mozRequestFullscreen || elem.msRequestFullscreen;
+        let exitFullscreen = document.exitFullscreen || document.webkitExitFullscreen || document.mozExitFullscreen || document.msExitFullscreen;
+        
+	    if(value && !isEvent) {
+		    if(enterFullscreen && !isFullScreen()) {
+			    $("#item1").style.display = "grid";
+        		await enterFullscreen.call(elem, {navigationUI: "hide"});
+        		
+        		Clicked($("#fs-on"), $("#fs-on").parentNode);
+        		AdjustScreen(screen.orientation.type.toLowerCase());
+			    other.fullscreen = value;
+			    
+			    let res = await orientationLocking(document.documentElement, other.orientation);
+                if(!res) {
+                    $("#item1").style.display = "none";
+                } 
+        	}
+        	else
+        		Notify({action: "alert",
+					    header: "Fullscreen Error",
+					    message: "Your browser doesn't support Fullscreen functionality."});
+	    } 
+	    else if(!isEvent) {
+		    if(exitFullscreen && isFullScreen()) {
+			    other.fullscreen = value;
+			    $("#item1").style.display = "none";
+        		await exitFullscreen.call(document);
+        		AdjustScreen("", true);
+        		Clicked($("#fs-off"), $("#fs-off").parentNode);
+        	}
+	    } 
+	    else if(isEvent && !isFullScreen()) {
+		    $("#item1").style.display = "none";
+		    let btns = $$("#item0 button");
+		    btns[0].style.background = other.background;
+		    btns[1].style.background = other.default;
+		    other.fullscreen = false;
+		} 
+        else if(isEvent && isFullScreen()) {
+            let btns = $$("#item0 button");
+		    btns[0].style.background = other.default;
+		    btns[1].style.background = other.background;
+		    other.fullscreen = true;
+		    AdjustScreen(screen.orientation.type.toLowerCase());
+		    let res = await orientationLocking(document.documentElement, other.orientation);
             if(!res) {
                 $("#item1").style.display = "none";
             } 
-    	}
-    	else
-    		Notify({action: "alert",
-					header: "Fullscreen Error",
-					message: "Your browser doesn't support Fullscreen functionality."});
-	} 
-	else if(!isEvent) {
-		if(exitFullscreen && isFullScreen()) {
-			other.fullscreen = value;
-			$("#item1").style.display = "none";
-    		await exitFullscreen.call(document);
-    		AdjustScreen("", true);
-    		Clicked($("#fs-off"), $("#fs-off").parentNode);
-    	}
-	} 
-	else if(isEvent && !isFullScreen()) {
-		$("#item1").style.display = "none";
-		let btns = $$("#item0 button");
-		btns[0].style.background = other.background;
-		btns[1].style.background = other.default;
-		other.fullscreen = false;
-    else if(isEvent && isFullScreen()) {
-        let btns = $$("#item0 button");
-		btns[0].style.background = other.default;
-		btns[1].style.background = other.background;
-		other.fullscreen = true;
-		AdjustScreen(screen.orientation.type.toLowerCase());
-		let res = await orientationLocking(document.documentElement, other.orientation);
-        if(!res) {
-            $("#item1").style.display = "none";
         } 
-    } 
-	} } catch (error) {
+	} catch (error) {
 		if(!other.fullscreen)
 		    $("#item1").style.display = "none";
 		Notify({action: "alert",
