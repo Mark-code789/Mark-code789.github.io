@@ -3365,7 +3365,7 @@ async function orientationLocking (elem, orientation) {
     } catch (error) {
         Notify("Locking error: " + error);
     }
-    return new Prms(res);
+    return Prms(res);
 }
 
 async function back (undo = false, isComp = false) {
