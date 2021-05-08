@@ -3342,8 +3342,8 @@ const Fullscreen = async (value, isEvent = false) => { try {
 } 
 
 async function orientationLocking (elem, orientation) {
+	let res = false;
 	try {
-		let res = false;
 		await screen.orientation.lock(orientation).then(_ => {
             let viewBtns = $$("#item1 button");
             if(screen.orientation.type.toLowerCase().includes("portrait")) {
