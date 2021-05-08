@@ -3353,7 +3353,7 @@ async function orientationLocking (elem, orientation) {
             }
             return true;
         }).catch((error) => {
-            Notify("An error occurred while locking view\n");
+            Notify("An error occurred while locking orientation view\n");
             return false;
         }); 
     } catch (error) {
