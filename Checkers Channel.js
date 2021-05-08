@@ -125,7 +125,8 @@ const ChannelFunction = () => {
 	                        } 
 							else if(response.action === "leave" && response.uuid != Lobby.UUID) {
 								if(!Lobby.intentionalExit) {
-									Notify(`${playerB.name} went offline.`);
+									let opp = $$("#online .player_name")[1].innerHTML;
+									Notify(`${opp} went offline.`);
 									let status = $$(".chat_header p")[1];
 									status.innerHTML = "offline";
 									let opponentStatus = $("#player-2-status");
