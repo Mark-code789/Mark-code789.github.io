@@ -3307,7 +3307,6 @@ const Fullscreen = async (value, isEvent = false) => { try {
 			let res = await orientationLocking(document.documentElement, other.orientation);
             if(!res) {
                 $("#item1").style.display = "none";
-                //await enterFullscreen.call(elem, {navigationUI: "hide"});
             } 
     	}
     	else
