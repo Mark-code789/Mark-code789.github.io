@@ -3295,11 +3295,7 @@ const Fullscreen = async (value, isEvent = false) => { try {
 		if(enterFullscreen && !isFullScreen()) {
 			$("#item1").style.display = "grid";
     		await enterFullscreen.call(elem, {navigationUI: "hide"});
-    		let res = await orientationLocking(document.documentElement, other.orientation);
-            if(!res) {
-                $("#item1").style.display = "none";
-                await enterFullscreen.call(elem, {navigationUI: "hide"});
-            } 
+    		
     		Clicked($("#fs-on"), $("#fs-on").parentNode);
     		if(screen.orientation.type.toLowerCase().includes("portrait")) 
     			await setTimeout(() => {AdjustScreen("portrait");}, 1000);
@@ -3307,6 +3303,12 @@ const Fullscreen = async (value, isEvent = false) => { try {
     			await setTimeout(() => {AdjustScreen("landscape");}, 1000);
     		
 			other.fullscreen = value;
+			
+			let res = await orientationLocking(document.documentElement, other.orientation);
+            if(!res) {
+                $("#item1").style.display = "none";
+                //await enterFullscreen.call(elem, {navigationUI: "hide"});
+            } 
     	}
     	else
     		Notify({action: "alert",
@@ -3353,7 +3355,8 @@ async function orientationLocking (elem, orientation) {
             }
             return true;
         }).catch((error) => {
-            Notify("An error occurred while locking orientation view\n" + error.name);
+            if(error.name != "NotSupportedError")
+                Notify("An error occurred while locking orientation view");
             return false;
         }); 
     } catch (error) {
