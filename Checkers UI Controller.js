@@ -3348,7 +3348,9 @@ async function orientationLocking (elem, orientation) {
                 other.orientation = "landscape";
             }
         }).catch((error) => {
-            alert("An error occurred while locking view\n" + error);
+            Notify({action: "alert", 
+                    header: "Fullscreen Locking Error", 
+                    message: "An error occurred while locking orientation view\n");
         }); 
     } catch (error) {
         Notify("Locking error: " + error);
