@@ -3121,6 +3121,9 @@ const Home = async () => {
 }
 
 async function play (isAutoRotate = false, accepted = false) {
+    if(isAutoRotate) {
+        AdjustScreen(other.orientation);
+    } 
     if(Lobby != undefined && Lobby.isConnected && Game.mode === "two-player-online" || Game.mode === "single-player") {
         if(GetValue($("#play-window"), "display") == "none" && !isAutoRotate || accepted) {
         	// If game mode is online, request consent from opponent, otherwise just display the play window
@@ -3371,7 +3374,7 @@ async function back (undo = false, isComp = false) {
 	} 
     if(!undo) {
         let btns;
-		if(other.fullscreen) {
+		if(other.fullscreen && GetValue($("#item1"), "display") == "grid") {
         	btns = $$("#item1 button");
 	        for(let btn of btns) {
 	            if(GetValue(btn, "background-image") == other.default) { 
