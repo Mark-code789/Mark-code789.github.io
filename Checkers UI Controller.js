@@ -3343,7 +3343,7 @@ const Fullscreen = async (value, isEvent = false) => { try {
 
 async function orientationLocking (elem, orientation) {
 	try {
-		screen.orientation.lock(orientation).then(_ => {
+		await screen.orientation.lock(orientation).then(_ => {
             let viewBtns = $$("#item1 button");
             if(screen.orientation.type.toLowerCase().includes("portrait")) {
                 viewBtns[1].style.background = other.default;
