@@ -451,7 +451,7 @@ const LeftChannel = (response) => {
     		Cancel();
     		back();
     	} 
-        name = $$("#online .player_name")[1].innerHTML;
+        let name = $$("#online .player_name")[1].innerHTML;
         $$("#online .player_name")[1].innerHTML = "N/A";
         let opponentStatus = $("#player-2-status");
         opponentStatus.innerHTML = "N/A";
