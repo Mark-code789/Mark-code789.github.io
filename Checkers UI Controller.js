@@ -3365,7 +3365,7 @@ async function orientationLocking (elem, orientation) {
     } catch (error) {
         Notify("Locking error: " + error);
     }
-    return res;
+    return new Prms(res);
 }
 
 async function back (undo = false, isComp = false) {
@@ -3380,14 +3380,12 @@ async function back (undo = false, isComp = false) {
 	        for(let btn of btns) {
 	            if(GetValue(btn, "background-image") == other.default) { 
 	                if(btn.innerHTML == "HORIZ." && screen.orientation.type.toLowerCase().includes("portrait")) {
-	                    await orientationLocking(document.documentElement, "landscape-primary"); 
+	                    orientationLocking(document.documentElement, "landscape-primary"); 
 	                    other.orientation = "landscape-primary";
-	                    break;
 	                } 
 	                else if(btn.innerHTML == "VERT." && screen.orientation.type.toLowerCase().includes("landscape")) {
-	                    await orientationLocking(document.documentElement, "portrait-primary");
+	                    orientationLocking(document.documentElement, "portrait-primary");
 	                    other.orientation = "portrait-primary";
-	                    break;
 	                } 
 					AdjustScreen(other.orientation);
 	            } 
