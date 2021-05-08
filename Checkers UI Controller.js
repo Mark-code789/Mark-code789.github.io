@@ -3296,8 +3296,10 @@ const Fullscreen = async (value, isEvent = false) => { try {
 			$("#item1").style.display = "grid";
     		await enterFullscreen.call(elem, {navigationUI: "hide"});
     		let res = await orientationLocking(document.documentElement, other.orientation);
-            if(!res)
+            if(!res) {
                 $("#item1").style.display = "none";
+                await enterFullscreen.call(elem, {navigationUI: "hide"});
+            } 
     		Clicked($("#fs-on"), $("#fs-on").parentNode);
     		if(screen.orientation.type.toLowerCase().includes("portrait")) 
     			await setTimeout(() => {AdjustScreen("portrait");}, 1000);
