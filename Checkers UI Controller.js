@@ -285,7 +285,6 @@ async function LoadingDone () {
             $("#mute").style.background = other.background;
         }
         else if(muted == "false") {
-            btns = $$("#item2 button");
             Mute(JSON.parse(muted));
             $("#mute").style.background = other.default;
             $("#unmute").style.background = other.background;
