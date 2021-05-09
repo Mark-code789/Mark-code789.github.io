@@ -279,12 +279,12 @@ async function LoadingDone () {
         } catch (error) {/*alert(error + "" + JSON.parse(storage.getItem("stats")).length);*/}
        
         let muted = storage.getItem("muted");
-        if(muted == "true") {
+        if(muted == "false") {
             Mute(JSON.parse(muted));
             $("#unmute").style.background = other.default;
             $("#mute").style.background = other.background;
         }
-        else if(muted == "false") {
+        else if(muted == "true") {
             Mute(JSON.parse(muted));
             $("#mute").style.background = other.default;
             $("#unmute").style.background = other.background;
