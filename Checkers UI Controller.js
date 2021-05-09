@@ -582,7 +582,7 @@ const LoadBoard = (playerAPieceColor, playerBPieceColor) => {
 
 const Refresh = async (restart = false, color = playerA.pieceColor) => {
     // remove all the temporary css classes 
-    let pieces = $$("#table tr td div, #transmitter .outer, .valid, .pre_valid, .hint, .helper_empty, .helper_filled");
+    /*let pieces = $$("#table tr td div, #transmitter .outer, .valid, .pre_valid, .hint, .helper_empty, .helper_filled");
     for(let piece of pieces) {
         if(piece.parentNode != null) {
             piece.classList.remove("helper_empty");
@@ -595,14 +595,14 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
             if(piece.tagName.toLowerCase() === "div")
                 piece.parentNode.removeChild(piece);
         } 
-    }
+    }*/
    
     for(let p of $$(".frame p")) {
         p.innerHTML = "";
         p.style.display = "flex";
     } 
    
-    //$("#table").innerHTML = "";
+    $("#table").innerHTML = "";
    
     // reset all the game states and players states 
     BackState.moves = [];
