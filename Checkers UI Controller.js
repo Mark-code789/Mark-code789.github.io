@@ -432,7 +432,7 @@ const HasNotch = () => {
     return {has: false, top: 0};
 } 
 
-const LoadBoard = (playerAPieceColor, playerBPieceColor) => {
+const LoadBoard = async (playerAPieceColor, playerBPieceColor) => {
 	let board = $("#table");
 	let frame = $$(".frame");
 	let ftc, frc, fbc, flc;
@@ -441,7 +441,7 @@ const LoadBoard = (playerAPieceColor, playerBPieceColor) => {
 	let chars = "ABCDEFGHIJKLMNOPQRST";
 	let count = 0;
     for(let i = 0; i < Game.boardSize; i++) {
-        let tr = tre[i] || board.insertRow(-1);
+        let tr = tre[i] || await board.insertRow(-1);
         if(!tr.classList.contains('tr')) 
             tr.classList.add("tr");
         if(isEmpty) 
@@ -507,7 +507,7 @@ const LoadBoard = (playerAPieceColor, playerBPieceColor) => {
             
            
             
-            let td = tr.cells[j] || tr.insertCell(-1);
+            let td = tr.cells[j] || await tr.insertCell(-1);
             if(!td.classList.contains('cell')) 
                 td.classList.add("cell");
             
@@ -571,12 +571,9 @@ const LoadBoard = (playerAPieceColor, playerBPieceColor) => {
                 if(isEmpty)
                 Game.state[i].push("NA"); // pushing NOT-AVAILABLE
             } 
-            
-            /*if(td.parentNode === null)
-                tr.appendChild(td);*/
+            await Prms("done");
         } 
-        /*if(tr.parentNode === null)
-            board.appendChild(tr);*/
+        await Prms("done");
     }
    
     for(let i = Game.boardSize; i < frame[0].children.length; i++) {
@@ -584,37 +581,40 @@ const LoadBoard = (playerAPieceColor, playerBPieceColor) => {
         frame[1].children[i].style.display = "none";
         frame[2].children[i].style.display = "none";
         frame[3].children[i].style.display = "none";
-    } 
+    }
+    return Prms("done");
 } 
 
 const Refresh = async (restart = false, color = playerA.pieceColor) => {
     // remove all the temporary css classes 
-    /*let pieces = $$("#table tr td div, #transmitter .outer, .valid, .pre_valid, .hint, .helper_empty, .helper_filled");
-    for(let piece of pieces) {
-        if(piece.parentNode != null) {
-            piece.classList.remove("helper_empty");
-            piece.classList.remove("helper_filled");
-            piece.classList.remove("hint");
-            if(piece.className.includes("valid"))
-                piece.classList.remove("valid");
-            if(piece.className.includes("pre_valid"))
-                piece.classList.remove("pre_valid");
-            if(piece.tagName.toLowerCase() === "div")
-                piece.parentNode.removeChild(piece);
-        } 
-    }*/
+    let cells = $$("#table tr td");
+    for(let cell of cells) {
+        cell.classList.remove("hint", "helper_empty", "helper_filled", "valid", "pre_valid");
+        cell.innerHTML = "";
+        cell.style.pointerEvents = "auto";
+    }
    
     for(let p of $$(".frame p")) {
         p.innerHTML = "";
         p.style.display = "flex";
     } 
-   
-    $("#table").innerHTML = "";
+    let table = $("#table");
+    
+    if(table.rows.length > 0) {
+        for(i = 0; i < table.rows.length; i++) {
+            if(i < Game.boardSize) {
+                for(let j = Game.boardSize; j < table.rows.length; j++) 
+                    table.rows[i].deleteCell(-1);
+            }
+            else if(i >= Game.boardSize)
+                table.deleteRow(-1);
+        } 
+    } 
    
     // reset all the game states and players states 
     BackState.moves = [];
     Game.state = /*[["NA", "EC", "NA", "EC", "NA", "EC", "NA", "EC"],
-				  ["EC", "NA", "EC", "NA", "EC", "NA", "MB", "NA"],
+				  ["EC", "NA", "EC", "NA", "MB", "NA", "MB", "NA"],
 				  ["NA", "EC", "NA", "EC", "NA", "EC", "NA", "EC"],
 				  ["KB", "NA", "MW", "NA", "MB", "NA", "EC", "NA"],
 				  ["NA", "EC", "NA", "KW", "NA", "EC", "NA", "EC"],
@@ -648,7 +648,7 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
     
     if(restart && Game.mode != "two-player-online") {
         start();
-        return;
+        return Prms(true);
     }
     else if(restart) {
         await LoadBoard(playerA.pieceColor, playerB.pieceColor);
@@ -657,7 +657,8 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
             let id = playerA.pieceColor.slice(0,1);
             Game.possibleMoves = await Iterate({id, state: Game.state, func: AssesMoves});
             await Helper(Game.possibleMoves, Copy(Game.state));
-        } 
+        }
+        return Prms(true);
     } 
     
     async function start () {
@@ -681,7 +682,7 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
                         icon: srcs[versions.indexOf(Game.version)]});
             } 
             if(Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black") {
-                setTimeout(_ => aiStart(), 1000);
+                setTimeout(_ => aiStart(), 100);
             }
             else if(Game.helper) {
                 let id = playerA.pieceColor.slice(0,1);
@@ -776,8 +777,7 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
     } 
 } 
 
-const Alternate = async (color) => {
-    //Notify(color);
+const Alternate = async (color = playerA.pieceColor) => {
     playerA.pieceColor = color;
     if(playerA.pieceColor == "White") {
         playerA.pieceColor = 'Black';
@@ -794,8 +794,8 @@ const Alternate = async (color) => {
         if(playerA.pieceColor == 'Black') {
             await Alternate();
         } 
-    } 
-    //setTimeout(() => Notify(playerA.pieceColor), 2000);
+    }
+    return Prms("done");
 } 
 
 const RollDice = () => {
@@ -1167,14 +1167,14 @@ class Move {
         piece.style.margin = "0px";
         piece.style.top = `${Game.prop.y1}px`;
         piece.style.left = `${Game.prop.x1}px`;
-        piece.style.boxShadow = piece.className.includes("black")? `0 var(--shadow-width) 0 0 #1A1A1A`: `0 var(--shadow-width) 0 0 #999999`;
+        piece.style.boxShadow = piece.classList.contains("piece_black")? `0 var(--shadow-width) 0 0 #1A1A1A, 0 calc(var(--shadow-width) + 2px) 5px 0 rgba(0,0,0,0)`: `0 var(--shadow-width) 0 0 #999999, 0 calc(var(--shadow-width) + 2px) 5px 0 rgba(0,0,0,0)`;
         this.root.style.setProperty('--ept', prop.y2.toFixed(16) + "px");
         this.root.style.setProperty('--epl', prop.x2.toFixed(16) + "px");
         let id = Game.state[Game.prop.i][Game.prop.j].substring(1,2);
         let angle = parseInt(GetValue(this.root, "--angleZ" + id));
         this.root.style.setProperty("--angleZP", angle + "deg");
         
-        let mt = 0.35;
+        let mt = 0.4;
     	let increase = mt * 0.25;
     	let no_of_cells = Math.abs(Game.prop.i - prop.i);
     	for(let i = 1; i < no_of_cells; i++) {
@@ -1230,6 +1230,7 @@ class Move {
             piece.style.width  = "var(--piece_size)";
             piece.style.margin = "auto";
             piece.style.marginTop = "calc(calc(100% - var(--piece_size)) / 2 - var(--shadow-width))";
+            piece.style.boxShadow = piece.classList.contains("piece_black")? `0 var(--shadow-width) 0 0 #1A1A1A, 0 calc(var(--shadow-width) + 2px) 3px 0 var(--shadow-color)`: `0 var(--shadow-width) 0 0 #999999, 0 calc(var(--shadow-width) + 2px) 3px 0 var(--shadow-color)`;
             
             if(screen.orientation.type.toLowerCase().includes("landscape")) {
                 root.style.setProperty("--piece_size", "80%");
@@ -1250,7 +1251,7 @@ class Move {
             } 
             
             if((Game.version !== "russian" && prop.final || Game.version === "russian" && capture || !capture) && !piece.className.includes("crown") && (prop.i === 0 && piece.className.includes(playerA.pieceColor.toLowerCase()) || prop.i === Game.boardSize - 1 && piece.className.includes(playerB.pieceColor.toLowerCase()))) {
-                if(piece.className.includes("white")) {
+                if(piece.classList.contains("piece_white")) {
                     piece.classList.add("crown_white");
                 } 
                 else {
@@ -1921,7 +1922,7 @@ const GameOver = async (isDraw = false) => { try {
                 if(Game.mode === "two-player-online") {
                     if(Game.alternatePlayAs) {
                         let color = playerA.pieceColor;
-                        setTimeout( () => Alternate(color), 100);
+                        await Alternate(color);
                     }
                     if(Game.rollDice) {
                         Game.firstMove = await RollDice();
@@ -2283,7 +2284,7 @@ const Restart = async (option) => {
                 if(Game.mode === "two-player-online") {
                     if(Game.alternatePlayAs) {
                         let color = playerA.pieceColor;
-                        setTimeout( () => Alternate(color), 100);
+                        Alternate(color);
                     }
                     if(Game.rollDice) {
                         Game.firstMove = await RollDice();
@@ -2306,11 +2307,11 @@ const Restart = async (option) => {
                 
                 if(Game.alternatePlayAs) {
                     let color = playerA.pieceColor;
-                    setTimeout( () => Alternate(color), 100);
-                    setTimeout(async () => await Refresh(true), 200);
+                    await Alternate(color);
+                    await Refresh(true);
                 }
                 else {
-                   Refresh(true);
+                   await Refresh(true);
                 } 
                 Cancel();
             } 
@@ -2382,12 +2383,9 @@ const Hint = async (elem, state=Copy(Game.state)) => {
         let cell = other.aiPath[0];
         await ValidateMove({cell: $("#table").rows[cell.i].cells[cell.j], i: cell.i, j: cell.j});
         
-        if(other.aiPath.length === 1)
+        for(cell of other.aiPath) {
+            $("#table").rows[cell.m].cells[cell.n].classList.remove("helper_empty");
             $("#table").rows[cell.m].cells[cell.n].classList.add("hint");
-        else if(other.aiPath.length > 1 && !Game.helper && !Game.capturesHelper) {
-            for(cell of other.aiPath) {
-                $("#table").rows[cell.m].cells[cell.n].classList.add("hint");
-            } 
         } 
         other.aiPath = [];
         elem.style.backgroundSize = "30px 25px";
@@ -3215,7 +3213,7 @@ async function play (isAutoRotate = false, accepted = false) {
             if(Game.mode === "two-player-online" && !accepted) {
                 if(Game.alternatePlayAs) {
                     let color = playerA.pieceColor;
-                    setTimeout( () => Alternate(color), 100);
+                    await Alternate(color);
                 }
                 setTimeout(async () => {
                     if(Game.rollDice) {
@@ -3245,9 +3243,9 @@ async function play (isAutoRotate = false, accepted = false) {
                 $("#play-window .footer_section p").style.display = "flex";
                 if(Game.alternatePlayAs) {
                     let color = playerA.pieceColor;
-                    setTimeout( () => Alternate(color), 100);
+                    await Alternate(color);
                 } 
-                setTimeout(async () => await Refresh(true), 200);
+                await Refresh(true);
             }
            
             // choosing whether to display the hint button or not
@@ -3345,9 +3343,9 @@ async function play (isAutoRotate = false, accepted = false) {
             $("#play-window .footer_section p").style.display = "none";
             if(Game.alternatePlayAs) {
                 let color = playerA.pieceColor;
-                setTimeout( () => Alternate(color), 100);
+                await Alternate(color);
             } 
-            setTimeout(async () => await Refresh(true), 200);
+            await Refresh(true);
             
             $("#play-window .middle_section .horiz_controls:nth-of-type(3)").style.backgroundImage = "var(--hint)";
             $("#play-window .controls_section .controls:nth-of-type(3)").style.backgroundImage = "var(--hint)";
