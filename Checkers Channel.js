@@ -650,7 +650,7 @@ const Request = async (prop) => {
             
             if(Game.alternatePlayAs) {
                 let color = playerA.pieceColor;
-                setTimeout( () => Alternate(color), 100);
+                Alternate(color);
             }
             setTimeout(async () => {
                 Publish.send({channel: Lobby.CHANNEL, message: {title: "AcceptedRequest", content: ""} });
