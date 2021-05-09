@@ -1327,7 +1327,7 @@ class Move {
                             await ai.makeMove();
                             ai = null;
                             } catch (error) {alert("Non capture Error\n" + error);} 
-                        }, 1);
+                        }, 100);
                     }
                     
                 } // End of else if isOver 
