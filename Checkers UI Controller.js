@@ -602,7 +602,7 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
         p.style.display = "flex";
     } 
    
-    $("#table").innerHTML = "";
+    //$("#table").innerHTML = "";
    
     // reset all the game states and players states 
     BackState.moves = [];
