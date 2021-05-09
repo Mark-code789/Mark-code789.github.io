@@ -674,7 +674,7 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
                         icon: srcs[versions.indexOf(Game.version)]});
             } 
             if(Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black") {
-                setTimeout(_ => aiStart(), 100);
+                setTimeout(_ => aiStart(), 1000);
             }
             else if(Game.helper) {
                 let id = playerA.pieceColor.slice(0,1);
