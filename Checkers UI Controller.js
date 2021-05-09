@@ -427,22 +427,85 @@ const HasNotch = () => {
 
 const LoadBoard = (playerAPieceColor, playerBPieceColor) => {
 	let board = $("#table");
+	let frame = $$(".frame");
+	let ftc, frc, fbc, flc;
 	let tre = board.rows;
 	let isEmpty = Game.state.length === 0? true: false;
+	let chars = "ABCDEFGHIJKLMNOPQRST";
+	let count = 0;
     for(let i = 0; i < Game.boardSize; i++) {
-        let tr = tre[i] || $$$("tr");
-        if(tr.parentNode === null) 
+        let tr = tre[i] || board.insertRow(-1);
+        if(!tr.classList.contains('tr')) 
             tr.classList.add("tr");
         if(isEmpty) 
         Game.state.push([]);
         
         for(let j=0; j < Game.boardSize; j++) {
-            let td = tr.cells[j] || $$$("td");
-            if(td.parentNode === null) 
+            if(Game.version == "american" || Game.version == "kenyan" || Game.version == "russian" || Game.version == "pool") {
+                if(j == 0) {
+                    ftc = frame[0].children[Game.boardSize-1-i];
+                    fbc = frame[2].children[i];
+                    ftc.innerHTML = chars.charAt(i);
+                    fbc.innerHTML = chars.charAt(i);
+                }
+                if(j == 0 || j == Game.boardSize-1) {
+                    frc = frame[1].children[i];
+                    flc = frame[3].children[Game.boardSize-1-i];
+                    frc.innerHTML = i+1;
+                    flc.innerHTML = i+1;
+                } 
+            }
+            else if(Game.version == "nigerian") {
+                if(i % 2 == 0 && j % 2 == 0 || i % 2 == 1 && j % 2 == 1) {
+                    ++count;
+                    if(i == 0) {
+                        ftc = frame[0].children[Game.boardSize-1-j];
+                        ftc.innerHTML = count;
+                    } 
+                    if(j == 0) {
+                        flc = frame[3].children[i];
+                        flc.innerHTML = count;
+                    }
+                    if(j == Game.boardSize-1) {
+                        frc = frame[1].children[Game.boardSize-1-i];
+                        frc.innerHTML = count;
+                    }
+                    if(i == Game.boardSize-1) {
+                        fbc = frame[2].children[j];
+                        fbc.innerHTML = count;
+                    } 
+                } 
+            }
+            else if(Game.version == "international") {
+                if(i % 2 == 0 && j % 2 == 1 || i % 2 == 1 && j % 2 == 0) {
+                    ++count;
+                    if(i == 0) {
+                        ftc = frame[0].children[Game.boardSize-1-j];
+                        ftc.innerHTML = count;
+                    } 
+                    if(j == 0) {
+                        flc = frame[3].children[i];
+                        flc.innerHTML = count;
+                    }
+                    if(j == Game.boardSize-1) {
+                        frc = frame[1].children[Game.boardSize-1-i];
+                        frc.innerHTML = count;
+                    }
+                    if(i == Game.boardSize-1) {
+                        fbc = frame[2].children[j];
+                        fbc.innerHTML = count;
+                    } 
+                } 
+            }
+            
+           
+            
+            let td = tr.cells[j] || tr.insertCell(-1);
+            if(!td.classList.contains('cell')) 
                 td.classList.add("cell");
             
             if(Game.version != "nigerian" && (j%2 == 1 && i%2 == 0 || j%2 == 0 && i%2 == 1) || Game.version === "nigerian" && (j%2 == 0 && i%2 == 0 || j%2 == 1 && i%2 == 1)) {
-                if(td.parentNode === null) {
+                if(!td.classList.contains('cell_black')) {
                     td.classList.add("cell_black");
                     td.addEventListener('click', () => {ValidateMove({cell: td, i, j}); }, true);
                 }
@@ -495,19 +558,26 @@ const LoadBoard = (playerAPieceColor, playerBPieceColor) => {
 				} 
             }
             else {
-                if(td.parentNode === null) {
+                if(!td.classList.contains('cell_white')) {
                     td.classList.add("cell_white");
                 }
                 if(isEmpty)
                 Game.state[i].push("NA"); // pushing NOT-AVAILABLE
             } 
             
-            if(td.parentNode === null)
-                tr.appendChild(td);
+            /*if(td.parentNode === null)
+                tr.appendChild(td);*/
         } 
-        if(tr.parentNode === null)
-            board.appendChild(tr);
+        /*if(tr.parentNode === null)
+            board.appendChild(tr);*/
     }
+   
+    for(let i = Game.boardSize; i < frame[0].children.length; i++) {
+        frame[0].children[i].style.display = "none";
+        frame[1].children[i].style.display = "none";
+        frame[2].children[i].style.display = "none";
+        frame[3].children[i].style.display = "none";
+    } 
 } 
 
 const Refresh = async (restart = false, color = playerA.pieceColor) => {
@@ -526,6 +596,11 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
                 piece.parentNode.removeChild(piece);
         } 
     }
+   
+    for(let p of $$(".frame p")) {
+        p.innerHTML = "";
+        p.style.display = "flex";
+    } 
    
     $("#table").innerHTML = "";
    
