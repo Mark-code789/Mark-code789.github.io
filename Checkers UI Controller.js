@@ -714,15 +714,17 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
             if(Game.mode === "single-player") {
                 Cancel();
                 if(res) 
-                await Notify({action: "pop-up-alert", 
+                setTimeout(_ => Notify({action: "pop-up-alert", 
                         header: "YOU WIN!<br>PLAY FIRST.", 
                         icon: Icons.diceIcon, 
-                        iconType: "dice"});
+                        iconType: "dice", 
+                        delay: 1500}), 500);
                 else if(!res) 
-                await Notify({action: "pop-up-alert", 
+                setTimeout(_ => Notify({action: "pop-up-alert", 
                         header: "YOU LOSE!<br>OPPONENT FIRST.", 
                         icon: Icons.diceIcon, 
-                        iconType: "dice"});
+                        iconType: "dice", 
+                        delay: 1500}), 500);
             } 
             else {
                 let name;
@@ -733,9 +735,11 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
                     
                 name += "!";
                     
-                Notify({action: "alert", 
-                        header: "Congrats " + name, 
-                        message: "You've won dice roll. Make the first move"});
+                setTimeout(_ => Notify({action: "pop-up-alert", 
+                        header: "YOU WIN!<br>PLAY FIRST.", 
+                        icon: Icons.diceIcon, 
+                        iconType: "dice",
+                        delay: 1500}), 500);
             } 
         } 
     } 
@@ -2844,7 +2848,8 @@ const Notify = (data) => {
             note_buttons[0].style.display = "none";
             note_buttons[1].style.display = "none";
             note_buttons[2].style.display = "none";
-            setTimeout(Cancel, 1000);
+            let delay = data.delay || 1000;
+            setTimeout(Cancel, delay);
         } 
         else if(data.action === "alert_special") {
             note_image.src = Icons.loadIcon;
