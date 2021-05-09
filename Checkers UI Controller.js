@@ -677,9 +677,9 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
         if(Game.mode === "single-player") {
             if(screen.orientation.type.toLowerCase().includes("landscape")) {
                 let versions = ["american", "kenyan", "international", "pool", "russian", "nigerian"];
-                Notify({action: "pop-up-alert",
+                setTimeout(_ => Notify({action: "pop-up-alert",
                         header: Game.version.toUpperCase() + " CHECKERS<br>" + Game.levels[Game.level].level.toUpperCase(), 
-                        icon: srcs[versions.indexOf(Game.version)]});
+                        icon: srcs[versions.indexOf(Game.version)]}), 1500);
             } 
             if(Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black") {
                 setTimeout(_ => aiStart(), 100);
