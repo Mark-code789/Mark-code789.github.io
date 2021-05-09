@@ -22,7 +22,7 @@
     --star: url("star.png");
     --satc: constant(safe-area-inset-top, 0);
     --sat: env(safe-area-inset-top, 0);
-    --mt: 0.35s; /*moving time*/
+    --mt: 0.4s; /*moving time*/
     --atf: ease-in-out; /*animation-timing-function*/
     --ept: 50%;
     --epl: 50%;
@@ -35,6 +35,7 @@
     --border-top: 0;
     --board-size: 8;
     --shadow-width: 0px;
+    --shadow-color: #502C00;
     --piece_size: 85%;
     --txtSize: 40px;
     --M: 5px;
@@ -500,7 +501,7 @@ article {
 #main-window #header .header_div:first-of-type h1 {
     height: 53px;
     font-size: 2.2rem;
-    font-weight: 500;
+    font-weight: 400;
     
     display: flex;
     justify-content: center;
@@ -1036,6 +1037,8 @@ article {
     flex-flow: row nowrap;
     height: 7px;
     width: calc(100% - 12px);
+    border-top: 1px solid #000;
+    box-shadow: 0 -2px 8px 0 #592900;
 } 
 
 .frame p {
@@ -1043,7 +1046,7 @@ article {
     margin: 0;
     border: none;
     color: #000 !important;
-    font-size: 0.4em; 
+    font-size: 30%; 
     font-weight: 700;
     display: flex;
     justify-content: center;
@@ -1056,27 +1059,23 @@ article {
 .frame_top {
     top: 0;
     left: 6px;
-    border-top: 1px solid #000;
     transform: rotate(180deg);
 } 
 
 .frame_right {
     top: calc(50% - 3.5px); /*Divide everything by two*/
     left: calc(50% + 2.5px);
-    border-top: 1px solid #000;
     transform: rotate(-90deg);
 } 
 
 .frame_bottom {
     top: calc(100% - 7px);
     left: 6px;
-    border-top: 1px solid #000;
 } 
 
 .frame_left {
     top: calc(50% - 3.5px); /*Divide everything by two*/
     left: calc(-50% + 9.25px);
-    border-top: 1px solid #000;
     transform: rotate(90deg);
 } 
 
@@ -1113,10 +1112,18 @@ article {
     display: none;
 } 
 
+#play-window .middle_section .scene .board .face_back {
+    height: var(--length);
+    width: var(--length);
+    background: transparent;
+    transform: rotateY(180deg) translateZ( calc( var(--width)/2 ) );
+    box-shadow: 0 0 8px 15px #402100; 
+} 
+
 #play-window .middle_section .scene .board .face_bottom {
     height: var(--width);
     width: var(--length);
-    background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), var(--black-cell);
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), var(--black-cell);
     
     transform: rotateX(-90deg) translateZ( calc( var(--length)/2 ) );
     
@@ -1129,9 +1136,9 @@ article {
 
 #play-window .middle_section .scene .board .face_bottom .p {
     font-family: Arial;
-    font-size: 100%;
+    font-size: 130%;
     font-weight: 300;
-    color: #aaa;
+    color: #ccc;
     width: 100%;
     text-align: center;
     text-transform: capitalize;
@@ -1990,8 +1997,24 @@ article {
     background-image: linear-gradient(rgba(0, 152, 25, 0.5), rgba(0, 152, 25, 0.5)), var(--black-cell);
 } 
 
+.valid .piece_black {
+    box-shadow: 0 var(--shadow-width) 0 0 #1A1A1A, 0 calc(var(--shadow-width) + 2px) 5px 0 rgba(0, 52, 0, 0.8) !important;
+} 
+
+.valid .piece_white {
+    box-shadow: 0 var(--shadow-width) 0 0 #999999, 0 calc(var(--shadow-width) + 2px) 5px 0 rgba(0, 52, 0, 0.8) !important;
+} 
+
 .pre_valid {
     background-image: linear-gradient(rgba(0, 152, 255, 0.5), rgba(0, 152, 255, 0.5)), var(--black-cell);
+} 
+
+.pre_valid .piece_black {
+    box-shadow: 0 var(--shadow-width) 0 0 #1A1A1A, 0 calc(var(--shadow-width) + 2px) 5px 0 rgba(0, 52, 155, 0.8) !important;
+} 
+
+.pre_valid .piece_white {
+    box-shadow: 0 var(--shadow-width) 0 0 #999999, 0 calc(var(--shadow-width) + 2px) 5px 0 rgba(0, 52, 155, 0.8) !important;
 } 
 
 .invalid {
@@ -2052,7 +2075,7 @@ article {
 } 
 
 .piece_black {
-    box-shadow: 0 var(--shadow-width)  0 0 #1A1A1A;
+    box-shadow: 0 var(--shadow-width) 0 0 #1A1A1A, 0 calc(var(--shadow-width) + 2px) 3px 0 var(--shadow-color);
     background-image: var(--black-piece);
     background-color: #2F2F2F;
     background-size: cover;
@@ -2062,7 +2085,7 @@ article {
 } 
 
 .crown_black {
-    box-shadow: 0 var(--shadow-width)  0 0 #1A1A1A;
+    box-shadow: 0 var(--shadow-width) 0 0 #1A1A1A, 0 calc(var(--shadow-width) + 2px) 3px 0 var(--shadow-color);
     background-size: 70%, cover, cover;
     background-clip: padding-box, padding-box, border-box;
     background-image: var(--white-crown), var(--black-piece);
@@ -2071,7 +2094,7 @@ article {
 } 
 
 .piece_white {
-    box-shadow: 0 var(--shadow-width)  0 0 #999999;
+    box-shadow: 0 var(--shadow-width) 0 0 #999999, 0 calc(var(--shadow-width) + 2px) 3px 0 var(--shadow-color);
     background-image: var(--white-piece);
     background-color: #999999;
     background-size: cover;
@@ -2081,7 +2104,7 @@ article {
 } 
 
 .crown_white {
-    box-shadow: 0 var(--shadow-width)  0 0 #999999;
+    box-shadow: 0 var(--shadow-width) 0 0 #999999, 0 calc(var(--shadow-width) + 2px) 3px 0 var(--shadow-color);
     background-image: var(--black-crown), var(--white-piece);
     background-color: #999999;
     background-size: 70%, cover, cover;
@@ -2110,7 +2133,7 @@ article {
 
 
 .move {
-    animation: pos var(--mt) var(--atf) 0s 1 normal forwards;
+    animation: pos var(--mt) var(--atf) 0.1s 1 normal forwards;
 }
 
 @keyframes pos {
