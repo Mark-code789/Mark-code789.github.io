@@ -1671,7 +1671,7 @@ article {
 } 
 
 .fade_note {
-    animation: fade-note 0.6s ease 0s 1 normal forwards;
+    animation: fade-note 0.2s ease 0s 1 normal forwards;
 } 
 
 @keyframes fade-note {
