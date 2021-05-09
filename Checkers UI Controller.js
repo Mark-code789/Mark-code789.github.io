@@ -589,7 +589,7 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
     // remove all the temporary css classes 
     let cells = $$("#table tr td");
     for(let cell of cells) {
-        cell.classList.remove("hint", "helper_empty", "helper_filled", "valid", "pre_valid");
+        cell.className = "";
         cell.innerHTML = "";
         cell.style.pointerEvents = "auto";
     }
