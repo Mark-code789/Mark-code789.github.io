@@ -1009,7 +1009,6 @@ article {
     height: var(--length);
     width: var(--length);
     padding: 0px;
-    border: 5px solid #FFDB94;
     
     display: flex;
     justify-content: center;
@@ -1021,10 +1020,64 @@ article {
     position: relative;
     height: 100%;
     width: 100%;
-    border: 1px solid #000;
     padding: 0;
     margin: 0;
+    background-image: var(--white-cell);
+    background-size: cover;
     overflow: auto;
+} 
+
+.frame {
+    position: absolute;
+    transform-origin: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: row nowrap;
+    height: 7px;
+    width: calc(100% - 12px);
+} 
+
+.frame p {
+    padding: 0;
+    margin: 0;
+    border: none;
+    color: #000 !important;
+    font-size: 0.4em; 
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+    height: 100%;
+    width: calc(100% / var(--board-size));
+} 
+
+.frame_top {
+    top: 0;
+    left: 6px;
+    border-top: 1px solid #000;
+    transform: rotate(180deg);
+} 
+
+.frame_right {
+    top: calc(50% - 3.5px); /*Divide everything by two*/
+    left: calc(50% + 2.5px);
+    border-top: 1px solid #000;
+    transform: rotate(-90deg);
+} 
+
+.frame_bottom {
+    top: calc(100% - 7px);
+    left: 6px;
+    border-top: 1px solid #000;
+} 
+
+.frame_left {
+    top: calc(50% - 3.5px); /*Divide everything by two*/
+    left: calc(-50% + 9.25px);
+    border-top: 1px solid #000;
+    transform: rotate(90deg);
 } 
 
 #table {
@@ -1036,8 +1089,8 @@ article {
     table-layout: fixed;
     padding: 0;
     margin: 0;
-    height: 100%;
-    width: 100%;
+    height: calc(100% - 14px);
+    width: calc(100% - 14px);
     border-collapse: collapse;
     border: none;
     border-spacing: 0;
@@ -1050,8 +1103,8 @@ article {
     left: 50%;
     transform-origin: 50% 50%;
     transform: translate3d(-50%, -50%, 0);
-    height: 100%;
-    width: 100%;
+    height: calc(100% - 14px);
+    width: calc(100% - 14px);
     padding: 0;
     margin: 0;
     border: none;
@@ -1063,7 +1116,7 @@ article {
 #play-window .middle_section .scene .board .face_bottom {
     height: var(--width);
     width: var(--length);
-    background: #372800;
+    background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), var(--black-cell);
     
     transform: rotateX(-90deg) translateZ( calc( var(--length)/2 ) );
     
@@ -1076,7 +1129,7 @@ article {
 
 #play-window .middle_section .scene .board .face_bottom .p {
     font-family: Arial;
-    font-size: 0.8;
+    font-size: 100%;
     font-weight: 300;
     color: #aaa;
     width: 100%;
@@ -1877,30 +1930,22 @@ article {
         grid-template-rows: 48px calc(100% - 105px) 45px; /*Percentage height is calculated based on inner-width (610px Ex.), row-gap and remaining rows-height*/
         grid-template-columns: 100%;
     } 
-    
-    .piece_black {
-        border-bottom-color: #2F2F2F;
-    } 
-    
-    .piece_white {
-        border-bottom-color: #999999;
-    } 
 } 
 
 .cell_black {
-    background-image: var(--black-cell);
-    background-size: cover;
+    background: var(--black-cell);
+    background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center;
-    background-clip: padding-box;
+    background-clip: border-box;
 } 
 
 .cell_white {
-    background-image: var(--white-cell);
-    background-size: cover;
+    background: var(--white-cell);
+    background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center;
-    background-clip: padding-box;
+    background-clip: border-box;
 } 
 
 .hint::before {
@@ -1983,9 +2028,14 @@ article {
     padding: 0;
     margin: 0;
     border: none;
+    max-height: calc(100% / var(--board-size)) !important;
+    min-height: calc(100% / var(--board-size)) !important;
+    max-width: calc(100% / var(--board-size)) !important;
+    min-width: calc(100% / var(--board-size)) !important;
     height: calc(100% / var(--board-size));
     width: calc(100% / var(--board-size));
     vertical-align: top;
+    text-align: center;
     overflow: hidden;
 } 
 
