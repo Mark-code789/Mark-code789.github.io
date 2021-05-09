@@ -2133,7 +2133,7 @@ article {
 
 
 .move {
-    animation: pos var(--mt) var(--atf) 0.1s 1 normal forwards;
+    animation: pos var(--mt) var(--atf) 0s 1 normal forwards;
 }
 
 @keyframes pos {
