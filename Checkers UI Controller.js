@@ -679,7 +679,9 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
                 let versions = ["american", "kenyan", "international", "pool", "russian", "nigerian"];
                 setTimeout(_ => Notify({action: "pop-up-alert",
                         header: Game.version.toUpperCase() + " CHECKERS<br>" + Game.levels[Game.level].level.toUpperCase(), 
-                        icon: srcs[versions.indexOf(Game.version)]}), 1500);
+                        icon: srcs[versions.indexOf(Game.version)],
+                        iconType: "flag", 
+                        delay: 1500}), 1000);
             } 
             if(Game.whiteTurn && playerB.pieceColor === "White" || !Game.whiteTurn && playerB.pieceColor === "Black") {
                 setTimeout(_ => aiStart(), 100);
