@@ -713,12 +713,12 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
         if(Game.rollDice) {
             if(Game.mode === "single-player") {
                 if(res) 
-                Notify({action: "pop-up-alert", 
+                await Notify({action: "pop-up-alert", 
                         header: "YOU WIN!<br>PLAY FIRST.", 
                         icon: Icons.diceIcon, 
                         iconType: "dice"});
                 else if(!res) 
-                Notify({action: "pop-up-alert", 
+                await Notify({action: "pop-up-alert", 
                         header: "YOU LOSE!<br>OPPONENT FIRST.", 
                         icon: Icons.diceIcon, 
                         iconType: "dice"});
