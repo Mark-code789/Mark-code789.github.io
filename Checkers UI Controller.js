@@ -712,6 +712,7 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
         
         if(Game.rollDice) {
             if(Game.mode === "single-player") {
+                Cancel();
                 if(res) 
                 await Notify({action: "pop-up-alert", 
                         header: "YOU WIN!<br>PLAY FIRST.", 
