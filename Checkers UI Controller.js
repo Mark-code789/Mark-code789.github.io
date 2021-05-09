@@ -282,12 +282,14 @@ async function LoadingDone () {
         if(muted == "true") {
             btns = $$("#item2 button");
             Mute(JSON.parse(muted));
-            Clicked(btns[0], btns[0].parentNode);
+            btns[0].style.background = other.default;
+            btns[1].style.background = other.background;
         }
         else if(muted == "false") {
             btns = $$("#item2 button");
             Mute(JSON.parse(muted));
-            Clicked(btns[1], btns[1].parentNode);
+            btns[1].style.background = other.default;
+            btns[0].style.background = other.background;
         }
         else {
             storage.setItem("muted", JSON.stringify(Sound.muted));
