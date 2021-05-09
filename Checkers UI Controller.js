@@ -2289,7 +2289,7 @@ const Restart = async (option) => {
                 if(Game.mode === "two-player-online") {
                     if(Game.alternatePlayAs) {
                         let color = playerA.pieceColor;
-                        Alternate(color);
+                        await Alternate(color);
                     }
                     if(Game.rollDice) {
                         Game.firstMove = await RollDice();
@@ -2316,7 +2316,7 @@ const Restart = async (option) => {
                     await Refresh(true);
                 }
                 else {
-                   await Refresh(true);
+                    await Refresh(true);
                 } 
                 Cancel();
             } 
