@@ -1447,7 +1447,7 @@ class Move {
                                 await ai.makeMove();
                                 ai = null;
                                 } catch (error) {alert("Capture Error\n" + error);} 
-                            }, 300);
+                            }, 100);
                         }
                     } // end of else if isOver
                 } // end of if is prop.final
