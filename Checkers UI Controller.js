@@ -218,7 +218,7 @@ async function LoadingDone () {
             storage.clear();
             storage.setItem("NotifiedUpdateV5.1", "true");
         } 
-    }
+    } 
     
     let btns = $$("#main-window #levels #nav div");
     let btn = null;
@@ -278,13 +278,20 @@ async function LoadingDone () {
             }
         } catch (error) {/*alert(error + "" + JSON.parse(storage.getItem("stats")).length);*/}
        
-        try {
-            for(let table of ["americanTable", "kenyanTable", "internationalTable", "poolTable", "russianTable", "nigerianTable"]) {
-                let item = await JSON.parse(storage.getItem(table));
-                table = table.replace("Table");
-                TranspositionTable[table] = await Copy(item);
-            } 
-        } catch (error) {}
+        let muted = storage.getItem("muted");
+        if(muted == "true") {
+            btns = $$("#item2 button");
+            Mute(JSON.parse(muted));
+            Clicked(btns[0], btns[0].parentNode);
+        }
+        else if(muted == "false") {
+            btns = $$("#item2 button");
+            Mute(JSON.parse(muted));
+            Clicked(btns[1], btns[1].parentNode);
+        }
+        else {
+            storage.setItem("muted", JSON.stringify(Sound.muted));
+        } 
     }
     
     if(deferredEvent)
@@ -2195,6 +2202,9 @@ const Enable = async (parent, bgColor, color) => { try {
 
 const Mute = (mute) => {
     Sound.muted = mute;
+    if(storage) {
+        storage.setItem("muted", JSON.stringify(mute));
+    } 
 } 
 
 const Edit = (elem, extreme = false) => {
