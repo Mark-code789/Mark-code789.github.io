@@ -586,6 +586,7 @@ const LoadBoard = async (playerAPieceColor, playerBPieceColor) => {
 } 
 
 const Refresh = async (restart = false, color = playerA.pieceColor) => {
+    await new Sleep().wait(1);
     // remove all the temporary css classes 
     let cells = $$("#table tr td");
     for(let cell of cells) {
@@ -2314,10 +2315,12 @@ const Restart = async (option) => {
                     let gameSettings = {firstMove: !Game.firstMove, mandatoryCapture: Game.mandatoryCapture, version: Game.version};
                     Publish.send({channel: Lobby.CHANNEL, message: {title: 'RequestRestart', content: gameSettings}});
                     return;
-                } 
+                }
+                
                 await Notify({action: "alert_special",
                         header: "Please Wait",
                         message: "loading..."});
+                        
                 if(Game.alternatePlayAs) {
                     let color = playerA.pieceColor;
                     await Alternate(color);
