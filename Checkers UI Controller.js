@@ -1951,9 +1951,7 @@ const GameOver = async (isDraw = false) => { try {
                     Publish.send({channel: Lobby.CHANNEL, message: {title: 'RequestReplay', content: gameSettings}});
                     return;
                 }
-                await Notify({action: "alert_special",
-                        header: "Please Wait",
-                        message: "loading..."});
+                
                 await Refresh(true);
                 Cancel();
                 return;
@@ -2316,10 +2314,6 @@ const Restart = async (option) => {
                     Publish.send({channel: Lobby.CHANNEL, message: {title: 'RequestRestart', content: gameSettings}});
                     return;
                 }
-                
-                await Notify({action: "alert_special",
-                        header: "Please Wait",
-                        message: "loading..."});
                         
                 if(Game.alternatePlayAs) {
                     let color = playerA.pieceColor;
@@ -3111,9 +3105,6 @@ const Level = async (elem, index, click = true) => {
             let color = playerA.pieceColor;
             await Alternate(color); 
         }
-        await Notify({action: "alert_special",
-                header: "Please Wait",
-                message: "loading..."});
         await Refresh(true);
         index = 0;
         } catch (error) {Notify({action: "alert", 
