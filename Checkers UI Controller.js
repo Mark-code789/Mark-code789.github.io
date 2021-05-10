@@ -2316,12 +2316,10 @@ const Restart = async (option) => {
                 if(Game.alternatePlayAs) {
                     let color = playerA.pieceColor;
                     await Alternate(color);
-                    await Refresh(true);
                 }
-                else {
-                    await Refresh(true);
-                } 
-                Cancel();
+                
+                await Refresh(true);
+                await Cancel();
             } 
             else if(choice === "CANCEL") {
                 Cancel();
