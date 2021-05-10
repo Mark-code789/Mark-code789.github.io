@@ -2312,7 +2312,9 @@ const Restart = async (option) => {
                     Publish.send({channel: Lobby.CHANNEL, message: {title: 'RequestRestart', content: gameSettings}});
                     return;
                 } 
-                
+                Notify({action: "alert_special",
+                        header: "Please Wait",
+                        message: "loading..."});
                 if(Game.alternatePlayAs) {
                     let color = playerA.pieceColor;
                     await Alternate(color);
