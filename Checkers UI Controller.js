@@ -586,7 +586,7 @@ const LoadBoard = async (playerAPieceColor, playerBPieceColor) => {
 } 
 
 const Refresh = async (restart = false, color = playerA.pieceColor) => {
-    await new Sleep().wait(1);
+    await new Sleep().wait(0.1);
     // remove all the temporary css classes 
     let cells = $$("#table tr td");
     for(let cell of cells) {
