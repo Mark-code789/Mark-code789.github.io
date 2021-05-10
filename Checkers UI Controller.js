@@ -514,7 +514,7 @@ const LoadBoard = async (playerAPieceColor, playerBPieceColor) => {
             if(Game.version != "nigerian" && (j%2 == 1 && i%2 == 0 || j%2 == 0 && i%2 == 1) || Game.version === "nigerian" && (j%2 == 0 && i%2 == 0 || j%2 == 1 && i%2 == 1)) {
                 if(!td.classList.contains('cell_black')) {
                     td.classList.add("cell_black");
-                    td.addEventListener('click', () => {ValidateMove({cell: td, i, j}); }, true);
+                    td.setAttribute('onclick', `ValidateMove({cell: this, i: ${i}, j: ${j}})`);
                 }
                 if(isEmpty) {
 	                if(i < Game.rowNo) {
@@ -591,6 +591,7 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
     for(let cell of cells) {
         cell.className = "";
         cell.innerHTML = "";
+        cell.removeAttribute("onclick");
         cell.style.pointerEvents = "auto";
     }
    
