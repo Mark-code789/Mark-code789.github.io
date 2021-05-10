@@ -3102,15 +3102,9 @@ const Level = async (elem, index, click = true) => {
         } 
         if(Game.alternatePlayAs) {
             let color = playerA.pieceColor;
-            await setTimeout(async () => {
-                await Alternate(color); 
-                return Prms("done");
-            }, 100);
+            await Alternate(color); 
         } 
-        await setTimeout(async () => {
-            await Refresh(true)
-            return Prms("done");
-        }, 200);
+        await Refresh(true);
         index = 0;
         } catch (error) {Notify({action: "alert", 
                                 header: error.name, 
