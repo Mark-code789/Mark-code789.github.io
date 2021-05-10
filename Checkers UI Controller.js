@@ -1952,7 +1952,7 @@ const GameOver = async (isDraw = false) => { try {
                     return;
                 }
                 
-                await Refresh(true);
+                await setTimeout(_ => {Refresh(true);}, 200);
                 Cancel();
                 return;
             } 
@@ -2320,7 +2320,7 @@ const Restart = async (option) => {
                     await Alternate(color);
                 }
                 
-                await Refresh(true);
+                await setTimeout(_ => {Refresh(true);}, 200);
                 Cancel();
             } 
             else if(choice === "CANCEL") {
@@ -3105,7 +3105,7 @@ const Level = async (elem, index, click = true) => {
             let color = playerA.pieceColor;
             await Alternate(color); 
         }
-        await Refresh(true);
+        await setTimeout(_ => {Refresh(true);}, 200);
         index = 0;
         } catch (error) {Notify({action: "alert", 
                                 header: error.name, 
