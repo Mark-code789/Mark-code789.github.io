@@ -2928,7 +2928,8 @@ const Notify = (data) => {
         popUpNote.classList.remove("pop");
         void popUpNote.offsetWidth;
         popUpNote.classList.add("pop");
-    } 
+    }
+    return Prms("done");
 }
 
 const Version = async (elem, index, click = true) => { try {
