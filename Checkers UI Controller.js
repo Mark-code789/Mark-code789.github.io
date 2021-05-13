@@ -644,7 +644,6 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
     playerB.captures = 0;
     playerB.longestCapture = 0;
     $("#transmitter").style.display = "none";
-    $("#play-window .footer_section p label:last-of-type").style.backgroundImage = "none";
     $("#play-window .header_section h2").innerHTML = Game.version.toUpperCase() + " CHECKERS";
     
     if(restart && Game.mode != "two-player-online") {
@@ -676,6 +675,9 @@ const Refresh = async (restart = false, color = playerA.pieceColor) => {
         await UpdatePiecesStatus();
         Game.baseState = Copy(Game.state);
         if(Game.mode === "single-player") {
+            let hint_label = $("#play-window .footer_section p label:last-of-type");
+            hint_label.style.backgroundImage = "none";
+            hint_label.classList.remove("not_valid_for_hint");
             if(screen.orientation.type.toLowerCase().includes("landscape")) {
                 let versions = ["american", "kenyan", "international", "pool", "russian", "nigerian"];
                 setTimeout(_ => Notify({action: "pop-up-alert",
@@ -1164,25 +1166,23 @@ class Move {
         //} catch (error) {Notify({action: "alert", header: "Error 1!", message: error});} 
     } 
     
-    attachToScene = function (prop, capture = false) { //try {
+    attachToScene = async function (prop, capture = false) { //try {
         let piece = Game.prop.cell.lastChild;
         Game.prop.cell.removeChild(piece);
-        this.scene.style.display = "table";
-        this.scene.appendChild(piece);
         piece.classList.add("outer");
         piece.style.height = Game.prop.h1.toFixed(16) + "px";
         piece.style.width = Game.prop.w1.toFixed(16) + "px";
         piece.style.margin = "0px";
         piece.style.top = `${Game.prop.y1}px`;
         piece.style.left = `${Game.prop.x1}px`;
-        piece.style.boxShadow = piece.classList.contains("piece_black")? `0 var(--shadow-width) 0 0 #1A1A1A, 0 calc(var(--shadow-width) + 2px) 5px 0 rgba(0,0,0,0)`: `0 var(--shadow-width) 0 0 #999999, 0 calc(var(--shadow-width) + 2px) 5px 0 rgba(0,0,0,0)`;
+        piece.style.boxShadow = piece.classList.contains("piece_black")? `0 var(--shadow-width) 0 0 #1A1A1A, 0 calc(var(--shadow-width) + 2px) 5px 0 #502C00`: `0 var(--shadow-width) 0 0 #999999, 0 calc(var(--shadow-width) + 2px) 5px 0 #502C00`;
         this.root.style.setProperty('--ept', prop.y2.toFixed(16) + "px");
         this.root.style.setProperty('--epl', prop.x2.toFixed(16) + "px");
         let id = Game.state[Game.prop.i][Game.prop.j].substring(1,2);
         let angle = parseInt(GetValue(this.root, "--angleZ" + id));
         this.root.style.setProperty("--angleZP", angle + "deg");
         
-        let mt = 0.4;
+        let mt = 0.3;
     	let increase = mt * 0.25;
     	let no_of_cells = Math.abs(Game.prop.i - prop.i);
     	for(let i = 1; i < no_of_cells; i++) {
@@ -1202,9 +1202,9 @@ class Move {
         //capture = capture;
         
         piece.setAttribute('onanimationend', `Move.detachFromScene(${capture})`);
-        piece.classList.remove("move");
-        void piece.offsetWidth;
-        void piece.offsetHeight;
+        this.scene.appendChild(piece);
+        this.scene.style.display = "table";
+        //await new Sleep().wait(0.001);
         piece.classList.add("move");
         
         //} catch (error) {Notify({action: "alert", header: "Error 2!", message: error});} 
@@ -1230,8 +1230,6 @@ class Move {
             scene.style.display = "none";
             piece.classList.remove("move", "outer"); 
             piece.removeAttribute("onanimationend");
-            void piece.offsetWidth;
-            void piece.offsetHeight;
            
             prop.cell2.appendChild(piece);
             piece.style.height = "var(--piece_size)";
@@ -1336,7 +1334,7 @@ class Move {
                             await ai.makeMove();
                             ai = null;
                             } catch (error) {alert("Non capture Error\n" + error);} 
-                        }, 100);
+                        }, 1);
                     }
                     
                 } // End of else if isOver 
@@ -1456,7 +1454,7 @@ class Move {
                                 await ai.makeMove();
                                 ai = null;
                                 } catch (error) {alert("Capture Error\n" + error);} 
-                            }, 100);
+                            }, 1);
                         }
                     } // end of else if isOver
                 } // end of if is prop.final
@@ -1983,28 +1981,14 @@ const GameOver = async (isDraw = false) => { try {
 } 
 
 class AudioPlayer {
-	static play = (tone, vol) => {
+	static play = async (tone, vol) => {
 	    if(!Sound.muted) { 
 	        try {
 	            Sound[tone].muted = false;
 	            Sound[tone].volume = vol;
-	            if(Sound[tone].paused) {
-	                let promise = Sound[tone].play();
-	                if(promise != undefined) {
-	                    promise.then(() => {
-	                        //Notify("SUCCESS");
-	                    }).catch((error) => {
-	                        /*Notify({action: "alert", 
-	                                header: "Audio Error", 
-	                                message: error});*/
-	                    });
-	                } 
-	            } 
-	            else {
-	                Sound[tone].pause();
-	                Sound[tone].currentTime = 0;
-	                Sound[tone].play();
-	            } 
+                Sound[tone].pause();
+                Sound[tone].currentTime = 0;
+                setTimeout(_ => Sound[tone].play(), 0.1);
 	        } catch (error) {Notify(error + "");}
 	    }
 	}
@@ -2094,7 +2078,7 @@ const Clicked = async (elem, parent, click = true) => { try {
     } 
     
     if(other.initialLoading) {
-    	await AudioPlayer.initializeAudios();
+    	AudioPlayer.initializeAudios();
     	other.initialLoading = false;
     } 
     } catch (error) {alert("Click error: " + error.message);}
@@ -2343,7 +2327,10 @@ const Hint = async (elem, state=Copy(Game.state)) => {
         if(Game.mode === "two-player-offline" || Game.mode === "two-player-online" && (Game.whiteTurn && playerA.pieceColor === "White" || !Game.whiteTurn && playerA.pieceColor === "Black") || Game.mode === "single-player" && (Game.level === 0 || Game.levels[Game.level-1].validForHint)) {
         	if(Game.mode === "single-player") {
 				Game.validForHint = false;
-				$("#play-window .footer_section p label:last-of-type").style.backgroundImage = "var(--hint)";
+				let hint_label = $("#play-window .footer_section p label:last-of-type");
+                hint_label.style.backgroundImage = "var(--hint)";
+                if(!hint_label.classList.contains("not_valid_for_hint"))
+                    hint_label.classList.add("not_valid_for_hint");
 				UpdatePiecesStatus();
 		    }
 		    else if(Game.mode === "two-player-online") {
@@ -2393,7 +2380,8 @@ const Hint = async (elem, state=Copy(Game.state)) => {
         for(cell of other.aiPath) {
             $("#table").rows[cell.m].cells[cell.n].classList.remove("helper_empty");
             $("#table").rows[cell.m].cells[cell.n].classList.add("hint");
-        } 
+        }
+        AudioPlayer.play("notification", 0.1);
         other.aiPath = [];
         elem.style.backgroundSize = "30px 25px";
         elem.style.backgroundImage = `var(--hint)`;
@@ -3569,7 +3557,10 @@ async function back (undo = false, isComp = false) {
                 	}
                 	else {
 	                	Game.validForHint = false;
-	                    $("#play-window .footer_section p label:last-of-type").style.backgroundImage = "var(--undo)";
+	                    let hint_label = $("#play-window .footer_section p label:last-of-type");
+	                    hint_label.style.backgroundImage = "var(--undo)";
+	                    if(!hint_label.classList.contains("not_valid_for_hint"))
+	                        hint_label.classList.add("not_valid_for_hint");
 					} 
                      
                     await back(true, true);
