@@ -23,7 +23,7 @@
     --satc: constant(safe-area-inset-top, 0);
     --sat: env(safe-area-inset-top, 0);
     --mt: 0.4s; /*moving time*/
-    --atf: ease-in-out; /*animation-timing-function*/
+    --atf: ease-in; /*animation-timing-function*/
     --ept: 50%;
     --epl: 50%;
     --angleX: 33deg;
@@ -966,10 +966,12 @@ article {
     border: none;
     z-index: 1;
     
+    -webkit-perspective: 100vmax;
     -moz-perspective: 100vmax;
+    -ms-perspective: 100vmax;
     perspective: 100vmax;
     perspective-origin: 50% 50%;
-    transform-origin: 50% 50%;
+    transform-origin: 50% 0%;
 }
 
 #play-window .middle_section .scene .perspective_background {
@@ -993,6 +995,9 @@ article {
     top: calc(50% + var(--top));
     left: 50%;
     transform: translate(-50%, -50%) rotateX(var(--angleX)) rotateZ(var(--angleZ));
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -ms-transform-style: preseve-3d;
     transform-style: preserve-3d;
     
     display: flex;
@@ -1270,10 +1275,36 @@ article {
 #play-window .footer_section p label {
     width: 20px;
     height: 100%;
+    position: relative;
     
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
+    overflow: hidden;
+} 
+
+.not_valid_for_hint::before {
+    content: "";
+    height: 25.2843px;
+    width: 3px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: center;
+    transform: translate(-50%, -50%) rotate(45deg);
+    background: #FFAC03;
+} 
+
+.not_valid_for_hint::after {
+    content: "";
+    height: 25.2843px;
+    width: 3px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: center;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    background: #FFAC03;
 } 
 
 
@@ -2129,10 +2160,12 @@ article {
     backface-visibility: hidden;
     -webkit-transform: rotateZ(var(--angleZP));
     transform: rotateZ(var(--angleZP));
+    will-change: transform;
 } 
 
 
 .move {
+    will-change: transform;
     animation: pos var(--mt) var(--atf) 0s 1 normal forwards;
 }
 
