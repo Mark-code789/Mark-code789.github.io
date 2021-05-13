@@ -30,6 +30,8 @@ class AI {
                 if(piece.includes(this.ai)) { 
                     if(piece.includes("K")) { // threatening
                         ai += 100; // value to piece
+                        if(i == 0 && j == 1 || i == 1 && j == 0 || i == Game.boardSize-1 && j == Game.boardSize-2 || i == Game.boardSize-2 && j == Game.boardSize-1) 
+                            ai += 50;
                     } 
                     if(piece.includes("M")) {
                         ai += 75; // value to piece
@@ -38,6 +40,8 @@ class AI {
                 else if(piece.includes(this.opp)) {
                     if(piece.includes("K")) { // Becomes more threatening
                         human += 100; // value to piece
+                        if(i == 0 && j == 1 || i == 1 && j == 0 || i == Game.boardSize-1 && j == Game.boardSize-2 || i == Game.boardSize-2 && j == Game.boardSize-1) 
+                            human += 50;
                     } 
                     if(piece.includes("M")) {
                         human += 75; // value to piece
