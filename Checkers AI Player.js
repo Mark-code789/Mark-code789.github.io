@@ -181,7 +181,7 @@ class AI {
         let sleep = new Sleep();
         
         if(moves.length > 1 && this.depth > 1) { 
-        	if(window.Worker && (this.depth > 6 || Game.version == "international" || Game.version == "nigerian")) {
+        	if(window.Worker && (this.depth > 9 && Game.version == "international" && Game.version == "nigerian")) {
         		worker = new Worker("Checkers Web Worker.js");
         		worker.onmessage = message;
         		for(let i = 0; i < moves.length; i++) {
