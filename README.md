@@ -27,7 +27,7 @@ Online gaming is powered by [PUBNUB](https://www.pubnub.com). I used two `channe
 - Requires latest browsers. if not update is needed.
 - Online gaming can be frustrating for slow networks. 
 ## Contributing
-Thank you for supporting this project. Contributions and suggestions are welcomed to make this it effective and efficient.  
+Thank you for supporting this project. Contributions and suggestions are welcomed to make this effective and efficient.  
 I will highly appreciate contributions for: 
 - Getting cross-browser precise location for pieces and cells.
 - Making AI faster at deeper depths. i.e implementing effective **Transposition Tables**, **History Tables**, **Killer Moves** or use other algorithms.
