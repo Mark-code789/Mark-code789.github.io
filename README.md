@@ -32,3 +32,7 @@ I will highly appreciate contributions for:
 - Getting cross-browser precise location for pieces and cells.
 - Making AI faster at deeper depths. i.e implementing effective **Transposition Tables**, **History Tables**, **Killer Moves** or use other algorithms.
 - Possibility or advantages of using 3D Canvas to represent the board using **THREE.js**;
+
+## Further Reading
+- [How Minimax Algorithm works](https://en.m.wikipedia.org/wiki/Minimax)
+- [Alpha Beta pruning](https://en.m.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning)
